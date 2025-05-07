@@ -1,0 +1,103 @@
+.admin-menu {
+  width: 250px;
+  background-color: #f8a1c2;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.admin-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  margin-bottom: 10px;
+}
+
+.nombre {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu a {
+  text-decoration: none;
+  width: 80%;
+}
+
+.menu button {
+  width: 100%;
+  background-color: #fff;
+  color: #f8a1c2;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: #f0e6e8;
+}
+
+.menu .active {
+  background-color: #c2185b; /* Rosado más oscuro */
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+  margin-top: auto;
+  background-color: #c2185b;
+  width: 80%;
+  padding: 12px;
+  border: none;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #a31545; /* Tono más intenso al hover */
+}
+
+@media (max-width: 768px) {
+  .admin-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+  }
+  .admin-menu.open {
+    transform: translateX(0);
+  }
+  .admin-menu.closed {
+    transform: translateX(-100%);
+  }
+}

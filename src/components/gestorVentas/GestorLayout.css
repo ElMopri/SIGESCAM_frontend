@@ -1,0 +1,11 @@
+.gestor-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  height: 100vh;
+}
+
+.gestor-content {
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f4f4f4;
+}
