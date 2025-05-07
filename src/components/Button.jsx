@@ -1,5 +1,5 @@
 import React from "react";
-import "../components/administrador/MenuAdmin.css";
+import "../layouts/MenuAdmin.css";
 
 const Button = ({ text, isActive, onClick }) => {
   return (
