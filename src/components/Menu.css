@@ -1,0 +1,158 @@
+/* Estilos comunes para ambos menús */
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu a {
+  text-decoration: none;
+  width: 80%;
+}
+
+.menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre icono y texto */
+  width: 100%;
+  background-color: transparent;
+  color: #2c0e20;
+  border: 2px solid #f8a1c2;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-icon {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: #2c0e20;
+}
+
+.menu button:hover {
+  background-color: #f0e6e8; /* Fondo ligeramente gris */
+  color: #000; /* Mantener el texto negro */
+}
+
+.menu .active {
+  background-color: #c2185b; /* Rosado más oscuro */
+  color: #fff; /* Letra blanca cuando está activo */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  background-color: #f8a1c2;
+  width: 70%;
+  padding: 12px;
+  border: none;
+  font-size: 25px;
+  color: #2c0e20;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 400;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  color: white;
+  background-color: #a31545; /* Tono más intenso al hover */
+}
+
+@media (max-width: 700px) {
+  /* Animación del menú en pantallas pequeñas */
+  .menu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+  }
+
+  .menu-container.open {
+    transform: translateX(0);
+  }
+
+  .menu-container.closed {
+    transform: translateX(-100%);
+  }
+
+  .menu {
+    width: 250px;
+    background-color: #f8a1c2; /* Rosado pálido */
+    color: black;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0;
+  }
+}
+
+/* Estilos específicos para el menú de admin */
+.admin-menu {
+  width: 250px;
+  background-color: #f8a1c2; /* Rosado pálido */
+  color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.admin-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.nombre {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Estilos específicos para el menú de gestor */
+.gestor-menu {
+  width: 250px;
+  background-color: #f8a1c2; /* Rosado pálido */
+  color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.gestor-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.gestor-menu .nombre {
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0;
+}
+
+.menu-logo {
+  width: 80px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+
+

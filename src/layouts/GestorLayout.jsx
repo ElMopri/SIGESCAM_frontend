@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import MenuGestor from "./MenuGestor";
 import { Outlet } from "react-router-dom";
 import "./GestorLayout.css";
+import { FaBars } from "react-icons/fa"; 
 
 const GestorLayout = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="gestor-layout">
-      <MenuGestor />
+      {/* Botón para abrir/cerrar el menú */}
+      <button 
+        className="toggle-menu-button"
+        onClick={toggleMenu}
+        aria-label="Toggle Menu"
+      >
+      <FaBars />
+      </button>
+
+      {/* Pasamos el estado isOpen a MenuGestor */}
+      <MenuGestor isOpen={isOpen} />
+
       <main className="gestor-content">
         <Outlet />
       </main>

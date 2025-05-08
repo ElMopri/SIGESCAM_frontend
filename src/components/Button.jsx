@@ -1,13 +1,15 @@
 import React from "react";
-import "../layouts/MenuAdmin.css";
+import "../components/Menu.css";
 
-const Button = ({ text, isActive, onClick }) => {
+const Button = ({ text, isActive, onClick, icon }) => {
   return (
     <button
       className={`menu-button ${isActive ? "active" : ""}`}
       onClick={onClick}
     >
-      {text}
+    {icon && <span className="menu-icon">{icon}</span>}
+    <span>{text}</span>
+
     </button>
   );
 };

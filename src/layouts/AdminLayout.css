@@ -9,3 +9,32 @@
   overflow-y: auto;
   background-color: #f0f0f0;
 }
+
+/* Estilos comunes para el botón de toggle del menú */
+.toggle-menu-button {
+  display: none; /* Por defecto, ocultamos el botón en pantallas grandes */
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #f8a1c2;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-menu-button:hover {
+  background-color: #c2185b;
+}
+
+/* Hacer visible el botón en pantallas pequeñas */
+@media (max-width: 700px) {
+  .toggle-menu-button {
+    display: block;
+  }
+}
