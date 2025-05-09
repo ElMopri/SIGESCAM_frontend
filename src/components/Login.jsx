@@ -21,35 +21,51 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="input-group">
-            <label htmlFor="dni">Documento de identidad</label>
-            <input
-              type="text"
-              id="dni"
-              value={dni}
-              onChange={(e) => setDni(e.target.value)}
-              required
-            />
+    <div className="login-background">
+      <div className="login-container">
+        <div className="login-card">
+          <div className="login-left">
+            <h2>Iniciar Sesión</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Documento:</label>
+                <input
+                  type="text"
+                  placeholder="CC"
+                  value={dni}
+                  onChange={(e) => setDni(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Contraseña:</label>
+                <input
+                  type="password"
+                  placeholder="*******"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <a href="/forgot-password" className="forgot-link">
+                  ¿Olvidó su contraseña ?
+                </a>
+              </div>
+
+              <div className="form-group">
+                <button type="submit">Ingresar</button>
+              </div>
+
+              {error && (
+                <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+              )}
+            </form>
           </div>
-          <div className="input-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+          <div className="login-right">
+            <img src="/logo.png" alt="Variedades Carmencita" />
           </div>
-          {error && <p className="error-msg">{error}</p>}
-          <button type="submit" className="login-button">
-            Iniciar sesión
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );
