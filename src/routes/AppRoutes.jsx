@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Inicio from "../components/Inicio";
 import Login from "../components/Login";
+import RestablecerContraseña from "../components/RestablecerContraseña";
 import AdminLayout from "../layouts/AdminLayout";
 import GestorLayout from "../layouts/GestorLayout";
 import InicioAdmin from "../pages/administrador/InicioAdmin";
@@ -12,6 +13,10 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Inicio />} />
       <Route path="/login" element={<Login />} />
+      <Route
+        path="/restablecerContraseña"
+        element={<RestablecerContraseña />}
+      />
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<InicioAdmin />} />
