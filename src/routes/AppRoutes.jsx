@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Inicio from "../components/Inicio";
-import Login from "../components/Login";
+import Inicio from "../pages/publica/Inicio";
+import Login from "../pages/publica/Login";
 import AdminLayout from "../layouts/AdminLayout";
 import GestorLayout from "../layouts/GestorLayout";
 import InicioAdmin from "../pages/administrador/InicioAdmin";
@@ -17,7 +17,6 @@ export default function AppRoutes() {
         <Route index element={<InicioAdmin />} />
         <Route path="sugerencias" element={<Sugerencias />} />
       </Route>
-
       <Route path="/gestorDeVentas" element={<GestorLayout />}>
         <Route index element={<InicioGestor />} />
       </Route>

@@ -15,6 +15,8 @@ const Inicio = () => {
       <main className="contenido-inicio">
         <p>Bienvenido a nuestra tienda en línea. ¡Comienza a explorar!</p>
       </main>
+
+      
     </div>
   );
 };
