@@ -1,0 +1,82 @@
+p {
+  margin-bottom: 25px;
+  font-size: 14px;
+  color: #000000;
+}
+
+.form-group-restablecer {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.input-with-icon {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.input-with-icon i {
+  background-color: #ff9fcd;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.input-with-icon input {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  border-color: #ff9fcd;
+  box-shadow: 0 0 4px rgba(255, 159, 205, 0.6);
+  border: 1px solid #ff9fcd;
+}
+
+.button-group-restablecer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.restablecer-btn,
+.cancelar-btn {
+  width: 100%;
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.restablecer-btn {
+  background-color: #007bff;
+  color: white;
+  margin-right: 10px;
+}
+
+.restablecer-btn:hover {
+  background-color: #0056b3;
+}
+
+.cancelar-btn {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.cancelar-btn:hover {
+  background-color: #c2c2c2;
+}

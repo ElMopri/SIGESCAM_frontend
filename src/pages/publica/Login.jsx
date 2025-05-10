@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import EstructuraLogin from "./EstructuraLogin";
 import "./Login.css";
 
 const Login = () => {
@@ -21,37 +22,43 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="input-group">
-            <label htmlFor="dni">Documento de identidad</label>
-            <input
-              type="text"
-              id="dni"
-              value={dni}
-              onChange={(e) => setDni(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && <p className="error-msg">{error}</p>}
-          <button type="submit" className="login-button">
-            Iniciar sesión
-          </button>
-        </form>
-      </div>
-    </div>
+    <EstructuraLogin>
+      <h2>Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="dni">Documento:</label>
+          <input
+            id="dni"
+            type="text"
+            placeholder="CC"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Contraseña:</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="*******"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <a href="/RestablecerContraseña" className="forgot-link">
+            ¿Olvidó su contraseña?
+          </a>
+        </div>
+
+        <div className="form-group">
+          <button type="submit">Ingresar</button>
+        </div>
+
+        {error && <p className="login-error">{error}</p>}
+      </form>
+    </EstructuraLogin>
   );
 };
 
