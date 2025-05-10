@@ -1,0 +1,13 @@
+.boton-icono {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  margin: 0 2px;
+}
+
+.icono-accion {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}

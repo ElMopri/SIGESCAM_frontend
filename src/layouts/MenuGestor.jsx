@@ -9,7 +9,7 @@ import { MdPointOfSale } from "react-icons/md";
 const MenuGestor = ({ isOpen }) => {
   const menuItems = [
     { text: "Inicio", path: "/gestorDeVentas/inicio", icon:<BiSolidHome /> },
-    { text: "Productos", path: "/gestorDeVentas/ventas", icon: <FaShoppingCart />},
+    { text: "Productos", path: "/gestorDeVentas/productos", icon: <FaShoppingCart />},
     { text: "Por Cobrar", path: "/gestorDeVentas/devoluciones", icon:<GiReceiveMoney /> },
     { text: "Sugerencias", path: "/gestorDeVentas/clientes" ,icon:<FaCommentAlt />},
     { text: "Registrar Venta", path: "/gestorDeVentas/estadisticas",icon:<MdPointOfSale /> },
