@@ -6,6 +6,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import GestorLayout from "../layouts/GestorLayout";
 import InicioAdmin from "../pages/administrador/InicioAdmin";
 import Sugerencias from "../pages/administrador/Sugerencias";
+import Ajustes from "../pages/administrador/Ajustes";
 import InicioGestor from "../pages/gestorVentas/InicioGestor";
 
 export default function AppRoutes() {
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<InicioAdmin />} />
         <Route path="sugerencias" element={<Sugerencias />} />
+        <Route path="Ajustes" element={<Ajustes />} />
       </Route>
       <Route path="/gestorDeVentas" element={<GestorLayout />}>
         <Route index element={<InicioGestor />} />

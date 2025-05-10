@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EstructuraLogin from "./EstructuraLogin";
+import EstructuraLogin from "../../components/EstructuraLogin";
 import "./RestablecerContraseña.css";
 
 const RestablecerContraseña = () => {

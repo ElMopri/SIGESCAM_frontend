@@ -1,0 +1,282 @@
+h2 {
+  margin-bottom: 20px;
+}
+
+.ajustes-background {
+  min-height: 100vh;
+  background-color: #fff5e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.titulo-ajustes {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.settings-card {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  width: 100%;
+}
+
+.account-section {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
+
+.profile-icon img {
+  width: 23px;
+  height: 23px;
+}
+
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 350px;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  outline: none;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: #0077ff;
+  box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.1);
+}
+
+.input-group .icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.input-group .icon img {
+  width: 100%;
+  height: auto;
+}
+
+.notifications-section p {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.switch span {
+  margin-left: 15px;
+}
+
+.toggle {
+  width: 50px;
+  height: 26px;
+  border-radius: 15px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.toggle.on::before {
+  content: "✔";
+  color: green;
+  transform: translateX(0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.toggle.off::before {
+  content: "✖";
+  color: red;
+  transform: translateX(24px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.toggle.on {
+  background-color: #4caf50;
+}
+
+.toggle.on::before {
+  transform: translateX(0);
+}
+
+.toggle.off {
+  background-color: #f44336;
+}
+
+.toggle.off::before {
+  transform: translateX(24px);
+}
+
+.save-button {
+  background-color: #2196f3;
+  color: white;
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 2rem auto 0 auto;
+}
+
+.save-button:hover {
+  background-color: #0b7dda;
+}
+
+@media (max-width: 768px) {
+  .ajustes-background {
+    padding: 1.5rem 1rem;
+  }
+
+  .settings-card {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .titulo-ajustes {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .account-section {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  .input-fields {
+    max-width: 100%;
+  }
+
+  .input-group input {
+    font-size: 0.95rem;
+    padding: 0.5rem 2.5rem 0.5rem 0.8rem;
+  }
+
+  .input-group .icon {
+    width: 22px;
+    height: 22px;
+    right: 8px;
+  }
+
+  .notifications-section p {
+    font-size: 1rem;
+  }
+
+  .switch {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .save-button {
+    font-size: 0.95rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .toggle {
+    margin-left: 15px;
+  }
+}
