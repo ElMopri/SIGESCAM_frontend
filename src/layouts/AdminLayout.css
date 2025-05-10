@@ -5,14 +5,11 @@
 }
 
 .admin-content {
-  padding: 20px;
   overflow-y: auto;
-  background-color: #f0f0f0;
 }
 
-/* Estilos comunes para el botón de toggle del menú */
 .toggle-menu-button {
-  display: none; /* Por defecto, ocultamos el botón en pantallas grandes */
+  display: none;
   position: absolute;
   top: 20px;
   left: 20px;
@@ -32,7 +29,6 @@
   background-color: #c2185b;
 }
 
-/* Hacer visible el botón en pantallas pequeñas */
 @media (max-width: 700px) {
   .toggle-menu-button {
     display: block;

@@ -1,16 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
 import Inicio from "../pages/publica/Inicio";
 import Login from "../pages/publica/Login";
-=======
-import Inicio from "../components/Inicio";
-import Login from "../components/Login";
-import RestablecerContraseña from "../components/RestablecerContraseña";
->>>>>>> 6ca99f62a376c4d30b01a4860a5211c22c50c5d1
+import RestablecerContraseña from "../pages/publica/RestablecerContraseña";
 import AdminLayout from "../layouts/AdminLayout";
 import GestorLayout from "../layouts/GestorLayout";
 import InicioAdmin from "../pages/administrador/InicioAdmin";
 import Sugerencias from "../pages/administrador/Sugerencias";
+import Ajustes from "../pages/administrador/Ajustes";
 import InicioGestor from "../pages/gestorVentas/InicioGestor";
 
 export default function AppRoutes() {
@@ -26,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<InicioAdmin />} />
         <Route path="sugerencias" element={<Sugerencias />} />
+        <Route path="Ajustes" element={<Ajustes />} />
       </Route>
       <Route path="/gestorDeVentas" element={<GestorLayout />}>
         <Route index element={<InicioGestor />} />
