@@ -10,7 +10,7 @@ import {
   obtenerSugerencias,
   registrarSugerencia,
   actualizarEstadoSugerencia
-} from "../../api/UsuarioApi.js";
+} from "../../api/SugerenciasApi.js";
 
 const Sugerencias = () => {
   const [sugerencias, setSugerencias] = useState([]);

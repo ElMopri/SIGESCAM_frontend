@@ -1,63 +1,29 @@
+import axios from 'axios';
 
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/sugerencias`;
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+const API_USUARIOS = `${API_URL}/usuarios`;
 
-export const obtenerSugerencias = async () => {
+// Obtener usuario por DNI- este sirve pa que cuando edite el email, lo cargue primero, pa q se muestre el que tiene
+export const obtenerPorId = async (dni) => {
   try {
-    console.log(API_URL);
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error("Error al obtener sugerencias");
-    return await res.json();
+    const response = await axios.get(`${API_USUARIOS}/${dni}`);
+    return response.data;
   } catch (error) {
-    console.error("Error:", error);
-    return [];
+    const mensaje = error.response?.data?.message || 'Error al obtener el usuario';
+    console.error('Error al obtener usuario:', mensaje);
+    throw new Error(mensaje);
   }
 };
 
-
-export const registrarSugerencia = async ({ nombre_producto, descripcion }) => {
+export const editarCorreo = async (dni, nuevoEmail) => {
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre_producto, descripcion }),
+    const response = await axios.put(`${API_USUARIOS}/email/${dni}`, {
+      nuevoEmail,
     });
-
-    if (!res.ok) {
-      const errorText = await res.text(); // 👈 Solo para debug en caso de error
-      console.error("Respuesta con error:", res.status, errorText);
-      throw new Error("Error al registrar sugerencia");
-    }
-
-    const data = await res.json();
-    console.log("Sugerencia creada:", data);
-    return data;
-
+    return response.data;
   } catch (error) {
-    console.error("Error al registrar sugerencia:", error);
-    return null;
-  }
-};
-
-//Cambiar estado
-export const actualizarEstadoSugerencia = async (id, estado) => {
-  try {
-    const res = await fetch(`${API_URL}/${id}`, {
-      method: "PATCH", 
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ estado }),
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("Error al cambiar estado:", res.status, errorText);
-      throw new Error("No se pudo cambiar el estado");
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Error al cambiar estado de sugerencia:", error);
-    return null;
+    const mensaje = error.response?.data?.message || 'Error al actualizar el correo';
+    console.error('Error al actualizar correo:', mensaje);
+    throw new Error(mensaje);
   }
 };

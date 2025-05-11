@@ -136,7 +136,7 @@ const RestablecerContraseña = () => {
 
       {mostrarModal && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal-token">
             <span
               className="close"
               onClick={() => {
