@@ -1,0 +1,76 @@
+.table-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
+  background-color: #f5faff;
+}
+
+.table-title {
+  background-color: #99d4ea;
+  color: #000;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  padding: 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 16px;
+  text-align: center; /* Centrado horizontal */
+  vertical-align: middle; /* Centrado vertical */
+  border: 1px solid #cce4f1;
+  color: black;
+}
+
+.styled-table th {
+  background-color: #e6f4f9;
+  font-weight: bold;
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background-color: #e8f5fc;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #CBDEED;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.edit-icon {
+  color: #f1c40f;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.estado {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.habilitado {
+  background-color: #8bc34a;
+  color: white;
+}
+
+.deshabilitado {
+  background-color: #e57373;
+  color: white;
+}

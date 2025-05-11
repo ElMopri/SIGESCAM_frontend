@@ -1,0 +1,15 @@
+.new-element-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.new-element-button:hover {
+  background-color: #0056b3;
+}

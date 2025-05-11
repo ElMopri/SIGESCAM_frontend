@@ -1,19 +1,30 @@
-import { Link } from "react-router-dom";
+import Header from "../../components/Header";
+import ProductSection from "../../components/public_components/ProductSection";
+import { FaWhatsapp } from "react-icons/fa";
+import { IoArrowDownCircleOutline } from "react-icons/io5";
 import "./Inicio.css";
 
 const Inicio = () => {
   return (
     <div className="pagina-inicio">
-      <header className="header">
-        <div className="logo-container">
-          <h1 className="titulo-inicio">Variedades Carmencita</h1>
+    <Header/>
+
+      <img src="/rama.png" alt="Decoración rama" className="decoracion-rama" />
+
+      <main className="contenido-principal">
+        <div className="contenido-izquierda">
+          <img src="/logositio.png" alt="Logo Carmencita" className="logo-carmencita" />
         </div>
-        <Link to="/login">
-          <button className="boton-iniciar-sesion">Iniciar sesión</button>
-        </Link>
-      </header>
-      <main className="contenido-inicio">
-        <p>Bienvenido a nuestra tienda en línea. ¡Comienza a explorar!</p>
+
+        <div className="contenido-derecha">
+          <div className="frase">
+            <p>
+              “Tu tienda de confianza,
+              <br />
+              <strong>cada vez más cerca de ti</strong>”
+            </p>
+          </div>
+        </div>
       </main>
 
       

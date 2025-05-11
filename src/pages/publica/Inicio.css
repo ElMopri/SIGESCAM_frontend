@@ -13,56 +13,93 @@ body {
 .pagina-inicio {
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
+  background-color: #FFFCE4;
+  justify-content: center;
 }
 
-.header {
+.contenido-principal {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  background-color: #f8a1c2;
-  padding: 16px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-sizing: border-box;
+  flex-wrap: wrap;
+  max-width: 1200px;       
+  margin: 0 auto;           
+  padding: 0 40px;         
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
+
+.decoracion-rama {
+  width: 90%;
+  height: 140px;
+  margin: 80px auto 0; 
+  display: block;    
 }
 
-.titulo-inicio {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
-  margin: 0;
-}
 
-.boton-iniciar-sesion {
-  background-color: #ffffff;
-  color: #f8a1c2;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.boton-iniciar-sesion:hover {
-  background-color: #f0e6e8;
-}
-
-.contenido-inicio {
-  padding: 24px;
+.contenido-derecha {
+  flex: 1;
+  min-width: 300px;
   text-align: center;
-  font-size: 18px;
-  color: #333;
-  margin-top: 80px;
+}
+
+.contenido-izquierda{
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+  margin-right: 80px;
+}
+
+.logo-carmencita {
+  max-width: 450px;
+  height: auto;
+}
+
+.frase {
+  background-color: #d9f3ff;
+  border-radius: 2px 80px 2px 80px;
+  padding: 30px;
+  font-size: 24px;
+  font-family: "Comic Sans MS", cursive;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.frase strong {
+  display: block;
+  margin-top: 10px;
+}
+
+.frase p{
+  margin: 0;
+  font-size: 50px;
+}
+
+.icono-entrar {
+  color: #406e0f;
+  font-size: 100px;
+  display: block;
+  margin: 0 auto 0;
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+}
+
+.boton-whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25d366;
+  color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.boton-whatsapp img {
+  width: 24px;
+  margin-right: 8px;
 }

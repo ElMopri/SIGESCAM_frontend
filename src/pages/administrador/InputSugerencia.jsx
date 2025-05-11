@@ -2,20 +2,17 @@ import React, { useState } from "react";
 import "./Sugerencias.css";
 
 const InputSugerencia = ({ onAgregar }) => {
-  const [nombre, setNombre] = useState("");
+  const [nombre_producto, setNombreProducto] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
   const manejarAgregar = () => {
-    if (nombre.trim() !== "" && descripcion.trim() !== "") {
+    if (nombre_producto.trim() !== "" && descripcion.trim() !== "") {
       const nueva = {
-        id: Date.now(),
-        fecha: new Date().toLocaleDateString(),
-        nombre,
+        nombre_producto,
         descripcion,
-        estado: "pendiente",
       };
       onAgregar(nueva);
-      setNombre("");
+      setNombreProducto("");
       setDescripcion("");
     }
   };
@@ -27,8 +24,8 @@ const InputSugerencia = ({ onAgregar }) => {
         <input
           type="text"
           placeholder="Nombre del producto"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          value={nombre_producto}
+          onChange={(e) => setNombreProducto(e.target.value)}
         />
         <input
           type="text"
