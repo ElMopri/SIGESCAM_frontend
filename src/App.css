@@ -1,4 +1,4 @@
-/* Global */
+
 * {
   margin: 0;
   padding: 0;
@@ -6,19 +6,19 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Inter";
   background-color: #f9f9f9;
   color: #333;
 }
 
-/* Contenedor de la aplicación */
+
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Estilo para las rutas */
+
 main {
   flex-grow: 1;
 }

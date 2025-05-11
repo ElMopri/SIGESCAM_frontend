@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import "./Menu.css";
@@ -21,9 +20,10 @@ const Menu = ({ menuItems, role, handleLogout, isOpen }) => {
             </Link>
           ))}
         </nav>
+        <br />
         <button className="logout-button" onClick={handleLogout}>
-          <IoLogOut />
-          <span>salir</span>
+          <span>Salir </span>
+          <IoLogOut className="salir-button" />
         </button>
       </div>
     </div>

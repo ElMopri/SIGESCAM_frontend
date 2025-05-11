@@ -10,7 +10,7 @@ const MenuAdmin = ({ isOpen }) => {
   const menuItems = [
     { text: "Inicio", path: "/admin/inicio", icon:<BiSolidHome />},
     { text: "Productos", path: "/admin/productos",icon: <FaShoppingCart /> },
-    { text: "Por Cobrar", path: "/admin/por-cobrar", icon:<GiReceiveMoney />},
+    { text: "Por cobrar", path: "/admin/por-cobrar", icon:<GiReceiveMoney />},
     { text: "Sugerencias", path: "/admin/sugerencias",icon:<FaCommentAlt /> },
     { text: "Estadísticas", path: "/admin/estadisticas",icon:<ImStatsBars />  },
     { text: "Usuarios", path: "/admin/usuarios", icon: <FaUser />},
