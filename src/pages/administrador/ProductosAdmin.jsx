@@ -50,7 +50,6 @@ const datos = [
 
 const ProductosAdmin = () => (
   <div>
-    <h2>Productos - Admin</h2>
     <TablaProductos columnas={columnasAdmin} datos={datos} />
   </div>
 );

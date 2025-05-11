@@ -5,7 +5,7 @@ p {
 }
 
 .form-group-restablecer {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -47,8 +47,8 @@ p {
 .envio-token-buttons {
   display: flex;
   flex-direction: row;
-  gap: 12px;
-  margin: 25px 0;
+  gap: 8px;
+  margin: 10px 0;
   width: 100%;
   justify-content: space-between;
 }
@@ -70,7 +70,7 @@ p {
 }
 
 .envio-btn.correo {
-  background-color: #d44638; /* Rojo característico de Gmail */
+  background-color: #d44638;
   color: white;
   box-shadow: 0 2px 5px rgba(212, 70, 56, 0.3);
 }
@@ -118,10 +118,10 @@ form {
 }
 
 .button-group-restablecer {
-  display: flex;
+  margin-bottom: 10px;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .restablecer-btn,
@@ -169,7 +169,7 @@ form {
   backdrop-filter: blur(4px);
 }
 
-.modal {
+.modal-token {
   background: #ffffff;
   padding: 32px 24px;
   border-radius: 16px;
@@ -193,14 +193,14 @@ form {
   }
 }
 
-.modal h3 {
+.modal-token h3 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 12px;
   color: #111827;
 }
 
-.modal p {
+.modal-token p {
   font-size: 14px;
   margin-bottom: 24px;
   color: #2d3033;

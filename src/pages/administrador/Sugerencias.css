@@ -1,0 +1,274 @@
+/* Estilos para InputSugerencia */
+.input-sugerencia label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.input-agregar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.input-agregar input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.input-agregar button {
+  background-color: #29b6f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-agregar button:hover {
+  background-color: #0288d1;
+}
+
+/* Estilos para Tabs */
+.tabs-sugerencias {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  background-color: #e3f2fd;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabs-sugerencias button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tabs-sugerencias .activo {
+  border-bottom: 3px solid #1976d2;
+  color: #2e7d32;
+}
+
+.tabs-sugerencias .activo.rechazada {
+  border-bottom: 3px solid #d32f2f;
+  color: #d32f2f;
+}
+
+/* Estilos para Tarjetas */
+.tarjeta-sugerencia {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 150px; /* Usamos min-height para que la tarjeta crezca si es necesario */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  word-wrap: break-word;
+}
+
+.contenido-scroll {
+  max-height: 80px;
+  overflow-y: auto;
+  overflow-x: auto;
+  margin-bottom: 0.5rem;
+  color: black;
+}
+
+.contenido-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.contenido-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.contenido-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tarjeta-sugerencia .fecha {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+
+.tarjeta-sugerencia p {
+  margin-bottom: 0.5rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.icono {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.verde {
+  color: #2e7d32;
+}
+
+.rojo {
+  color: #d32f2f;
+}
+
+.azul {
+  margin-left: auto;
+  color: #1976d2;
+}
+
+/* Estilos para Grid */
+.grid-sugerencias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.sugerencias-admin {
+  padding: 2rem;
+  background-color: #fff9c4;
+  min-height: 100vh;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-contenido h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.modal-contenido table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.modal-contenido th,
+.modal-contenido td {
+  padding: 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.modal-contenido th {
+  background-color: #e3f2fd;
+  font-weight: bold;
+}
+
+.modal-contenido button {
+  margin-top: 1rem;
+  background-color: #29b6f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-contenido button:hover {
+  background-color: #0288d1;
+}
+
+.nombre {
+  font-size: 18px; /* Tamaño reducido */
+}
+
+.contenidolimitado {
+  font-size: 0.85rem; /* Tamaño reducido */
+}
+
+.contenido-scroll {
+  max-height: 140px; /* o el valor que desees */
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.modal-sugerencias {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.modal-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-content th,
+.modal-content td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.modal-content .cerrar {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn-aceptadas:hover {
+  color: #2e7d32;
+  border-bottom: 2px solid #1b5e20; /* verde más oscuro */
+}
+
+.btn-rechazadas:hover {
+  color: #c62828;
+  border-bottom: 2px solid #8e0000; /* rojo más oscuro */
+}
+
+.label-sugerencia {
+  font-weight: bold;
+  margin-top: 1rem;
+}
