@@ -171,7 +171,7 @@ form {
 }
 
 .checklist li::before {
-  content: "✗";
+  content: '✗';
   position: absolute;
   left: 0;
   color: #e74c3c;
@@ -199,6 +199,7 @@ form {
   color: #c7a8ba;
   font-size: 1.2rem;
 }
+
 
 @media (max-width: 768px) {
   .reset-card {
