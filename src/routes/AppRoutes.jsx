@@ -17,6 +17,7 @@ import PorCobrarAdmin from "../pages/administrador/PorCobrarAdmin";
 import PorCobrarGestor from "../pages/gestorVentas/PorCobrarGestor";
 import SugerenciasGestor from "../pages/gestorVentas/SugerenciasGestor";
 import RegistrarVentasGestor from "../pages/gestorVentas/RegistrarVentasGestor";
+import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -43,6 +44,7 @@ export default function AppRoutes() {
         <Route path="por-cobrar" element={<PorCobrarGestor />} />
         <Route path="sugerencias" element={<SugerenciasGestor />} />
         <Route path="registar-venta" element={<RegistrarVentasGestor />} />
+        <Route path="ajustes" element={<AjustesGestor />} />
       </Route>
       <Route path="*" element={<Inicio />} />
     </Routes>
