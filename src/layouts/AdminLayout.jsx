@@ -3,6 +3,7 @@ import MenuAdmin from "./MenuAdmin";
 import { Outlet } from "react-router-dom";
 import "./AdminLayout.css";
 import { FaBars } from "react-icons/fa"; 
+import HeaderUser from "../components/HeaderUser";
 
 const AdminLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ const AdminLayout = () => {
       <MenuAdmin isOpen={isOpen} />
       
       <main className="admin-content">
+         <HeaderUser nombre="Administrador" />
         <Outlet />
       </main>
     </div>

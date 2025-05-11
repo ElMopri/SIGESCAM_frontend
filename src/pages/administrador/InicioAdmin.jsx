@@ -1,5 +1,5 @@
 import React from "react";
-import "./InicioAdmin.css"; // Asegúrate de crear el archivo CSS
+import "./InicioAdmin.css"; 
 
 const InicioAdmin = () => {
   return (
