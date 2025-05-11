@@ -68,7 +68,7 @@
 
 .input-password-container input {
   width: 100%;
-  padding: 14px 40px 14px 16px; 
+  padding: 14px 40px 14px 16px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
   background-color: #f9fafb;
@@ -81,8 +81,8 @@
   top: 20%;
   right: 16px;
   cursor: pointer;
-  color: #888;
-  font-size: 1.4rem;
+  color: #999797;
+  font-size: 1.3rem;
   transition: color 0.3s ease;
 }
 
