@@ -1,4 +1,3 @@
-import React from "react";
 import Menu from "../components/Menu";
 import { FaShoppingCart, FaCommentAlt,  FaUser } from "react-icons/fa";
 import{BiSolidHome} from "react-icons/bi";

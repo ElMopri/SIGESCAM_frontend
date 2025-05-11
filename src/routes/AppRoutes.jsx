@@ -8,6 +8,7 @@ import InicioAdmin from "../pages/administrador/InicioAdmin";
 import Sugerencias from "../pages/administrador/Sugerencias";
 import Ajustes from "../pages/administrador/Ajustes";
 import InicioGestor from "../pages/gestorVentas/InicioGestor";
+import Usuarios from "../pages/administrador/Usuarios";
 
 export default function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function AppRoutes() {
         <Route index element={<InicioAdmin />} />
         <Route path="sugerencias" element={<Sugerencias />} />
         <Route path="Ajustes" element={<Ajustes />} />
+        <Route path="Usuarios" element={<Usuarios />} />
       </Route>
       <Route path="/gestorDeVentas" element={<GestorLayout />}>
         <Route index element={<InicioGestor />} />

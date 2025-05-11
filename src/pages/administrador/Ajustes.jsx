@@ -29,6 +29,7 @@ const Ajustes = () => {
 
   return (
     <div className="ajustes-background">
+      
       <h1 className="titulo-ajustes">Ajustes del sistema</h1>
 
       <div className="settings-card">
