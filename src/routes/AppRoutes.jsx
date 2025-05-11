@@ -31,18 +31,18 @@ export default function AppRoutes() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<InicioAdmin />} />
         <Route path="productos" element={<ProductosAdmin />} />
-        <Route path="porCobrar" element={<PorCobrarAdmin />} />
+        <Route path="por-cobrar" element={<PorCobrarAdmin />} />
         <Route path="sugerencias" element={<SugerenciasAdmin />} />
-        <Route path="Estadisticas" element={<Estadisticas />} />
-        <Route path="Usuarios" element={<Usuarios />} />
-        <Route path="Ajustes" element={<Ajustes />} />
+        <Route path="estadisticas" element={<Estadisticas />} />
+        <Route path="usuarios" element={<Usuarios />} />
+        <Route path="ajustes" element={<Ajustes />} />
       </Route>
       <Route path="/gestorDeVentas" element={<GestorLayout />}>
         <Route index element={<InicioGestor />} />
         <Route path="productos" element={<ProductosGestor />} />
-        <Route path="porCobrar" element={<PorCobrarGestor />} />
+        <Route path="por-cobrar" element={<PorCobrarGestor />} />
         <Route path="sugerencias" element={<SugerenciasGestor />} />
-        <Route path="registarVenta" element={<RegistrarVentasGestor />} />
+        <Route path="registar-venta" element={<RegistrarVentasGestor />} />
       </Route>
       <Route path="*" element={<Inicio />} />
     </Routes>
