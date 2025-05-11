@@ -1,27 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import "./Sugerencias.css";
+
 import InputSugerencia from "./InputSugerencia";
 import TabsSugerencias from "./TabsSugerencia";
 import TarjetaSugerencia from "./TarjetaSugerencia";
-import ModalSugerencias from "./ModalSugerencia";
-import "./Sugerencias.css";
+import ModalSugerencia from "./ModalSugerencia";
+
+import {
+  obtenerSugerencias,
+  registrarSugerencia,
+  actualizarEstadoSugerencia
+} from "../../api/UsuarioApi.js";
 
 const Sugerencias = () => {
   const [sugerencias, setSugerencias] = useState([]);
-  const [modalTipo, setModalTipo] = useState(null); // null, 'aceptada', 'rechazada'
+  const [modalTipo, setModalTipo] = useState(null);
 
-  // Agregar sugerencia nueva como pendiente
-  const agregarSugerencia = (nueva) => {
-    setSugerencias([...sugerencias, { ...nueva, estado: "pendiente" }]);
+  useEffect(() => {
+    const cargarDatos = async () => {
+      const datos = await obtenerSugerencias();
+      if (datos) setSugerencias(datos);
+    };
+    cargarDatos();
+  }, []);
+
+  const agregarSugerencia = async (nueva) => {
+    if (!nueva.nombre_producto?.trim() || !nueva.descripcion?.trim()) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    const creada = await registrarSugerencia(nueva);
+    if (creada) {
+      setSugerencias((prev) => [...prev, creada]);
+    } else {
+      alert("No se pudo registrar la sugerencia");
+    }
   };
 
-  // Cambiar estado de sugerencia
-  const cambiarEstado = (id, nuevoEstado) => {
+  const cambiarEstado = async (id_sugerencia, nuevoEstado) => {
+  const actualizada = await actualizarEstadoSugerencia(id_sugerencia, nuevoEstado);
+  if (actualizada) {
     setSugerencias((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, estado: nuevoEstado } : s))
+      prev.map((s) =>
+        s.id_sugerencia === id_sugerencia ? actualizada : s
+      )
     );
-  };
+    alert("Operción exitosa.")
+  } else {
+    alert("No se pudo actualizar el estado");
+  }
+};
 
-  // Filtrados
   const sugerenciasPendientes = sugerencias.filter((s) => s.estado === "pendiente");
   const sugerenciasAceptadas = sugerencias.filter((s) => s.estado === "aceptada");
   const sugerenciasRechazadas = sugerencias.filter((s) => s.estado === "rechazada");
@@ -29,28 +59,33 @@ const Sugerencias = () => {
   return (
     <div className="sugerencias-admin">
       <InputSugerencia onAgregar={agregarSugerencia} />
+
       <TabsSugerencias
         onVerAceptadas={() => setModalTipo("aceptada")}
         onVerRechazadas={() => setModalTipo("rechazada")}
       />
 
       <div className="label-sugerencia">
-      <label>Sugerencias Pendientes</label> </div>
+        <label>Sugerencias Pendientes</label>
+      </div>
+
       <div className="grid-sugerencias">
         {sugerenciasPendientes.map((sug) => (
           <TarjetaSugerencia
-            key={sug.id}
+            key={sug.id_sugerencia}
             sugerencia={sug}
-            onAceptar={() => cambiarEstado(sug.id, "aceptada")}
-            onRechazar={() => cambiarEstado(sug.id, "rechazada")}
+            onAceptar={() => cambiarEstado(sug.id_sugerencia, "aceptada")}
+            onRechazar={() => cambiarEstado(sug.id_sugerencia, "rechazada")}
           />
         ))}
       </div>
 
       {modalTipo && (
-        <ModalSugerencias
+        <ModalSugerencia
           tipo={modalTipo}
-          sugerencias={modalTipo === "aceptada" ? sugerenciasAceptadas : sugerenciasRechazadas}
+          sugerencias={
+            modalTipo === "aceptada" ? sugerenciasAceptadas : sugerenciasRechazadas
+          }
           onCerrar={() => setModalTipo(null)}
           onMover={(id) =>
             cambiarEstado(id, modalTipo === "aceptada" ? "rechazada" : "aceptada")
