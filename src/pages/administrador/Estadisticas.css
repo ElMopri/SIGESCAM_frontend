@@ -1,0 +1,182 @@
+.titulo-general {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+.estadisticas-container {
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding-top: 0;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  background-color: #e4f7fb;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #e4f7fb;
+  transition: background-color 0.3s;
+  border-bottom: 3px solid transparent;
+}
+
+.tab.active {
+  background-color: #bde0e7;
+}
+
+.filtro-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+.filtro-label {
+  font-weight: 500;
+  color: #444;
+  margin-right: 0.5rem;
+}
+
+.filtro-select,
+.busqueda-input,
+.fecha-inputs input {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.filtro-select {
+  background-color: white;
+  min-width: 120px;
+}
+
+.fecha-inputs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fecha-inputs input {
+  width: 150px;
+}
+
+.busqueda-input {
+  flex-grow: 1;
+  max-width: 300px;
+}
+
+.tabla-estadisticas {
+  width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.tabla-estadisticas th {
+  background-color: #f8f9fa;
+  color: #444;
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tabla-estadisticas td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.fila-par {
+  background-color: #f8f9fa;
+}
+
+.tabla-estadisticas tr:hover {
+  background-color: #f1f8fe;
+}
+
+.total-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.total-container span {
+  font-weight: 600;
+  margin-right: 1rem;
+  color: #444;
+}
+
+.total-input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #1a73e8;
+  text-align: right;
+  min-width: 150px;
+}
+
+.salidas-placeholder {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .estadisticas-container {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .filtro-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fecha-inputs {
+    width: 100%;
+  }
+
+  .fecha-inputs input {
+    width: 100%;
+  }
+
+  .busqueda-input {
+    max-width: 100%;
+  }
+
+  .tabla-estadisticas {
+    font-size: 0.8rem;
+  }
+
+  .tabla-estadisticas th,
+  .tabla-estadisticas td {
+    padding: 0.6rem;
+  }
+}

@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-=======
 import EstructuraLogin from "../../components/EstructuraLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
->>>>>>> refs/remotes/origin/main
 import "./Login.css";
-import EstructuraLogin from "../../components/EstructuraLogin";
 
 const Login = () => {
   const [dni, setDni] = useState("");
