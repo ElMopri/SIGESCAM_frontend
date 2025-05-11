@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EstructuraLogin from "../../components/EstructuraLogin";
 import "./Login.css";
+import EstructuraLogin from "../../components/EstructuraLogin";
 
 const Login = () => {
   const [dni, setDni] = useState("");
