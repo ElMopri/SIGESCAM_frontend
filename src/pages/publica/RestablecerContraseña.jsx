@@ -41,7 +41,7 @@ const RestablecerContraseña = () => {
       setMensajeValidacion("Token validado correctamente");
       setMensajeColor("green");
       setTimeout(() => {
-        navigate("/login");
+        navigate("/CrearContraseña");
       }, 1000);
     } else {
       setMensajeValidacion("Token incorrecto, intente nuevamente");
@@ -71,7 +71,8 @@ const RestablecerContraseña = () => {
     <EstructuraLogin>
       <h2>Restablecer contraseña</h2>
       <p>
-       Ingresa tu número de documento y elige si deseas recibir el token de verificación por correo electrónico o mensaje de texto (SMS).
+        Ingresa tu número de documento y elige si deseas recibir el token de
+        verificación por correo electrónico o mensaje de texto (SMS).
       </p>
 
       <form onSubmit={(e) => e.preventDefault()}>

@@ -11,6 +11,7 @@ import Ajustes from "../pages/administrador/Ajustes";
 import InicioGestor from "../pages/gestorVentas/InicioGestor";
 import Usuarios from "../pages/administrador/Usuarios";
 import ProductosGestor from "../pages/gestorVentas/ProductosGestor";
+import CrearContraseña from "../pages/publica/CrearContraseña";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
         path="/restablecerContraseña"
         element={<RestablecerContraseña />}
       />
+      <Route path="/crearContraseña" element={<CrearContraseña />} />
 
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<InicioAdmin />} />
