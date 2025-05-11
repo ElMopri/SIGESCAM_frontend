@@ -1,18 +1,34 @@
 import React from "react";
 import Menu from "../components/Menu";
 
-import { FaShoppingCart, FaCommentAlt,  FaUser } from "react-icons/fa";
-import{BiSolidHome} from "react-icons/bi";
-import{GiReceiveMoney} from "react-icons/gi";
+import { FaShoppingCart, FaCommentAlt, FaUser } from "react-icons/fa";
+import { BiSolidHome } from "react-icons/bi";
+import { GiReceiveMoney } from "react-icons/gi";
 import { MdPointOfSale } from "react-icons/md";
 
 const MenuGestor = ({ isOpen }) => {
   const menuItems = [
-    { text: "Inicio", path: "/gestorDeVentas/inicio", icon:<BiSolidHome /> },
-    { text: "Productos", path: "/gestorDeVentas/productos", icon: <FaShoppingCart />},
-    { text: "Por Cobrar", path: "/gestorDeVentas/devoluciones", icon:<GiReceiveMoney /> },
-    { text: "Sugerencias", path: "/gestorDeVentas/clientes" ,icon:<FaCommentAlt />},
-    { text: "Registrar Venta", path: "/gestorDeVentas/estadisticas",icon:<MdPointOfSale /> },
+    { text: "Inicio", path: "/gestorDeVentas/inicio", icon: <BiSolidHome /> },
+    {
+      text: "Productos",
+      path: "/gestorDeVentas/productos",
+      icon: <FaShoppingCart />,
+    },
+    {
+      text: "Por Cobrar",
+      path: "/gestorDeVentas/por-cobrar",
+      icon: <GiReceiveMoney />,
+    },
+    {
+      text: "Sugerencias",
+      path: "/gestorDeVentas/sugerencias",
+      icon: <FaCommentAlt />,
+    },
+    {
+      text: "Registrar Venta",
+      path: "/gestorDeVentas/registar-venta",
+      icon: <MdPointOfSale />,
+    },
   ];
 
   const handleLogout = () => {

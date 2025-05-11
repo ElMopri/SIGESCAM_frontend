@@ -1,0 +1,216 @@
+.reset-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: url("/fondoFloral.png") no-repeat center center fixed;
+  background-size: cover;
+  padding: 1rem;
+}
+
+.reset-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+  border: 1px solid rgba(255, 182, 193, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.reset-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #ff9fcd, #f8d1e5, #ff9fcd);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reset-card h2 {
+  color: #b03578;
+  font-weight: 600;
+  font-size: 1.9rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.reset-card h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff9fcd, #f8d1e5);
+  border-radius: 2px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reset-card label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #5a3a4e;
+  margin-bottom: 4px;
+}
+
+.reset-card input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #f0c1d6;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #5a3a4e;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.reset-card input:focus {
+  outline: none;
+  border-color: #ff8cc3;
+  box-shadow: 0 0 0 3px rgba(255, 140, 195, 0.25);
+}
+
+.reset-card input::placeholder {
+  color: #c7a8ba;
+  opacity: 0.75;
+}
+
+.reset-card button {
+  background: linear-gradient(135deg, #ff9fcd, #f76db3);
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+  box-shadow: 0 4px 15px rgba(247, 109, 179, 0.3);
+}
+
+.reset-card button:hover {
+  background: linear-gradient(135deg, #f76db3, #e64b9e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(247, 109, 179, 0.4);
+}
+
+.reset-card button:active {
+  transform: translateY(0);
+}
+
+.mensaje,
+.error {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.mensaje {
+  color: #2e8b57;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.checklist {
+  background: rgba(249, 240, 246, 0.75);
+  border: 1px solid #f8d1e5;
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 20px;
+  color: #5a3a4e;
+}
+
+.checklist p {
+  font-weight: bold;
+  color: #3a3a3a;
+  margin-bottom: 10px;
+}
+
+.checklist ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+
+.checklist li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: #e74c3c;
+}
+
+.checklist li.valid {
+  color: #3cb371;
+}
+
+.checklist li.valid::before {
+  content: "✔";
+  color: #3cb371;
+}
+
+.input-password-container {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #c7a8ba;
+  font-size: 1.2rem;
+}
+
+
+@media (max-width: 768px) {
+  .reset-card {
+    padding: 2rem;
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .reset-card {
+    padding: 1.5rem;
+    width: 95%;
+  }
+}

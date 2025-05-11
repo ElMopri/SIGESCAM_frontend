@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import EstructuraLogin from "../../components/EstructuraLogin";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+>>>>>>> refs/remotes/origin/main
 import "./Login.css";
 import EstructuraLogin from "../../components/EstructuraLogin";
 
@@ -7,6 +12,7 @@ const Login = () => {
   const [dni, setDni] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -20,6 +26,9 @@ const Login = () => {
       setError("Credenciales incorrectas");
     }
   };
+
+  const toggleMostrarContrasena = () =>
+    setMostrarContrasena(!mostrarContrasena);
 
   return (
     <EstructuraLogin>
@@ -39,14 +48,20 @@ const Login = () => {
 
         <div className="form-group">
           <label htmlFor="password">Contraseña:</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="*******"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-password-container">
+            <input
+              id="password"
+              type={mostrarContrasena ? "text" : "password"}
+              placeholder="*******"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span className="eye-icon-login" onClick={toggleMostrarContrasena}>
+              {mostrarContrasena ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
           <a href="/RestablecerContraseña" className="forgot-link">
             ¿Olvidó su contraseña?
           </a>
