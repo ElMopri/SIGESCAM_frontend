@@ -1,19 +1,17 @@
-.titulo-general {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-  padding-left: 0;
-  font-weight: 600;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 0.5rem;
-}
 .estadisticas-container {
   padding: 1.5rem;
   border-radius: 8px;
   width: 80%;
   margin: 0 auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding-top: 0;
+}
+
+.titulo-general {
+  margin-top: 20px;
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-left: 10px;
 }
 
 .tabs {
@@ -30,9 +28,17 @@
   padding: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  background-color: #e4f7fb;
+  background-color: white;
   transition: background-color 0.3s;
-  border-bottom: 3px solid transparent;
+  border: 1px solid #bde0e7;
+}
+
+.tab:first-child {
+  border-radius: 12px 0 0 0;
+}
+
+.tab:last-child {
+  border-radius: 0 12px 0 0;
 }
 
 .tab.active {
@@ -117,9 +123,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 2px solid #f0f0f0;
+  margin-top: 0;
+  padding: 1rem;
+  border-top: none;
+  background-color: white;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .total-container span {
