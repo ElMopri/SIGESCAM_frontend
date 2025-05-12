@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  obtenerHistorialCompras,
+  filtrarComprasPorFecha,
+  filtrarComprasPorProducto,
+} from "../../api/CompraApi";
 import "./Estadisticas.css";
 
 const Estadisticas = () => {
@@ -7,19 +12,74 @@ const Estadisticas = () => {
   const [fechaFin, setFechaFin] = useState("");
   const [producto, setProducto] = useState("");
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
+  const [compras, setCompras] = useState([]);
+  const [total, setTotal] = useState(0);
 
-  const data = [
-    { nombre: "DetoDito Picante de 165 g", cantidad: 20, precio: 3000 },
-    { nombre: "DetoDito Natural de 165 g", cantidad: 17, precio: 3000 },
-    { nombre: "Doritos de 150 g", cantidad: 14, precio: 2500 },
-    { nombre: "Lapicero Mongol H2", cantidad: 10, precio: 1100 },
-    { nombre: "Bolsa de globos rosa x 20", cantidad: 4, precio: 5000 },
-  ];
+  useEffect(() => {
+    const mostrarHistorial = async () => {
+      try {
+        const data = await obtenerHistorialCompras();
+        setCompras(data.compras);
+        setTotal(data.totalGeneral);
+      } catch (error) {
+        console.error("Error al obtener el historial:", error);
+      }
+    };
+    mostrarHistorial();
+  }, []);
 
-  const total = data.reduce(
-    (acc, item) => acc + item.cantidad * item.precio,
-    0
-  );
+  // Función para manejar el filtrado por fecha
+  const filtrarPorFecha = async () => {
+    if (fechaInicio && fechaFin) {
+      try {
+        const data = await filtrarComprasPorFecha(fechaInicio, fechaFin);
+        setCompras(data.compras);
+        setTotal(data.totalGeneral);
+      } catch (error) {
+        alert(error.message);
+      }
+    } else {
+      try {
+        const data = await obtenerHistorialCompras();
+        setCompras(data.compras);
+        setTotal(data.totalGeneral);
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  };
+
+  // Función para manejar el filtrado por producto
+  const filtrarPorProducto = async () => {
+    if (producto) {
+      try {
+        const data = await filtrarComprasPorProducto(producto);
+        setCompras(data.compras);
+        setTotal(data.totalGeneral);
+      } catch (error) {
+        alert(error.message);
+      }
+    } else {
+      try {
+        const data = await obtenerHistorialCompras();
+        setCompras(data.compras);
+        setTotal(data.totalGeneral);
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (filtroPor === "fecha") {
+      setProducto("");
+      filtrarPorFecha();
+    } else if (filtroPor === "producto") {
+      setFechaInicio("");
+      setFechaFin("");
+      filtrarPorProducto();
+    }
+  }, [filtroPor, fechaInicio, fechaFin, producto]);
 
   return (
     <div className="estadisticas-container">
@@ -85,14 +145,20 @@ const Estadisticas = () => {
                 <th>Nombre</th>
                 <th>Cantidad</th>
                 <th>Precio (U)</th>
+                <th>Fecha Compra</th>
+                <th>Total de la compra</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item, idx) => (
+              {compras.map((item, idx) => (
                 <tr key={idx} className={idx % 2 === 0 ? "fila-par" : ""}>
-                  <td>{item.nombre}</td>
-                  <td>{item.cantidad}</td>
+                  <td>{item.producto.nombre}</td>
+                  <td>{item.cantidad_agregar}</td>
                   <td>${item.precio.toLocaleString()}</td>
+                  <td>
+                    {new Date(item.fecha_compra).toLocaleDateString("es-ES")}
+                  </td>
+                  <td>${item.total_compra}</td>
                 </tr>
               ))}
             </tbody>
