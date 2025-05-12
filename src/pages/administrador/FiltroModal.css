@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 1100;
 }
 
 .modal-filtro {
@@ -36,7 +36,17 @@
 }
 
 .btn-buscar-modal {
-  background-color: #3b82f6;
+  background-color: #63c8f2;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-buscar-modal:hover {
+  background-color: #5ab2d8;
   color: white;
   border: none;
   padding: 10px;
