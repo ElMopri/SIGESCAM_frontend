@@ -1,13 +1,12 @@
 import React from "react";
 import Menu from "../components/Menu";
-
-import { FaShoppingCart, FaCommentAlt, FaUser } from "react-icons/fa";
+import { FaShoppingCart, FaCommentAlt } from "react-icons/fa";
 import { BiSolidHome } from "react-icons/bi";
 import { GiReceiveMoney } from "react-icons/gi";
 import { MdPointOfSale } from "react-icons/md";
 import { IoSettingsSharp } from "react-icons/io5";
 
-const MenuGestor = ({ isOpen }) => {
+const MenuGestor = ({ isOpen, setIsOpen }) => {
   const menuItems = [
     { text: "Inicio", path: "/gestorDeVentas/inicio", icon: <BiSolidHome /> },
     {
@@ -37,16 +36,12 @@ const MenuGestor = ({ isOpen }) => {
     },
   ];
 
-  const handleLogout = () => {
-    // Aquí puedes añadir la lógica de cierre de sesión
-  };
-
   return (
     <Menu
       menuItems={menuItems}
       role="gestor"
-      handleLogout={handleLogout}
       isOpen={isOpen}
+      setIsOpen={setIsOpen}
     />
   );
 };

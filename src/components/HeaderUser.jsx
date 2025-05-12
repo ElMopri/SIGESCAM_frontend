@@ -1,12 +1,15 @@
-
+import React, { useContext } from "react";
 import { FaBell } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
 import "./HeaderUser.css";
 
-const HeaderUser = ({ nombre = "Nombre del Usuario" }) => {
+const HeaderUser = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <header className="header-user">
       <button className="notificacion-btn">
-        <FaBell size={18} />
+        <FaBell className="bell-icon" size={20} />
       </button>
 
       <div className="usuario-info">
@@ -17,7 +20,9 @@ const HeaderUser = ({ nombre = "Nombre del Usuario" }) => {
             className="imagen-usuario"
           />
         </div>
-        <span className="nombre-usuario">{nombre}</span>
+        <span className="nombre-usuario">
+          {user?.nombre ? `${user.nombre}` : "Usuario no encontrado"}
+        </span>
       </div>
     </header>
   );

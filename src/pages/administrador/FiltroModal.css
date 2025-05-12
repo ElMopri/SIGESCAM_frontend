@@ -1,0 +1,70 @@
+.modal-filtro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-filtro {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.modal-filtro input,
+.modal-filtro select {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.modal-filtro select option:first-child {
+  font-style: italic;
+  color: #888;
+}
+
+.btn-buscar-modal {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cerrar-icono {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: red;
+  cursor: pointer;
+}
+
+.btn-revertir {
+  background-color: #ef4444; /* rojo intenso */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-revertir:hover {
+  background-color: #dc2626; /* un tono más oscuro al pasar el mouse */
+}

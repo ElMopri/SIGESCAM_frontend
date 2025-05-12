@@ -59,7 +59,7 @@ table {
 }
 
 thead {
-  background-color: #29b6f6;
+  background-color: #7ccde6;
   color: white;
 }
 
@@ -78,6 +78,14 @@ td {
   padding: 12px 15px;
   border-right: 1px solid #7CCDE6;
   border-bottom: 1px solid #ddd;
+}
+
+.mensaje-vacio {
+  font-size: 15px;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: #666;
 }
 
 /* Íconos */

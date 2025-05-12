@@ -136,3 +136,29 @@
 .btn-azul {
   background-color: #2d90e9;
 }
+
+.btn-filtrar {
+  border: 2px solid #3b82f6;
+  background-color: white;
+  color: #3b82f6;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-filtrar:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.cerrar-icono {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: red;
+  cursor: pointer;
+}

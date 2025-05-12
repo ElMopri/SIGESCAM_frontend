@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import CategoriasModal from "./CategoriasModal";
 import TablaProductos from "../../components/TablaProductos";
+import SearchBar from "../../components/SearchBar";
+import FiltroModal from "./FiltroModal";
 import iconEditar from "/EditYellow.png";
 import iconDelete from "/Delete.png";
+import { FaPlus } from "react-icons/fa";
+import { MdOutlineFilterAlt } from "react-icons/md";
+import { FaUndo } from "react-icons/fa"; // Importar ícono para revertir
 import "./ProductosAdmin.css";
-import { FaSearch, FaFilter, FaPlus } from "react-icons/fa";
 
 const ProductosAdmin = () => {
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
+  const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
+  const [filtroNombre, setFiltroNombre] = useState(""); // Estado para la barra de búsqueda
+  const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -16,7 +23,7 @@ const ProductosAdmin = () => {
     {
       key: "precio",
       label: "Precio",
-      render: (item) => `$${item.precio.toLocaleString()}`
+      render: (item) => `$${item.precio.toLocaleString()}`,
     },
     {
       key: "acciones",
@@ -40,17 +47,24 @@ const ProductosAdmin = () => {
   const datos = [
     {
       id: 1,
-      producto: "camiseta hombre",
-      categoria: "ropa deportiva",
+      producto: "Camiseta Hombre",
+      categoria: "Ropa Deportiva",
       unidades: 10,
       precio: 20000,
     },
     {
       id: 2,
       producto: "Jean",
-      categoria: "ropa deportiva",
+      categoria: "Ropa Deportiva",
       unidades: 15,
       precio: 50000,
+    },
+    {
+      id: 3,
+      producto: "Zapatos",
+      categoria: "Calzado",
+      unidades: 5,
+      precio: 75000,
     },
   ];
 
@@ -62,21 +76,61 @@ const ProductosAdmin = () => {
     console.log("Eliminar", id);
   };
 
+  const categoriasDisponibles = [...new Set(datos.map((d) => d.categoria))];
+
+  const datosFiltrados = datos.filter((item) => {
+    const coincideNombre = item.producto
+      .toLowerCase()
+      .includes(filtroNombre.toLowerCase());
+
+    const coincideCantidad =
+      filtrosAvanzados.cantidad === undefined ||
+      filtrosAvanzados.cantidad === "" ||
+      item.unidades <= Number(filtrosAvanzados.cantidad);
+
+    const coincideCategoria =
+      !filtrosAvanzados.categoria ||
+      item.categoria.toLowerCase() === filtrosAvanzados.categoria.toLowerCase();
+
+    const coincidePrecio =
+      filtrosAvanzados.precio === undefined ||
+      filtrosAvanzados.precio === "" ||
+      item.precio <= Number(filtrosAvanzados.precio);
+
+    return coincideNombre && coincideCantidad && coincideCategoria && coincidePrecio;
+  });
+
+  // Función para revertir los filtros a su estado inicial
+  const revertirFiltros = () => {
+    setFiltroNombre(""); // Limpiar la búsqueda
+    setFiltrosAvanzados({}); // Restablecer los filtros avanzados
+  };
+
   return (
     <div className="productos-admin-container">
-      <div className="barra-busqueda">
-        <input type="text" placeholder="Buscar producto..." />
-        <button className="btn-buscar">
-          <FaSearch />
-        </button>
-      </div>
+      {/* Barra de búsqueda */}
+      <SearchBar value={filtroNombre} onChange={(e) => setFiltroNombre(e.target.value)} />
 
-      <button className="btn-filtrar">
-        Filtrar <FaFilter />
+      {/* Botón de filtro */}
+      <button
+        className="btn-filtrar"
+        onClick={() => setMostrarFiltroModal(true)}
+      >
+        Filtro <MdOutlineFilterAlt style={{ marginLeft: "8px" }} />
       </button>
 
-      <TablaProductos columnas={columnasAdmin} datos={datos} />
+      {/* Botón de revertir filtros */}
+      <button
+        className="btn-revertir"
+        onClick={revertirFiltros}
+      >
+        Revertir Filtros <FaUndo style={{ marginLeft: "8px" }} />
+      </button>
 
+      {/* Tabla de productos */}
+      <TablaProductos columnas={columnasAdmin} datos={datosFiltrados} />
+
+      {/* Botones inferiores */}
       <div className="botones-inferiores">
         <button className="btn-verde">
           Registrar Producto <FaPlus />
@@ -92,8 +146,32 @@ const ProductosAdmin = () => {
         </button>
       </div>
 
+      {/* Modal de categorías */}
       {mostrarModalCategorias && (
         <CategoriasModal onClose={() => setMostrarModalCategorias(false)} />
+      )}
+
+      {/* Modal de filtros */}
+      {mostrarFiltroModal && (
+        <FiltroModal
+          categorias={categoriasDisponibles}
+          onFiltrar={(valores) => {
+            // Asegurar que no entren valores negativos
+            const sanitizados = {
+              ...valores,
+              cantidad:
+                valores.cantidad !== "" && Number(valores.cantidad) < 0
+                  ? 0
+                  : valores.cantidad,
+              precio:
+                valores.precio !== "" && Number(valores.precio) < 0
+                  ? 0
+                  : valores.precio,
+            };
+            setFiltrosAvanzados(sanitizados);
+          }}
+          onClose={() => setMostrarFiltroModal(false)}
+        />
       )}
     </div>
   );
