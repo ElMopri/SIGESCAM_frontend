@@ -31,32 +31,27 @@ const ProductosAdmin = () => {
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
   
-  const [datos, setDatos] = useState([
-    {
-      id: 1,
-      producto: "Camiseta Hombre",
-      categoria: "Ropa Deportiva",
-      unidades: 10,
-      precio: 20000,
-      precioCompra: 15000,
-    },
-    {
-      id: 2,
-      producto: "Jean",
-      categoria: "Ropa Deportiva",
-      unidades: 15,
-      precio: 50000,
-      precioCompra: 30000,
-    },
-    {
-      id: 3,
-      producto: "Zapatos",
-      categoria: "Calzado",
-      unidades: 5,
-      precio: 75000,
-      precioCompra: 50000,
-    },
-  ]);
+  const [datos, setDatos] = useState([]);
+
+  React.useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const productos = await obtenerProductos();
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.id_categoria, // Assuming id_categoria is unique
+          producto: producto.nombre,
+          categoria: producto.id_categoria,
+          unidades: producto.cantidad,
+          precio: parseFloat(producto.precio_venta),
+        }));
+        setDatos(datosTransformados);
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      }
+    };
+
+    fetchProductos();
+  }, []);
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
