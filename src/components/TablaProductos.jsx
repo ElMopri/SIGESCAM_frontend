@@ -1,5 +1,6 @@
 import React from "react";
 import "./TablaProductos.css";
+
 const TablaProductos = ({ columnas, datos }) => {
   return (
     <table className="tabla-productos">

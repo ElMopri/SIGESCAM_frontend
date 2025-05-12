@@ -56,3 +56,14 @@ export const filtrarComprasPorProducto = async (nombre) => {
     );
   }
 };
+
+// Registrar compra
+export const registrarCompra = async (compraData) => {
+    try {
+        const response = await axios.post(`${API_COMPRAS}/registrar`, compraData);
+        return response.data;
+    } catch (error) {
+        console.error("Error al registrar compra:", error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || "Error al registrar la compra");
+    }
+};
