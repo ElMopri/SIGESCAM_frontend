@@ -11,8 +11,8 @@ import "./ProductosAdmin.css";
 import ModalAgregarProducto from "./ModalAgregarProducto";
 
 import {
-  obtenerProductos,
-  buscarProductosPorNombreParecido,
+  obtenerProductos, // Tabla de productos
+  buscarProductosPorNombreParecido, // Buscador de productos
   editarProductoPorNombre,
   activarDesactivarProductoPorNombre,
   filtrarProductos
@@ -38,11 +38,11 @@ const ProductosAdmin = () => {
       try {
         const productos = await obtenerProductos();
         const datosTransformados = productos.map((producto) => ({
-          id: producto.id_categoria, // Assuming id_categoria is unique
+          id: producto.nombre, // Assuming nombre is unique
           producto: producto.nombre,
           categoria: producto.id_categoria,
           unidades: producto.cantidad,
-          precio: parseFloat(producto.precio_venta),
+          precio: producto.precio_venta,
         }));
         setDatos(datosTransformados);
       } catch (error) {
