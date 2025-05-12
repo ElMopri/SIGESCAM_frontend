@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import EstructuraLogin from "../../components/EstructuraLogin";
 import "./RestablecerContraseña.css";
+import {
+  verificarDniUsuario,
+  enviarCodigoSMSRecuperacion,
+  enviarCodigoAEmail,
+  comprobarCodigo,
+} from "../../api/RecuperarContrasenaApi.js";
 
 const RestablecerContraseña = () => {
   const [documento, setDocumento] = useState("");
@@ -13,21 +19,42 @@ const RestablecerContraseña = () => {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("");
   const inputRef = useRef(null);
   const navigate = useNavigate();
-
-  const handleEnvioToken = (opcion) => {
+  const handleEnvioToken = async (opcion) => {
     if (!documento) {
-      setError("Por favor, ingrese un documento válido.");
+      setError("Por favor, ingresa un número de documento.");
       return;
     }
-    setError("");
-    setOpcionSeleccionada(opcion);
+
+    try {
+      await verificarDniUsuario(documento);
+      let respuesta;
+
+      if (opcion === "correo") {
+        respuesta = await enviarCodigoAEmail(documento);
+      } else if (opcion === "sms") {
+        respuesta = await enviarCodigoSMSRecuperacion(documento);
+      }
+
+      setError("");
+      setMensajeValidacion(
+        respuesta?.message || "Código enviado correctamente"
+      );
+      setMensajeColor("green");
+      setOpcionSeleccionada(opcion);
+    } catch (err) {
+      setMensajeValidacion("");
+      setError(err.message);
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
   };
 
   const mostrarModalToken = () => {
     setMostrarModal(true);
   };
 
-  const validarToken = () => {
+  const validarToken = async () => {
     if (codigoToken.length !== 6) {
       setMensajeValidacion("El token debe tener 6 dígitos");
       setMensajeColor("red");
@@ -35,16 +62,17 @@ const RestablecerContraseña = () => {
       return;
     }
 
-    const tokenValido = codigoToken === "123456"; // Ejemplo
-
-    if (tokenValido) {
+    try {
+      await comprobarCodigo(documento, codigoToken);
       setMensajeValidacion("Token validado correctamente");
       setMensajeColor("green");
       setTimeout(() => {
-        navigate("/CrearContraseña");
+        navigate("/CrearContraseña", { state: { dni: documento } }); // Pasas el dni para usarlo después
       }, 1000);
-    } else {
-      setMensajeValidacion("Token incorrecto, intente nuevamente");
+    } catch (err) {
+      setMensajeValidacion(
+        err?.response?.data?.message || "Token incorrecto, intente nuevamente"
+      );
       setMensajeColor("red");
       inputRef.current?.focus();
     }
@@ -89,6 +117,11 @@ const RestablecerContraseña = () => {
             />
           </div>
           {error && <p className="error-message">{error}</p>}
+          {mensajeValidacion && (
+            <p className={`mensaje-validacion ${mensajeColor}`}>
+              {mensajeValidacion}
+            </p>
+          )}
         </div>
 
         {!opcionSeleccionada ? (
@@ -151,7 +184,10 @@ const RestablecerContraseña = () => {
             <h3>Clave de token</h3>
             <p>Ingrese el token de 6 dígitos que recibió</p>
 
-            <div className="otp-container">
+            <div
+              className="otp-container"
+              onClick={() => inputRef.current?.focus()}
+            >
               <input
                 ref={inputRef}
                 type="text"
@@ -170,7 +206,6 @@ const RestablecerContraseña = () => {
                   <div
                     key={i}
                     className={`otp-circle ${codigoToken[i] ? "filled" : ""}`}
-                    onClick={() => inputRef.current?.focus()}
                   />
                 ))}
             </div>

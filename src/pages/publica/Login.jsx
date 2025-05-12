@@ -76,7 +76,7 @@ const Login = () => {
             </span>
           </div>
 
-          <a href="/RestablecerContraseña" className="forgot-link">
+          <a href="/restablecerContraseña" className="forgot-link">
             ¿Olvidó su contraseña?
           </a>
         </div>

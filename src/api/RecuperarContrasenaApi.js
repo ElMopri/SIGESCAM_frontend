@@ -1,33 +1,80 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const API_CONTRASENA = `${API_URL}/recuperar-contrasena`;
 
 export const verificarDniUsuario = async (dni) => {
-    const response = await axios.post(`${API_CONTRASENA}/verificar`, { dni });
-    return response.data;
+  try {
+    const res = await axios.post(`${API_CONTRASENA}/verificar`, { dni });
+    return res.data;
+  } catch (e) {
+    const mensaje =
+      e.response?.data?.error ||
+      e.response?.data?.message ||
+      "Error al obtener el usuario";
+    throw new Error(mensaje);
+  }
 };
 
 export const enviarCodigoSMSRecuperacion = async (dni) => {
-    const response = await axios.post(`${API_CONTRASENA}/enviar-sms`, { dni });
-    return response.data;
+  try {
+    const res = await axios.post(`${API_CONTRASENA}/enviar-sms`, { dni });
+    return res.data;
+  } catch (e) {
+    const mensaje =
+      e.response?.data?.error ||
+      e.response?.data?.message ||
+      "Error al enviar el código SMS";
+    throw new Error(mensaje);
+  }
 };
 
 export const enviarCodigoAEmail = async (dni) => {
-    const response = await axios.post(`${API_CONTRASENA}/enviar-email`, { dni });
-    return response.data;
+  try {
+    const res = await axios.post(`${API_CONTRASENA}/enviar-email`, { dni });
+    return res.data;
+  } catch (e) {
+    const mensaje =
+      e.response?.data?.error ||
+      e.response?.data?.message ||
+      "Error al enviar el código por correo";
+    throw new Error(mensaje);
+  }
 };
 
 export const comprobarCodigo = async (dni, codigo) => {
-    const response = await axios.post(`${API_CONTRASENA}/validar`, { dni, codigo });
-    return response.data;
+  try {
+    const res = await axios.post(`${API_CONTRASENA}/validar`, {
+      dni,
+      codigo,
+    });
+    return res.data;
+  } catch (e) {
+    const mensaje =
+      e.response?.data?.error ||
+      e.response?.data?.message ||
+      "Código incorrecto";
+    throw new Error(mensaje);
+  }
 };
 
-export const restablecerContrasena = async (dni, nuevaContrasena, confirmarContrasena) => {
-    const response = await axios.post(`${API_CONTRASENA}/actualizar`, {
-        dni,
-        nuevaContrasena,
-        confirmarContrasena,
+export const restablecerContrasena = async (
+  dni,
+  nuevaContrasena,
+  confirmarContrasena
+) => {
+  try {
+    const res = await axios.post(`${API_CONTRASENA}/actualizar`, {
+      dni,
+      nuevaContrasena,
+      confirmarContrasena,
     });
-    return response.data;
+    return res.data;
+  } catch (e) {
+    const mensaje =
+      e.response?.data?.error ||
+      e.response?.data?.message ||
+      "Error al restablecer la contraseña";
+    throw new Error(mensaje);
+  }
 };
