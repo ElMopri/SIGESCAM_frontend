@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CategoriasModal from "./CategoriasModal";
 import TablaProductos from "../../components/TablaProductos";
-import SearchBar from "../../components/SearchBar";
+import SearchBarProductos from "./SearchBarProductos";
 import FiltroModal from "./FiltroModal";
 import iconEditar from "/EditYellow.png";
 import iconDelete from "/Delete.png";
@@ -15,6 +15,7 @@ const ProductosAdmin = () => {
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
   const [filtroNombre, setFiltroNombre] = useState(""); // Estado para la barra de búsqueda
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
+  const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState(""); // Entrada temporal
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -109,9 +110,20 @@ const ProductosAdmin = () => {
   return (
     <div className="productos-admin-container">
       {/* Barra de búsqueda */}
-      <SearchBar value={filtroNombre} onChange={(e) => setFiltroNombre(e.target.value)} />
-
-      {/* Botón de filtro */}
+      <div className="contenedor-centrado">
+     <SearchBarProductos
+  value={nombreBusquedaTemp}
+  onChange={(e) => setNombreBusquedaTemp(e.target.value)}
+  onSearch={() => {
+  setFiltroNombre(nombreBusquedaTemp);
+  setNombreBusquedaTemp(""); // Limpiar el input
+}}
+/>
+    </div>
+      {/* Tabla de productos */}
+      <div className="contenedor-tabla">
+        {/* Botón de filtro */}
+        <div className="botones-filtro">
       <button
         className="btn-filtrar"
         onClick={() => setMostrarFiltroModal(true)}
@@ -124,11 +136,10 @@ const ProductosAdmin = () => {
         className="btn-revertir"
         onClick={revertirFiltros}
       >
-        Revertir Filtros <FaUndo style={{ marginLeft: "8px" }} />
-      </button>
+        Revertir Filtros <FaUndo style={{ marginLeft: "4px" }} />
+      </button> </div>
 
-      {/* Tabla de productos */}
-      <TablaProductos columnas={columnasAdmin} datos={datosFiltrados} />
+      <TablaProductos columnas={columnasAdmin} datos={datosFiltrados} /></div>
 
       {/* Botones inferiores */}
       <div className="botones-inferiores">

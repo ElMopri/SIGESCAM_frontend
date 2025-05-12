@@ -10,7 +10,7 @@
 }
 
 .tabla-productos thead {
-  background-color: #7ccde6;
+  background-color: #99d4ea;
   height: 60px;
   color: black;
 }
@@ -30,9 +30,15 @@
   text-align: center;
 }
 
+thead tr {
+  background-color: #99d4ea;
+}
+
 .boton-icono {
   background: none;
   border: none;
+  outline: none;
+  box-shadow: none;
   cursor: pointer;
   padding: 4px;
   margin: 0 2px;
