@@ -1,13 +1,164 @@
-.boton-icono {
-  background: none;
+/* Contenedor principal */
+.productos-admin-container {
+  padding: 20px;
+  background-color: #fff9dc;
+  border-radius: 10px;
+}
+
+/* Buscador con ícono */
+.barra-busqueda {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.barra-busqueda input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.btn-buscar {
+  margin-left: -45px;
+  background-color: #00bfff;
   border: none;
+  border-radius: 50%;
+  padding: 10px;
+  color: white;
   cursor: pointer;
-  padding: 3px;
-  margin: 0 2px;
+}
+
+/* Botón de filtrar */
+.btn-filtrar {
+  background-color: white;
+  border: 2px solid #00bfff;
+  color: #00bfff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+/* Tabla de productos */
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-productos th,
+.tabla-productos td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.tabla-productos th {
+  background-color: #63c8f2;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tabla-productos td {
+  background-color: #ffffff;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* Botones de acción */
+.boton-icono {
+  background-color: white;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boton-icono.editar {
+  border-color: orange;
+}
+
+.boton-icono.eliminar {
+  border-color: red;
+}
+
+.boton-icono:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
 }
 
 .icono-accion {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
+}
+
+/* Botones inferiores */
+.botones-inferiores {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.botones-inferiores button {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-verde {
+  background-color: #00d26a;
+}
+
+.btn-amarillo {
+  background-color: #f4b000;
+}
+
+.btn-azul {
+  background-color: #2d90e9;
+}
+
+.btn-filtrar {
+  border: 2px solid #3b82f6;
+  background-color: white;
+  color: #3b82f6;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-filtrar:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.cerrar-icono {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: red;
+  cursor: pointer;
 }
