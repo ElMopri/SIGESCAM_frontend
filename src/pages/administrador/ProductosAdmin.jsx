@@ -10,6 +10,18 @@ import { MdOutlineFilterAlt } from "react-icons/md";
 import "./ProductosAdmin.css";
 import ModalAgregarProducto from "./ModalAgregarProducto";
 
+import {
+  obtenerProductos,
+  buscarProductosPorNombreParecido,
+  editarProductoPorNombre,
+  activarDesactivarProductoPorNombre,
+  filtrarProductos
+} from "../../api/ProductoApi"; // Asegúrate de que el nombre del archivo sea correcto
+
+import {
+  registrarCompra
+} from "../../api/CompraApi"; // Asegúrate de que el nombre del archivo sea correcto
+
 const ProductosAdmin = () => {
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
