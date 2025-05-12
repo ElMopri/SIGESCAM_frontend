@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { verificarDniUsuario, enviarCodigoSMSRecuperacion, 
+  enviarCodigoAEmail, comprobarCodigo,
+} from "../../api/RecuperarContrasenaApi.js";
 import EstructuraLogin from "../../components/EstructuraLogin";
 import "./RestablecerContraseña.css";
-import {
-  verificarDniUsuario,
-  enviarCodigoSMSRecuperacion,
-  enviarCodigoAEmail,
-  comprobarCodigo,
-} from "../../api/RecuperarContrasenaApi.js";
 
 const RestablecerContraseña = () => {
   const [documento, setDocumento] = useState("");
@@ -34,8 +31,7 @@ const RestablecerContraseña = () => {
       } else if (opcion === "sms") {
         respuesta = await enviarCodigoSMSRecuperacion(documento);
       }
-
-      setError("");
+      S;
       setMensajeValidacion(
         respuesta?.message || "Código enviado correctamente"
       );
