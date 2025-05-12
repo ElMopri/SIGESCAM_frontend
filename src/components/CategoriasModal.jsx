@@ -8,7 +8,7 @@ import {
   obtenerCategorias,
   crearCategoria,
   eliminarCategoria,
-} from "../../api/CategoriaApi"; // Asegúrate de que el nombre del archivo sea correcto
+} from "../api/CategoriaApi"; // Asegúrate de que el nombre del archivo sea correcto
 
 const CategoriasModal = ({ onClose }) => {
   const [categorias, setCategorias] = useState([]);

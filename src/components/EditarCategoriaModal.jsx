@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./EditarCategoriaModal.css";
-import { actualizarCategoria } from "../../api/CategoriaApi";
+import { actualizarCategoria } from "../api/CategoriaApi";
 
 
 

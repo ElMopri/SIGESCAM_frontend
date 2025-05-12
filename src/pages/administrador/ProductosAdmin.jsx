@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import CategoriasModal from "./CategoriasModal";
+import CategoriasModal from "../../components/CategoriasModal";
 import TablaProductos from "../../components/TablaProductos";
-import SearchBarProductos from "./SearchBarProductos";
-import FiltroModal from "./FiltroModal";
+import SearchBarProductos from "../../components/SearchBarProductos";
+import FiltroModal from "../../components/FiltroModal";
 import iconEditar from "/EditYellow.png";
 import iconDelete from "/Delete.png";
 import { FaPlus, FaUndo } from "react-icons/fa";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import "./ProductosAdmin.css";
-import ModalAgregarProducto from "./ModalAgregarProducto";
+import ModalAgregarProducto from "../../components/ModalAgregarProducto";
 
 const ProductosAdmin = () => {
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
