@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EstructuraLogin from "../../components/EstructuraLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { login } from "../../api/LoginApi";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import "./Login.css";
 
 const Login = () => {
@@ -9,18 +12,33 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
+
   const navigate = useNavigate();
+  const { setUser, setRole } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
 
-    if (dni === "123" && password === "admin") {
-      navigate("/admin");
-    } else if (dni === "456" && password === "gestor") {
-      navigate("/gestorDeVentas");
-    } else {
-      setError("Credenciales incorrectas");
-    }
+    const realizarLogin = async () => {
+      try {
+        const data = await login({ dni, contrasena: password });
+        setUser(data.usuario);
+        setRole(data.usuario.rol);
+
+        if (data.usuario.rol === "Administrador") {
+          navigate("/admin");
+        } else if (data.usuario.rol === "Gestor de ventas") {
+          navigate("/gestorDeVentas");
+        } else {
+          navigate("/usuario");
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    realizarLogin();
   };
 
   const toggleMostrarContrasena = () =>

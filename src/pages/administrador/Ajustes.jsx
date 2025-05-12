@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import "./Ajustes.css";
+import { editarCorreo } from "../../api/UsuarioApi";
 
 const Ajustes = () => {
-  const [nombre, setNombre] = useState("Diana Triana");
-  const [correo, setCorreo] = useState("dianatr@gmail.com");
+  const { user, setUser } = useContext(AuthContext);
+  const [nombre, setNombre] = useState(
+    user?.nombre || "No hay un perfil con sesión activa"
+  );
+  const [correo, setCorreo] = useState(
+    user?.email || "No hay un perfil con sesión activa"
+  );
   const [notiSugerencias, setNotiSugerencias] = useState(true);
   const [notiProductos, setNotiProductos] = useState(true);
 
   const [editable, setEditable] = useState({
-    nombre: false,
     correo: false,
   });
 
@@ -22,14 +28,23 @@ const Ajustes = () => {
     }
   };
 
-  const handleGuardar = () => {
-    alert("Cambios guardados");
-    setEditable({ nombre: false, correo: false });
+  const handleGuardar = async () => {
+    const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!regexCorreo.test(correo)) {
+      alert("Por favor, ingrese un correo válido.");
+      return;
+    }
+    try {
+      await editarCorreo(user.dni, correo);
+      alert("Correo actualizado correctamente");
+      setEditable({ nombre: false, correo: false });
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
     <div className="ajustes-background">
-      
       <h1 className="titulo-ajustes">Ajustes del sistema</h1>
 
       <div className="settings-card">
@@ -55,14 +70,6 @@ const Ajustes = () => {
                 onChange={(e) => setNombre(e.target.value)}
                 disabled={!editable.nombre}
               />
-              <span className="icon" onClick={() => toggleEditable("nombre")}>
-                <img
-                  src={
-                    editable.nombre ? "/public/save.png" : "/public/create.png"
-                  }
-                  alt={editable.nombre ? "Guardar nombre" : "Editar nombre"}
-                />
-              </span>
             </div>
 
             <div className="input-group">
