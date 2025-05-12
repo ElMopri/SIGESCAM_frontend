@@ -30,17 +30,6 @@
   cursor: pointer;
 }
 
-/* Botón de filtrar */
-.btn-filtrar {
-  background-color: white;
-  border: 2px solid #00bfff;
-  color: #00bfff;
-  padding: 8px 16px;
-  border-radius: 30px;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
 /* Tabla de productos */
 .tabla-productos {
   width: 100%;
@@ -85,13 +74,6 @@
   justify-content: center;
 }
 
-.boton-icono.editar {
-  border-color: orange;
-}
-
-.boton-icono.eliminar {
-  border-color: red;
-}
 
 .boton-icono:hover {
   transform: scale(1.1);
@@ -137,6 +119,12 @@
   background-color: #2d90e9;
 }
 
+.botones-filtro {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px; /* <- este crea el espacio con la tabla */
+}
+
 .btn-filtrar {
   border: 2px solid #3b82f6;
   background-color: white;
@@ -150,7 +138,24 @@
   transition: background-color 0.3s;
 }
 
+.btn-revertir {
+  border: 2px solid #f63b3b;
+  background-color: white;
+  color: #f63b3b;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 .btn-filtrar:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.btn-revertir:hover {
   background-color: rgba(59, 130, 246, 0.1);
 }
 
@@ -161,4 +166,45 @@
   font-size: 24px;
   color: red;
   cursor: pointer;
+}
+
+.contenedor-centrado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.contenedor-tabla {
+  max-width: 950px;  /* ajusta a tu gusto */
+  margin: 0 auto;    /* centra horizontalmente */
+  width: 100%;
+}
+
+.contenedor-tabla th {
+  background-color: #99d4ea;
+  padding: 12px 20px;
+  text-align: center;
+  color: #000000;
+  font-weight: bold;
+}
+
+/* Estilo para las celdas de la tabla */
+.contenedor-tabla th, .contenedor-tabla td {
+  border-right: 1px solid #BFE0FF; /* Línea que separa las columnas */
+}
+
+/* Asegúrate de no tener una línea extra al final de la última columna */
+.contenedor-tabla th:last-child, .contenedor-tabla td:last-child {
+  border-right: none;
+}
+
+/* Estilo opcional para las filas */
+.contenedor-tabla tr {
+  border-bottom: 1px solid #BFE0FF; /* Línea horizontal entre filas */
+}
+
+.botones-filtro {
+  display: flex;
+  gap: 10px;
 }
