@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { verificarDniUsuario, enviarCodigoSMSRecuperacion, 
-  enviarCodigoAEmail, comprobarCodigo,
+import {
+  verificarDniUsuario,
+  enviarCodigoSMSRecuperacion,
+  enviarCodigoAEmail,
+  comprobarCodigo,
 } from "../../api/RecuperarContrasenaApi.js";
 import EstructuraLogin from "../../components/EstructuraLogin";
 import "./RestablecerContraseña.css";
@@ -16,9 +19,35 @@ const RestablecerContraseña = () => {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("");
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const TIEMPO_EXPIRACION_MS = 5 * 60 * 1000; // 5 minutos
+
+  useEffect(() => {
+    const savedDocumento = localStorage.getItem("recuperacion_documento");
+    const savedOpcion = localStorage.getItem("recuperacion_opcion");
+    const timestamp = localStorage.getItem("recuperacion_token_timestamp");
+    const ahora = Date.now();
+
+    if (timestamp && ahora - parseInt(timestamp, 10) > TIEMPO_EXPIRACION_MS) {
+      limpiarLocalStorage();
+    } else {
+      if (savedDocumento) setDocumento(savedDocumento);
+      if (savedOpcion) setOpcionSeleccionada(savedOpcion);
+    }
+  }, []);
+
+  const limpiarLocalStorage = () => {
+    localStorage.removeItem("recuperacion_documento");
+    localStorage.removeItem("recuperacion_opcion");
+    localStorage.removeItem("recuperacion_token_timestamp");
+  };
+
   const handleEnvioToken = async (opcion) => {
     if (!documento) {
       setError("Por favor, ingresa un número de documento.");
+      setMensajeColor("red");
+      setTimeout(() => {
+        setError("");
+      }, 1800);
       return;
     }
 
@@ -31,18 +60,26 @@ const RestablecerContraseña = () => {
       } else if (opcion === "sms") {
         respuesta = await enviarCodigoSMSRecuperacion(documento);
       }
-      S;
-      setMensajeValidacion(
-        respuesta?.message || "Código enviado correctamente"
-      );
+
+      setError(respuesta?.message || "Código enviado correctamente");
       setMensajeColor("green");
       setOpcionSeleccionada(opcion);
-    } catch (err) {
-      setMensajeValidacion("");
-      setError(err.message);
+      localStorage.setItem("recuperacion_documento", documento);
+      localStorage.setItem("recuperacion_opcion", opcion);
+      localStorage.setItem(
+        "recuperacion_token_timestamp",
+        Date.now().toString()
+      );
+
       setTimeout(() => {
         setError("");
-      }, 2000);
+      }, 1800);
+    } catch (err) {
+      setError(err.message || "Hubo un error en el proceso");
+      setMensajeColor("red");
+      setTimeout(() => {
+        setError("");
+      }, 1800);
     }
   };
 
@@ -55,6 +92,10 @@ const RestablecerContraseña = () => {
       setMensajeValidacion("El token debe tener 6 dígitos");
       setMensajeColor("red");
       inputRef.current?.focus();
+
+      setTimeout(() => {
+        setMensajeValidacion("");
+      }, 1200);
       return;
     }
 
@@ -62,32 +103,27 @@ const RestablecerContraseña = () => {
       await comprobarCodigo(documento, codigoToken);
       setMensajeValidacion("Token validado correctamente");
       setMensajeColor("green");
-      setTimeout(() => {
-        navigate("/CrearContraseña", { state: { dni: documento } }); // Pasas el dni para usarlo después
-      }, 1000);
+      limpiarLocalStorage();
+      setCodigoToken("");
+      navigate("/crearContraseña", { state: { dni: documento } });
     } catch (err) {
       setMensajeValidacion(
         err?.response?.data?.message || "Token incorrecto, intente nuevamente"
       );
       setMensajeColor("red");
+      setCodigoToken("");
+      setTimeout(() => {
+        setMensajeValidacion("");
+      }, 1200);
       inputRef.current?.focus();
     }
   };
 
   useEffect(() => {
-    if (mensajeColor === "red" && mensajeValidacion && codigoToken.length > 0) {
-      const timer = setTimeout(() => {
-        setMensajeValidacion("");
-        setMensajeColor("");
-      }, 1400);
-
-      return () => clearTimeout(timer);
-    }
-  }, [codigoToken, mensajeColor, mensajeValidacion]);
-
-  useEffect(() => {
     if (mostrarModal && inputRef.current) {
-      inputRef.current.focus();
+      setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
     }
   }, [mostrarModal]);
 
@@ -112,12 +148,7 @@ const RestablecerContraseña = () => {
               required
             />
           </div>
-          {error && <p className="error-message">{error}</p>}
-          {mensajeValidacion && (
-            <p className={`mensaje-validacion ${mensajeColor}`}>
-              {mensajeValidacion}
-            </p>
-          )}
+          {error && <p className={`error-message ${mensajeColor}`}>{error}</p>}
         </div>
 
         {!opcionSeleccionada ? (
@@ -153,13 +184,17 @@ const RestablecerContraseña = () => {
         )}
 
         <div className="button-group-restablecer">
-          <button
-            type="button"
-            className="cancelar-btn"
-            onClick={() => navigate("/login")}
-          >
-            Cancelar
-          </button>
+          <div className="button-group-restablecer">
+            <button
+              type="button"
+              className="cancelar-btn"
+              onClick={() => {
+                navigate("/login");
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </form>
 
