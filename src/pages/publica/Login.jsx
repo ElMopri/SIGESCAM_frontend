@@ -35,6 +35,9 @@ const Login = () => {
         }
       } catch (err) {
         setError(err.message);
+        setTimeout(() => {
+          setError("");
+        }, 1400);
       }
     };
 

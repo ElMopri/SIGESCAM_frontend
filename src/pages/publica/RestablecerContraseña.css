@@ -111,7 +111,6 @@ form {
 }
 
 .error-message {
-  color: #e74c3c;
   font-size: 13px;
   margin-top: 5px;
   text-align: left;
@@ -122,6 +121,14 @@ form {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+}
+
+.error-message.green {
+  color: green;
+}
+
+.error-message.red {
+  color: red;
 }
 
 .restablecer-btn,
