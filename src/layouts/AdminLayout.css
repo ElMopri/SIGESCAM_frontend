@@ -31,7 +31,13 @@
 }
 
 @media (max-width: 700px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
   .toggle-menu-button {
     display: block;
+    position: fixed;
+    z-index: 100;
   }
 }
