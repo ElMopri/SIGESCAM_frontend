@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import "./ModalAgregarProducto.css";
 import { FaTimes } from "react-icons/fa";
 
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
-  const [formData, setFormData] = useState({
-    nombre: producto.nombre,
-    precioVenta: producto.precioVenta,
-    categoria: producto.categoria,
+
+    const [formData, setFormData] = useState({
+    nombre: producto?.producto || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
+    precioVenta: producto?.precio || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
+    categoria: producto?.categoria || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
   });
+
+  // Sincroniza el estado si el producto cambia
+  useEffect(() => {
+
+      console.log("Producto recibido:", producto);
+
+    setFormData({
+      nombre: producto?.producto || "",
+      precioVenta: producto?.precio || "",
+      categoria: producto?.categoria || "",
+    });
+  }, [producto]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
