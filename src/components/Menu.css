@@ -18,7 +18,7 @@
   width: 100%;
   background-color: transparent;
   color: #2c0e20;
-  border: 2px solid #f8a1c2;
+  border: none;
   padding: 12px;
   font-size: 20px;
   border-radius: 6px;
@@ -36,6 +36,10 @@
 .menu button:hover {
   background-color: #f0e6e8;
   color: #000;
+}
+
+.menu button:focus {
+  text-decoration: underline;
 }
 
 .menu .active {

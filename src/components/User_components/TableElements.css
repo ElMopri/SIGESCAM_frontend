@@ -74,3 +74,13 @@
   background-color: #e57373;
   color: white;
 }
+
+.view-icon{
+  color: #999797;
+  font-size: 1.3rem;
+  transition: color 0.3s ease;
+}
+
+.view-icon:hover{
+ color: #6366f1;
+}

@@ -27,3 +27,25 @@ export const editarCorreo = async (dni, nuevoEmail) => {
     throw new Error(mensaje);
   }
 };
+
+export const listarUsuarios = async () => {
+  try {
+    const response = await axios.get(API_USUARIOS);
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al listar usuarios';
+    console.error('Error al listar usuarios:', mensaje);
+    throw new Error(mensaje);
+  }
+};
+
+export const registrar = async (usuario) => {
+  try {
+    const response = await axios.post(`${API_USUARIOS}`, usuario);
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al registrar el usuario';
+    console.error('Error al registrar usuario:', mensaje);
+    throw new Error(mensaje);
+  }
+};
