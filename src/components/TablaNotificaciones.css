@@ -32,15 +32,15 @@
 
 .notificaciones-campana {
   display: flex;
-  justify-content: center;  /* Centra el ícono horizontalmente */
-  align-items: center;      /* Centra el ícono verticalmente, en caso de que haya más alto */
+  justify-content: center;
+  align-items: center;
   font-size: 26px;
   margin-bottom: 12px;
   margin-top: -6px;
 }
 
 .notificaciones-campana svg {
-  background: none; /* Eliminar el fondo del SVG */
+  background: none;
 }
 
 .notificacion-item {
