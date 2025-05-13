@@ -15,7 +15,7 @@ const ModalAgregarProducto = ({
   const [precioCompra, setPrecioCompra] = useState(productoInicial?.precioCompra || "");
   const [cantidadExistente, setCantidadExistente] = useState(productoInicial?.unidades || 0);
   const [cantidadAgregar, setCantidadAgregar] = useState("");
-  const [fechaCompra, setFechaCompra] = useState(productoInicial?.fechaCompra || new Date().toISOString().split('T')[0]);
+  const [fechaCompra, setFechaCompra] = useState("");
   const [coincidencias, setCoincidencias] = useState([]);
   const inputRef = useRef(null);
 
@@ -49,6 +49,7 @@ const ModalAgregarProducto = ({
       precio: parseFloat(precio),
       precioCompra: parseFloat(precioCompra),
       cantidadAgregar: cantidadAgregarInt,
+      fechaCompra,
     };
 
     if (productoInicial) {
@@ -160,9 +161,9 @@ const ModalAgregarProducto = ({
           <label htmlFor="fechaCompra">Fecha de compra</label>
           <input
             id="fechaCompra"
-            type="text"
+            type="date"
             value={fechaCompra}
-            readOnly
+            onChange={(e) => setFechaCompra(e.target.value)}
           />
         </div>
 

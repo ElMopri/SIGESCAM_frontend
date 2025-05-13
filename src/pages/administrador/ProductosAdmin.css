@@ -235,16 +235,5 @@
   margin-bottom: 1rem;
 }
 
-.form-group {
-  margin-bottom: 1rem;
-}
 
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 
