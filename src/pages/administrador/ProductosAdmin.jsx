@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import CategoriasModal from "../../components/CategoriasModal";
 import TablaProductos from "../../components/TablaProductos";
 import SearchBarProductos from "../../components/SearchBarProductos";
@@ -14,19 +15,25 @@ import {
   obtenerProductos, // Tabla de productos
   buscarProductosPorNombreParecido, // Buscador de productos
   editarProductoPorNombre,
-  activarDesactivarProductoPorNombre,
-  filtrarProductos
-} from "../../api/ProductoApi"; // Asegúrate de que el nombre del archivo sea correcto
+  activarDesactivarProductoPorNombre, // Boton de eliminar
+  filtrarProductos // Boton de filtrar
+} from "../../api/ProductoApi";
 
 import {
   registrarCompra
-} from "../../api/CompraApi"; // Asegúrate de que el nombre del archivo sea correcto
+} from "../../api/CompraApi";
 
 import {
-  obtenerCategorias
-} from "../../api/CategoriaApi"; // Asegúrate de que el nombre del archivo sea correcto
+  obtenerCategorias // Categorias
+} from "../../api/CategoriaApi";
 
 const ProductosAdmin = () => {
+
+  const { user, setUser } = useContext(AuthContext);
+    const [dni, setDni] = useState(
+      user?.dni || "No hay un perfil con sesión activa"
+    );
+
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
   const [mostrarModalAgregarProducto, setMostrarModalAgregarProducto] = useState(false);
@@ -172,40 +179,35 @@ const ProductosAdmin = () => {
     setFiltrosAvanzados({});
   };
 
-  const agregarOActualizarProducto = async (nuevoProducto) => {
+const agregarOActualizarProducto = async (nuevoProducto) => {
     try {
       const compraData = {
-        dni: user.dni, // Obtén el DNI del usuario desde el contexto
-        nombre: nuevoProducto.producto,
-        categoria: nuevoProducto.categoria,
-        precioVenta: nuevoProducto.precio,
-        precioCompra: nuevoProducto.precioCompra,
-        cantidad: nuevoProducto.cantidadAgregar,
-        fechaCompra: nuevoProducto.fechaCompra,
+        dni_usuario: dni,
+        nombre_producto: nuevoProducto.producto,
+        precio_compra: nuevoProducto.precioCompra,
+        id_categoria: nuevoProducto.categoria,
+        precio_venta: nuevoProducto.precio,
+        cantidad_agregar: nuevoProducto.cantidadAgregar,
+        fecha_compra: nuevoProducto.fechaCompra,
       };
-  
+
+      // Agrega un console.log para revisar el JSON que se está enviando
+      console.log("Datos enviados a registrarCompra:", compraData);
+
       // Llama a la API para registrar la compra
       await registrarCompra(compraData);
-  
-      // Actualiza el estado local después de registrar la compra
-      const index = datos.findIndex((p) => p.producto.toLowerCase() === nuevoProducto.producto.toLowerCase());
-      if (index >= 0) {
-        // Actualiza
-        const actualizados = [...datos];
-        actualizados[index] = { ...actualizados[index], ...nuevoProducto };
-        setDatos(actualizados);
-      } else {
-        // Agrega nuevo
-        setDatos([
-          ...datos,
-          {
-            ...nuevoProducto,
-            id: datos.length + 1,
-            unidades: Number(nuevoProducto.cantidadAgregar),
-          },
-        ]);
-      }
-  
+
+      // Vuelve a obtener los productos después de registrar la compra
+      const productos = await obtenerProductos();
+      const datosTransformados = productos.map((producto) => ({
+        id: producto.nombre,
+        producto: producto.nombre,
+        categoria: producto.id_categoria,
+        unidades: producto.cantidad,
+        precio: producto.precio_venta,
+      }));
+      setDatos(datosTransformados);
+
       setMostrarModalAgregarProducto(false);
       setProductoSeleccionado(null);
     } catch (error) {
