@@ -33,7 +33,7 @@ const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
                     <td>{s.nombre_producto}</td>
                     <td>{s.descripcion}</td>
                     <td className="col-icon">
-                      <div className="icono" onClick={() => onMover(s.id)}>
+                      <div className="icono" onClick={() => onMover(s.id_sugerencia)}>
                         {tipo === "aceptada" ? (
                           <FaTrashAlt className="rojo" />
                         ) : (

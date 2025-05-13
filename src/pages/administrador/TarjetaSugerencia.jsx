@@ -8,7 +8,11 @@ const TarjetaSugerencia = ({ sugerencia, onAceptar, onRechazar }) => {
       <div className="fecha">{sugerencia.fecha}</div>
       <p className="nombre"><strong>{sugerencia.nombre}</strong></p>
       <div className="contenido-scroll">
-        <div className="contenido-limitado">{sugerencia.descripcion}</div>
+        <div className="contenido-limitado">
+  <h3 className="titulo-producto">{sugerencia.nombre_producto}</h3>
+  <hr className="linea-divisoria" />
+  <p className="descripcion-producto">{sugerencia.descripcion}</p>
+</div>
       </div>
       <div className="acciones">
         {onAceptar && (
