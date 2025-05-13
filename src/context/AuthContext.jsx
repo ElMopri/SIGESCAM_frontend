@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 
 export const AuthContext = createContext();
 
@@ -11,6 +11,34 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => {
     return localStorage.getItem("role") || null;
   });
+
+  const [loading, setLoading] = useState(true);
+
+  const checkAuth = useCallback(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedRole = localStorage.getItem("role");
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+
+    if (storedUser && storedRole && isLoggedIn) {
+      setUser(JSON.parse(storedUser));
+      setRole(storedRole);
+    } else {
+      clearAuth();
+    }
+    setLoading(false);
+  }, []);
+
+  const clearAuth = useCallback(() => {
+    setUser(null);
+    setRole(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    sessionStorage.removeItem("isLoggedIn");
+  }, []);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   useEffect(() => {
     if (user) {
@@ -28,21 +56,28 @@ export const AuthProvider = ({ children }) => {
     }
   }, [role]);
 
+  const login = (userData, userRole) => {
+    setUser(userData);
+    setRole(userRole);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("role", userRole);
+    sessionStorage.setItem("isLoggedIn", "true");
+  };
+
   const logout = () => {
-    setUser(null);
-    setRole(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("role");
+    clearAuth();
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         role,
-        setRole,
+        loading,
+        login,
         logout,
+        setUser,
+        setRole,
       }}
     >
       {children}
