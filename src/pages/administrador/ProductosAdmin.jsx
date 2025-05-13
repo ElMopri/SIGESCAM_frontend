@@ -10,13 +10,14 @@ import { FaPlus, FaUndo } from "react-icons/fa";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import "./ProductosAdmin.css";
 import ModalAgregarProducto from "../../components/ModalAgregarProducto";
+import ModalEditarProducto from "../../components/ModalEditarProducto";
 
 import {
-  obtenerProductos, // Tabla de productos
-  buscarProductosPorNombreParecido, // Buscador de productos
+  obtenerProductos,
+  buscarProductosPorNombreParecido,
   editarProductoPorNombre,
-  activarDesactivarProductoPorNombre, // Boton de eliminar
-  filtrarProductos // Boton de filtrar
+  activarDesactivarProductoPorNombre,
+  filtrarProductos
 } from "../../api/ProductoApi";
 
 import {
@@ -24,15 +25,12 @@ import {
 } from "../../api/CompraApi";
 
 import {
-  obtenerCategorias // Categorias
+  obtenerCategorias
 } from "../../api/CategoriaApi";
 
 const ProductosAdmin = () => {
-
-  const { user, setUser } = useContext(AuthContext);
-    const [dni, setDni] = useState(
-      user?.dni || "No hay un perfil con sesión activa"
-    );
+  const { user } = useContext(AuthContext);
+  const [dni, setDni] = useState(user?.dni || "No hay un perfil con sesión activa");
 
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
@@ -41,15 +39,17 @@ const ProductosAdmin = () => {
   const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("");
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
+  const [mostrarModalEditarProducto, setMostrarModalEditarProducto] = useState(false);
 
   const [datos, setDatos] = useState([]);
+  const [categoriasDisponibles, setCategoriasDisponibles] = useState([]);
 
   React.useEffect(() => {
     const fetchProductos = async () => {
       try {
         const productos = await obtenerProductos();
         const datosTransformados = productos.map((producto) => ({
-          id: producto.nombre, // Assuming nombre is unique
+          id: producto.nombre,
           producto: producto.nombre,
           categoria: producto.id_categoria,
           unidades: producto.cantidad,
@@ -64,52 +64,6 @@ const ProductosAdmin = () => {
     fetchProductos();
   }, []);
 
-  const columnasAdmin = [
-    { key: "producto", label: "Producto" },
-    { key: "categoria", label: "Categoría" },
-    { key: "unidades", label: "Unidades" },
-    {
-      key: "precio",
-      label: "Precio",
-      render: (item) => `$${item.precio.toLocaleString()}`,
-    },
-    {
-      key: "acciones",
-      label: "Acciones",
-      render: (item) => (
-        <>
-          <button onClick={() => editar(item)} className="boton-icono editar">
-            <img src={iconEditar} alt="Editar" className="icono-accion" />
-          </button>
-          <button
-            onClick={() => eliminar(item.id)}
-            className="boton-icono eliminar"
-          >
-            <img src={iconDelete} alt="Eliminar" className="icono-accion" />
-          </button>
-        </>
-      ),
-    },
-  ];
-
-  const editar = (producto) => {
-    setProductoSeleccionado(producto);
-    setMostrarModalAgregarProducto(true);
-  };
-
-  const eliminar = async (id) => {
-    try {
-      await activarDesactivarProductoPorNombre(id, false);
-      setDatos(datos.filter((d) => d.id !== id));
-      console.log(`Producto con id ${id} desactivado.`);
-    } catch (error) {
-      console.error("Error al desactivar el producto:", error);
-    }
-  };
-
-  // Obtener categorías disponibles para el filtro
-  const [categoriasDisponibles, setCategoriasDisponibles] = useState([]);
-
   React.useEffect(() => {
     const fetchCategorias = async () => {
       try {
@@ -123,11 +77,10 @@ const ProductosAdmin = () => {
     fetchCategorias();
   }, []);
 
-  // Filtrar productos según el buscador o filtros avanzados
   React.useEffect(() => {
     const fetchProductosFiltrados = async () => {
       try {
-        if (filtroNombre) { // Es el buscador
+        if (filtroNombre) {
           const productos = await buscarProductosPorNombreParecido(filtroNombre);
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
@@ -174,12 +127,52 @@ const ProductosAdmin = () => {
     fetchProductosFiltrados();
   }, [filtroNombre, filtrosAvanzados]);
 
+  const columnasAdmin = [
+    { key: "producto", label: "Producto" },
+    { key: "categoria", label: "Categoría" },
+    { key: "unidades", label: "Unidades" },
+    {
+      key: "precio",
+      label: "Precio",
+      render: (item) => `$${item.precio.toLocaleString()}`,
+    },
+    {
+      key: "acciones",
+      label: "Acciones",
+      render: (item) => (
+        <>
+          <button onClick={() => editar(item)} className="boton-icono editar">
+            <img src={iconEditar} alt="Editar" className="icono-accion" />
+          </button>
+          <button onClick={() => eliminar(item.id)} className="boton-icono eliminar">
+            <img src={iconDelete} alt="Eliminar" className="icono-accion" />
+          </button>
+        </>
+      ),
+    },
+  ];
+
+  const editar = (producto) => {
+    setProductoSeleccionado(producto);
+    setMostrarModalEditarProducto(true);
+  };
+
+  const eliminar = async (id) => {
+    try {
+      await activarDesactivarProductoPorNombre(id, false);
+      setDatos(datos.filter((d) => d.id !== id));
+      console.log(`Producto con id ${id} desactivado.`);
+    } catch (error) {
+      console.error("Error al desactivar el producto:", error);
+    }
+  };
+
   const revertirFiltros = () => {
     setFiltroNombre("");
     setFiltrosAvanzados({});
   };
 
-const agregarOActualizarProducto = async (nuevoProducto) => {
+  const agregarProducto = async (nuevoProducto) => {
     try {
       const compraData = {
         dni_usuario: dni,
@@ -191,13 +184,10 @@ const agregarOActualizarProducto = async (nuevoProducto) => {
         fecha_compra: nuevoProducto.fechaCompra,
       };
 
-      // Agrega un console.log para revisar el JSON que se está enviando
       console.log("Datos enviados a registrarCompra:", compraData);
 
-      // Llama a la API para registrar la compra
       await registrarCompra(compraData);
 
-      // Vuelve a obtener los productos después de registrar la compra
       const productos = await obtenerProductos();
       const datosTransformados = productos.map((producto) => ({
         id: producto.nombre,
@@ -285,8 +275,24 @@ const agregarOActualizarProducto = async (nuevoProducto) => {
             setMostrarModalAgregarProducto(false);
             setProductoSeleccionado(null);
           }}
-          onSave={agregarOActualizarProducto}
+          onSave={agregarProducto}
           productoInicial={productoSeleccionado}
+        />
+      )}
+
+      {mostrarModalEditarProducto && productoSeleccionado && (
+        <ModalEditarProducto
+          producto={productoSeleccionado}
+          categorias={categoriasDisponibles}
+          onClose={() => setMostrarModalEditarProducto(false)}
+          onGuardar={(productoActualizado) => {
+            setDatos((prev) =>
+              prev.map((p) =>
+                p.id === productoActualizado.id ? productoActualizado : p
+              )
+            );
+            setMostrarModalEditarProducto(false);
+          }}
         />
       )}
     </div>
