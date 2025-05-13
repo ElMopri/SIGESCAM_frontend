@@ -15,7 +15,7 @@ function TablaNotificaciones({ notificaciones, marcarComoLeida }) {
       <div key={noti.id} className={`notificacion-item ${getColorFondo(index)}`}>
         <div className="notificacion-mensaje">
           <div className="notificaciones-carta"><PiCardholderBold /></div>
-          {noti.leida ? noti.mensaje : <strong>{noti.mensaje}</strong>}
+          {noti.leida ? noti.descripcion : <strong>{noti.descripcion}</strong>}
         </div>
         <div>
           {noti.leida ? (
