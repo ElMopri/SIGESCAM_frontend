@@ -4,10 +4,10 @@ import { FaTimes } from "react-icons/fa";
 
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
   const [formData, setFormData] = useState({
-  producto: producto.producto,
-  precio: producto.precio,
-  categoria: producto.categoria,
-});
+    nombre: producto.nombre,
+    precioVenta: producto.precioVenta,
+    categoria: producto.categoria,
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,35 +38,40 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
     <div className="modal-agregar-overlay">
       <div className="modal-agregar">
         <FaTimes className="cerrar-icono" onClick={onClose} />
-         <div className="registrar-producto">
+        <div className="registrar-producto">
           <h2>Editar Producto</h2>
         </div>
-        <label htmlFor="nombreProducto" style={{marginBottom: "-6px"}}>Nuevo nombre del producto</label>
+        <label htmlFor="nombreProducto" style={{ marginBottom: "-6px" }}>
+          Nuevo nombre del producto
+        </label>
         <input
           type="text"
-          name="producto"
-          value={formData.producto}
+          name="nombre"
+          value={formData.nombre}
           onChange={handleChange}
         />
 
-        <label style={{marginBottom: "-6px"}}>Nuevo precio de venta</label>
+        <label style={{ marginBottom: "-6px" }}>Nuevo precio de venta</label>
         <input
           type="number"
-          name="precio"
-          value={formData.precio}
+          name="precioVenta"
+          value={formData.precioVenta}
           onChange={handleChange}
         />
 
-        <label style={{marginBottom: "-6px"}}>Nueva categoría</label>
+        <label htmlFor="categoria" style={{ marginBottom: "-6px" }}>
+          Nueva categoría
+        </label>
         <select
+          id="categoria"
           name="categoria"
           value={formData.categoria}
           onChange={handleChange}
         >
-          <option value="">Seleccionar categoría</option>
-          {categorias.map((cat) => (
-            <option key={cat.nombre} value={cat.nombre}>
-              {cat.nombre}
+          <option value="">Seleccione una categoría</option>
+          {categorias.map((cat, i) => (
+            <option key={i} value={cat}>
+              {cat}
             </option>
           ))}
         </select>

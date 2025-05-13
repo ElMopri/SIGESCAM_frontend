@@ -285,13 +285,30 @@ const ProductosAdmin = () => {
           producto={productoSeleccionado}
           categorias={categoriasDisponibles}
           onClose={() => setMostrarModalEditarProducto(false)}
-          onGuardar={(productoActualizado) => {
-            setDatos((prev) =>
-              prev.map((p) =>
-                p.id === productoActualizado.id ? productoActualizado : p
-              )
-            );
-            setMostrarModalEditarProducto(false);
+          onGuardar={async (productoActualizado) => {
+            try {
+              const datosActualizados = {
+                nuevoNombre: productoActualizado.producto,
+                precio_venta: productoActualizado.precio,
+                id_categoria: productoActualizado.categoria,
+              };
+
+              console.log("Datos enviados a editarProductoPorNombre:", datosActualizados);
+
+              await editarProductoPorNombre(productoSeleccionado.id, datosActualizados);
+
+              setDatos((prev) =>
+                prev.map((p) =>
+                  p.id === productoSeleccionado.id
+                    ? { ...p, ...productoActualizado }
+                    : p
+                )
+              );
+              setMostrarModalEditarProducto(false);
+            } catch (error) {
+              console.error("Error al editar el producto:", error);
+              // Si hay un error, no se realiza ningún cambio
+            }
           }}
         />
       )}
