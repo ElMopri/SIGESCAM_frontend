@@ -32,7 +32,6 @@ export default function Notificaciones() {
       );
     } catch (error) {
       console.error("Error al marcar como leída:", error);
-      // Puedes mostrar un mensaje de error al usuario aquí
     } finally {
       setCargando(null);
     }

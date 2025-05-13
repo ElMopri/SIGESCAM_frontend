@@ -34,3 +34,15 @@ export const actualizarEstadoNotificacion = async (id) => {
     throw error; 
   }
 };
+
+//listar notificaciones para administradora
+export const obtenerNotificacionesGestora = async (dni) => {
+  try {
+    const res = await fetch(`${API_URL}/paraGestoras/${dni}`);
+    if (!res.ok) throw new Error("Error al obtener notificaciones");
+    return await res.json();
+  } catch (error) {
+    console.error("Error:", error);
+    return [];
+  }
+};
