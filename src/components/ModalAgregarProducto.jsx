@@ -68,30 +68,33 @@ const ModalAgregarProducto = ({
       <div className="modal-agregar">
         <FaTimes className="cerrar-icono" onClick={onClose} />
         <div className="registrar-producto">
-            <h2>{productoInicial ? "Editar Producto" : "Registrar Producto"}</h2>
+          <h2>{productoInicial ? "Editar Producto" : "Registrar Producto"}</h2>
         </div>
         <div style={{ position: "relative" }}>
           <label htmlFor="nombreProducto">Nombre del producto</label>
           <input
-    id="nombreProducto"
-    type="text"
-    value={nombreProducto}
-    onChange={(e) => setNombreProducto(e.target.value)}
-    onBlur={() => setTimeout(() => setCoincidencias([]), 100)}
-    onFocus={() => {
-     if (nombreProducto.trim() !== "") {
-      const resultados = productos.filter((p) =>
-        p.producto.toLowerCase().includes(nombreProducto.toLowerCase())
-      );
-      setCoincidencias(resultados);
-     }
-  }}
-  ref={inputRef}
-/>
+            id="nombreProducto"
+            type="text"
+            value={nombreProducto}
+            onChange={(e) => setNombreProducto(e.target.value)}
+            onBlur={() => setTimeout(() => setCoincidencias([]), 100)}
+            onFocus={() => {
+              if (nombreProducto.trim() !== "") {
+                const resultados = productos.filter((p) =>
+                  p.producto.toLowerCase().includes(nombreProducto.toLowerCase())
+                );
+                setCoincidencias(resultados);
+              }
+            }}
+            ref={inputRef}
+          />
           {coincidencias.length > 0 && (
             <ul className="sugerencias-lista">
               {coincidencias.map((p, idx) => (
-                <li key={idx} onClick={() => seleccionarProducto(p)}>
+                <li
+                  key={idx}
+                  onMouseDown={() => seleccionarProducto(p)} // Changed to onMouseDown
+                >
                   {p.producto}
                 </li>
               ))}
@@ -108,7 +111,9 @@ const ModalAgregarProducto = ({
           >
             <option value="">Seleccione una categoría</option>
             {categorias.map((cat, i) => (
-              <option key={i} value={cat}>{cat}</option>
+              <option key={i} value={cat}>
+                {cat}
+              </option>
             ))}
           </select>
         </div>

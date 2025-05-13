@@ -58,12 +58,22 @@ export const filtrarComprasPorProducto = async (nombre) => {
 };
 
 // Registrar compra
+let isRegistrarCompraInProgress = false;
+
 export const registrarCompra = async (compraData) => {
-    try {
-        const response = await axios.post(`${API_COMPRAS}/registrar`, compraData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al registrar compra:", error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || "Error al registrar la compra");
-    }
+  if (isRegistrarCompraInProgress) {
+    throw new Error("El registro de compra ya está en progreso. Por favor, espere.");
+  }
+
+  isRegistrarCompraInProgress = true;
+
+  try {
+    const response = await axios.post(`${API_COMPRAS}/registrar`, compraData);
+    return response.data;
+  } catch (error) {
+    console.error("Error al registrar compra:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Error al registrar la compra");
+  } finally {
+    isRegistrarCompraInProgress = false;
+  }
 };
