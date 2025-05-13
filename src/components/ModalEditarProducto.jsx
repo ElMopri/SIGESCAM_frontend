@@ -4,10 +4,10 @@ import { FaTimes } from "react-icons/fa";
 
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
   const [formData, setFormData] = useState({
-    nombre: producto.nombre,
-    precioVenta: producto.precioVenta,
-    categoria: producto.categoria,
-  });
+  producto: producto.producto,
+  precio: producto.precio,
+  categoria: producto.categoria,
+});
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,16 +44,16 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
         <label htmlFor="nombreProducto" style={{marginBottom: "-6px"}}>Nuevo nombre del producto</label>
         <input
           type="text"
-          name="nombre"
-          value={formData.nombre}
+          name="producto"
+          value={formData.producto}
           onChange={handleChange}
         />
 
         <label style={{marginBottom: "-6px"}}>Nuevo precio de venta</label>
         <input
           type="number"
-          name="precioVenta"
-          value={formData.precioVenta}
+          name="precio"
+          value={formData.precio}
           onChange={handleChange}
         />
 
