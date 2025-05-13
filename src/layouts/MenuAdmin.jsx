@@ -8,7 +8,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 
 const MenuAdmin = ({ isOpen, setIsOpen }) => {
   const menuItems = [
-    { text: "Inicio", path: "/admin/inicio", icon: <BiSolidHome /> },
+    { text: "Inicio", path: "/admin", icon: <BiSolidHome /> },
     { text: "Productos", path: "/admin/productos", icon: <FaShoppingCart /> },
     { text: "Por cobrar", path: "/admin/por-cobrar", icon: <GiReceiveMoney /> },
     { text: "Sugerencias", path: "/admin/sugerencias", icon: <FaCommentAlt /> },

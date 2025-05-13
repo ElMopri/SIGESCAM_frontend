@@ -15,7 +15,7 @@ const HeaderUser = () => {
       <div className="usuario-info">
         <div className="foto-usuario">
           <img
-            src="/user.png"
+            src="https://randomuser.me/api/portraits/women/65.jpg"
             alt="Foto de usuario"
             className="imagen-usuario"
           />
