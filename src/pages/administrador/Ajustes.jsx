@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import "./Ajustes.css";
 import { editarCorreo } from "../../api/UsuarioApi";
+import Modal from "../../components/Modal";
 
 const Ajustes = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -14,14 +15,47 @@ const Ajustes = () => {
   const [notiSugerencias, setNotiSugerencias] = useState(true);
   const [notiProductos, setNotiProductos] = useState(true);
 
+  // Estados para el modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: "confirm",
+    title: "",
+    message: "",
+    onConfirm: null,
+  });
+
   const [editable, setEditable] = useState({
     correo: false,
   });
 
   const toggleEditable = (campo) => {
-    // Si ya está habilitado, al hacer clic se guarda y desactiva
     if (editable[campo]) {
-      // Aquí podrías agregar lógica adicional para guardar individualmente
+      // Validar antes de guardar
+      if (campo === "correo") {
+        const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!regexCorreo.test(correo)) {
+          setModalConfig({
+            type: "confirm",
+            title: "Correo inválido",
+            message: "Por favor, ingrese un correo válido.",
+            onConfirm: () => setShowModal(false),
+          });
+          setShowModal(true);
+          return;
+        }
+
+        // Mostrar modal de confirmación para cambiar correo
+        setModalConfig({
+          type: "confirm",
+          title: "Confirmar cambio de correo",
+          message: "¿Estás seguro de que deseas cambiar tu correo electrónico?",
+          onConfirm: () => {
+            handleGuardar();
+            setShowModal(false);
+          },
+        });
+        setShowModal(true);
+      }
       setEditable((prev) => ({ ...prev, [campo]: false }));
     } else {
       setEditable((prev) => ({ ...prev, [campo]: true }));
@@ -29,17 +63,30 @@ const Ajustes = () => {
   };
 
   const handleGuardar = async () => {
-    const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!regexCorreo.test(correo)) {
-      alert("Por favor, ingrese un correo válido.");
-      return;
-    }
     try {
       await editarCorreo(user.dni, correo);
-      alert("Correo actualizado correctamente");
-      setEditable({ nombre: false, correo: false });
+
+      // Mostrar modal de éxito
+      setModalConfig({
+        type: "success",
+        title: "¡Éxito!",
+        message: "Correo actualizado correctamente",
+        onConfirm: () => {
+          setShowModal(false);
+          setEditable({ nombre: false, correo: false });
+          // Actualizar el contexto si es necesario
+          setUser({ ...user, email: correo });
+        },
+      });
+      setShowModal(true);
     } catch (error) {
-      alert(error.message);
+      setModalConfig({
+        type: "confirm",
+        title: "Error",
+        message: error.message || "Error al actualizar el correo",
+        onConfirm: () => setShowModal(false),
+      });
+      setShowModal(true);
     }
   };
 
@@ -116,6 +163,16 @@ const Ajustes = () => {
           Guardar
         </button>
       </div>
+
+      {/* Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type={modalConfig.type}
+      />
     </div>
   );
 };
