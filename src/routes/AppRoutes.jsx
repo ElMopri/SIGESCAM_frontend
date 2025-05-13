@@ -20,6 +20,7 @@ import SugerenciasGestor from "../pages/gestorVentas/SugerenciasGestor";
 import RegistrarVentasGestor from "../pages/gestorVentas/RegistrarVentasGestor";
 import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
 import NotificacionesAdmin from "../pages/administrador/Notificaciones";
+import NotificacionesGestor from "../pages/gestorVentas/NotificacionesGestor"
 
 export default function AppRoutes() {
   return (
@@ -53,6 +54,7 @@ export default function AppRoutes() {
           <Route path="sugerencias" element={<SugerenciasGestor />} />
           <Route path="registar-venta" element={<RegistrarVentasGestor />} />
           <Route path="ajustes" element={<AjustesGestor />} />
+          <Route path="notificaciones" element={<NotificacionesGestor />} />
         </Route>
       </Route>
       <Route path="*" element={<Inicio />} />
