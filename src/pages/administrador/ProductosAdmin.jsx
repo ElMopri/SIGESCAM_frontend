@@ -22,6 +22,10 @@ import {
   registrarCompra
 } from "../../api/CompraApi"; // Asegúrate de que el nombre del archivo sea correcto
 
+import {
+  obtenerCategorias
+} from "../../api/CategoriaApi"; // Asegúrate de que el nombre del archivo sea correcto
+
 const ProductosAdmin = () => {
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
@@ -91,25 +95,72 @@ const ProductosAdmin = () => {
     setDatos(datos.filter((d) => d.id !== id));
   };
 
-  const categoriasDisponibles = [...new Set(datos.map((d) => d.categoria))];
+  // Obtener categorías disponibles para el filtro
+  const [categoriasDisponibles, setCategoriasDisponibles] = useState([]);
 
-  const datosFiltrados = datos.filter((item) => {
-    const coincideNombre = item.producto
-      .toLowerCase()
-      .includes(filtroNombre.toLowerCase());
-    const coincideCantidad =
-      filtrosAvanzados.cantidad === undefined ||
-      filtrosAvanzados.cantidad === "" ||
-      item.unidades <= Number(filtrosAvanzados.cantidad);
-    const coincideCategoria =
-      !filtrosAvanzados.categoria ||
-      item.categoria.toLowerCase() === filtrosAvanzados.categoria.toLowerCase();
-    const coincidePrecio =
-      filtrosAvanzados.precio === undefined ||
-      filtrosAvanzados.precio === "" ||
-      item.precio <= Number(filtrosAvanzados.precio);
-    return coincideNombre && coincideCantidad && coincideCategoria && coincidePrecio;
-  });
+  React.useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const categorias = await obtenerCategorias();
+        setCategoriasDisponibles(categorias.map((categoria) => categoria.nombre));
+      } catch (error) {
+        console.error("Error al obtener las categorías:", error);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
+
+  // Filtrar productos según el buscador o filtros avanzados
+  React.useEffect(() => {
+    const fetchProductosFiltrados = async () => {
+      try {
+        if (filtroNombre) { // Es el buscador
+          const productos = await buscarProductosPorNombreParecido(filtroNombre);
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.id_categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        } else if (
+          (filtrosAvanzados.cantidad !== undefined && filtrosAvanzados.cantidad !== "") ||
+          (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
+          (filtrosAvanzados.precio !== undefined && filtrosAvanzados.precio !== "")
+        ) {
+          const productos = await filtrarProductos(
+            filtrosAvanzados.cantidad || null,
+            filtrosAvanzados.categoria || null,
+            filtrosAvanzados.precio || null
+          );
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.id_categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        } else {
+          const productos = await obtenerProductos();
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.id_categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        }
+      } catch (error) {
+        console.error("Error al filtrar los productos:", error);
+      }
+    };
+
+    fetchProductosFiltrados();
+  }, [filtroNombre, filtrosAvanzados]);
 
   const revertirFiltros = () => {
     setFiltroNombre("");
@@ -160,7 +211,7 @@ const ProductosAdmin = () => {
             Revertir Filtros <FaUndo style={{ marginLeft: "4px" }} />
           </button>
         </div>
-        <TablaProductos columnas={columnasAdmin} datos={datosFiltrados} />
+        <TablaProductos columnas={columnasAdmin} datos={datos} />
       </div>
 
       <div className="botones-inferiores">
