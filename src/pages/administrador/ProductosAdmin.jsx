@@ -34,8 +34,6 @@ const ProductosAdmin = () => {
   const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("");
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
-  
-  const { user, setUser } = useContext(AuthContext);
 
   const [datos, setDatos] = useState([]);
 
