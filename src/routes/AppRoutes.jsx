@@ -19,6 +19,7 @@ import PorCobrarGestor from "../pages/gestorVentas/PorCobrarGestor";
 import SugerenciasGestor from "../pages/gestorVentas/SugerenciasGestor";
 import RegistrarVentasGestor from "../pages/gestorVentas/RegistrarVentasGestor";
 import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
+import NotificacionesAdmin from "../pages/administrador/Notificaciones";
 
 export default function AppRoutes() {
   return (
@@ -40,6 +41,7 @@ export default function AppRoutes() {
           <Route path="estadisticas" element={<Estadisticas />} />
           <Route path="usuarios" element={<Usuarios />} />
           <Route path="ajustes" element={<AjustesAdmin />} />
+          <Route path="notificaciones" element={<NotificacionesAdmin />} />
         </Route>
       </Route>
 
