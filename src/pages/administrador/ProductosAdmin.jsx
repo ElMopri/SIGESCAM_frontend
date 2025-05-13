@@ -34,7 +34,7 @@ const ProductosAdmin = () => {
   const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("");
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
-  
+
   const [datos, setDatos] = useState([]);
 
   React.useEffect(() => {
@@ -90,9 +90,14 @@ const ProductosAdmin = () => {
     setMostrarModalAgregarProducto(true);
   };
 
-  const eliminar = (id) => {
-    console.log("Eliminar", id);
-    setDatos(datos.filter((d) => d.id !== id));
+  const eliminar = async (id) => {
+    try {
+      await activarDesactivarProductoPorNombre(id, false);
+      setDatos(datos.filter((d) => d.id !== id));
+      console.log(`Producto con id ${id} desactivado.`);
+    } catch (error) {
+      console.error("Error al desactivar el producto:", error);
+    }
   };
 
   // Obtener categorías disponibles para el filtro
@@ -167,26 +172,45 @@ const ProductosAdmin = () => {
     setFiltrosAvanzados({});
   };
 
-  const agregarOActualizarProducto = (nuevoProducto) => {
-    const index = datos.findIndex((p) => p.producto.toLowerCase() === nuevoProducto.producto.toLowerCase());
-    if (index >= 0) {
-      // Actualiza
-      const actualizados = [...datos];
-      actualizados[index] = { ...actualizados[index], ...nuevoProducto };
-      setDatos(actualizados);
-    } else {
-      // Agrega nuevo
-      setDatos([
-        ...datos,
-        {
-          ...nuevoProducto,
-          id: datos.length + 1,
-          unidades: Number(nuevoProducto.cantidadAgregar),
-        },
-      ]);
+  const agregarOActualizarProducto = async (nuevoProducto) => {
+    try {
+      const compraData = {
+        dni: user.dni, // Obtén el DNI del usuario desde el contexto
+        nombre: nuevoProducto.producto,
+        categoria: nuevoProducto.categoria,
+        precioVenta: nuevoProducto.precio,
+        precioCompra: nuevoProducto.precioCompra,
+        cantidad: nuevoProducto.cantidadAgregar,
+        fechaCompra: nuevoProducto.fechaCompra,
+      };
+  
+      // Llama a la API para registrar la compra
+      await registrarCompra(compraData);
+  
+      // Actualiza el estado local después de registrar la compra
+      const index = datos.findIndex((p) => p.producto.toLowerCase() === nuevoProducto.producto.toLowerCase());
+      if (index >= 0) {
+        // Actualiza
+        const actualizados = [...datos];
+        actualizados[index] = { ...actualizados[index], ...nuevoProducto };
+        setDatos(actualizados);
+      } else {
+        // Agrega nuevo
+        setDatos([
+          ...datos,
+          {
+            ...nuevoProducto,
+            id: datos.length + 1,
+            unidades: Number(nuevoProducto.cantidadAgregar),
+          },
+        ]);
+      }
+  
+      setMostrarModalAgregarProducto(false);
+      setProductoSeleccionado(null);
+    } catch (error) {
+      console.error("Error al registrar la compra:", error);
     }
-    setMostrarModalAgregarProducto(false);
-    setProductoSeleccionado(null);
   };
 
   return (
