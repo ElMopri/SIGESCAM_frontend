@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./CrearContraseña.css";
+import { restablecerContrasena } from "../../api/RecuperarContrasenaApi";
 
 const CrearContraseña = () => {
-  const { token } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+  const { dni } = location.state || {};
 
   const [nuevaContrasena, setNuevaContrasena] = useState("");
   const [confirmarContrasena, setConfirmarContrasena] = useState("");
@@ -22,28 +24,27 @@ const CrearContraseña = () => {
     simbolo: /[\W_]/.test(nuevaContrasena),
   };
 
-  const validarContrasena = () => {
-    return Object.values(validaciones).every(Boolean);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+
+    if (!dni) {
+      setError(
+        "No se encontró el documento del usuario. Por favor, complete el proceso desde el inicio."
+      );
+      setTimeout(() => navigate("/recuperar-contrasena"), 3000);
+      return;
+    }
+
     setMensaje("");
-
-    if (nuevaContrasena !== confirmarContrasena) {
-      setError("Las contraseñas no coinciden.");
-      return;
-    }
-
-    if (!validarContrasena()) {
-      setError("La contraseña no cumple con los requisitos.");
-      return;
-    }
+    setError("");
 
     try {
-      await enviarNuevaContraseña(token, nuevaContrasena);
-      setMensaje("Contraseña creada correctamente. Redirigiendo...");
+      const respuesta = await restablecerContrasena(
+        dni,
+        nuevaContrasena,
+        confirmarContrasena
+      );
+      setMensaje(respuesta.mensaje);
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       setError(err.message || "Error al cambiar la contraseña");
