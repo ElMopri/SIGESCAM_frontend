@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import TablaNotificaciones from "../../components/TablaNotificaciones";
+import React, { useState, useEffect  } from "react";
+import TablaNotificaciones from "../../components/TablaNotificaciones.jsx";
+import { obtenerNotificacionesGestora , actualizarEstadoNotificacion } from "../../api/NotificacionApi.js";
 
 const listaDeNotificaciones = [
   { id: 1, descripcion: "Producto Cuaderno ha sido agregado al inventario", leida: true },
@@ -14,13 +15,36 @@ const listaDeNotificaciones = [
 ];
 
 export default function NotificacionesGestor() {
-  const [notificaciones, setNotificaciones] = useState(listaDeNotificaciones);
+  const [notificaciones, setNotificaciones] = useState([]);
+    const [cargando, setCargando] = useState(null);
 
-  const marcarComoLeida = (id) => {
-    setNotificaciones((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, leida: true } : n))
-    );
-  };
+    useEffect(() => {
+        const cargarNotificaciones = async () => {
+          const dni = localStorage.getItem("usuario_dni"); 
+          if (!dni) return;
+    
+          const data = await obtenerNotificacionesGestora(dni);
+          console.log("Datos cargados desde backend:", data);
+          setNotificaciones(data);
+        };
+    
+        cargarNotificaciones();
+      }, []);
+
+  const marcarComoLeida = async (id) => {
+      setCargando(id);
+      try {
+        const notificacionActualizada = await actualizarEstadoNotificacion(id);
+        
+        setNotificaciones(prev =>
+          prev.map(n => n.id === id ? { ...n, leida: true } : n)
+        );
+      } catch (error) {
+        console.error("Error al marcar como leída:", error);
+      } finally {
+        setCargando(null);
+      }
+    };
 
   return (
     <div className="notificaciones-container">
@@ -39,6 +63,7 @@ export default function NotificacionesGestor() {
       <TablaNotificaciones
         notificaciones={notificaciones}
         marcarComoLeida={marcarComoLeida}
+        cargando={cargando}
       />
     </div>
   );

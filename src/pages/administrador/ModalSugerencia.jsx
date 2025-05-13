@@ -29,8 +29,8 @@ const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
               <tbody>
                 {sugerencias.map((s) => (
                   <tr key={s.id}>
-                    <td>{s.fecha}</td>
-                    <td>{s.nombre}</td>
+                    <td>{new Date(s.fecha_registro).toLocaleDateString()}</td>
+                    <td>{s.nombre_producto}</td>
                     <td>{s.descripcion}</td>
                     <td className="col-icon">
                       <div className="icono" onClick={() => onMover(s.id)}>
