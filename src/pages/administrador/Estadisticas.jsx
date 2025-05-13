@@ -102,7 +102,7 @@ const Estadisticas = () => {
         </div>
       </div>
 
-      {pestañaActiva === "entradas" && (
+      {pestañaActiva === "salidas" && (
         <>
           <div className="filtro-section">
             <label className="filtro-label">Filtro por</label>
@@ -138,31 +138,35 @@ const Estadisticas = () => {
               />
             )}
           </div>
-
-          <table className="tabla-estadisticas">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Precio (U)</th>
-                <th>Fecha Compra</th>
-                <th>Total de la compra</th>
-              </tr>
-            </thead>
-            <tbody>
-              {compras.map((item, idx) => (
-                <tr key={idx} className={idx % 2 === 0 ? "fila-par" : ""}>
-                  <td>{item.producto.nombre}</td>
-                  <td>{item.cantidad_agregar}</td>
-                  <td>${item.precio.toLocaleString()}</td>
-                  <td>
-                    {new Date(item.fecha_compra).toLocaleDateString("es-ES")}
-                  </td>
-                  <td>${item.total_compra}</td>
+          <div className="tabla-container">
+            <table className="tabla-estadisticas">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>Precio (U)</th>
+                  <th>Fecha Compra</th>
+                  <th>Total de la compra</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {compras.map((item, idx) => (
+                  <tr
+                    key={idx}
+                    className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
+                  >
+                    <td>{item.producto.nombre}</td>
+                    <td>{item.cantidad_agregar}</td>
+                    <td>${item.precio.toLocaleString()}</td>
+                    <td>
+                      {new Date(item.fecha_compra).toLocaleDateString("es-ES")}
+                    </td>
+                    <td>${item.total_compra}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="total-container">
             <span>Total:</span>
@@ -176,9 +180,9 @@ const Estadisticas = () => {
         </>
       )}
 
-      {pestañaActiva === "salidas" && (
+      {pestañaActiva === "entradas" && (
         <div className="salidas-placeholder">
-          <p>Aquí va el histórico de salidas.</p>
+          <p>Aquí va el histórico de Entradas.</p>
         </div>
       )}
     </div>

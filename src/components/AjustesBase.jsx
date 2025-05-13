@@ -1,37 +1,145 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { editarCorreo, obtenerPorId } from "../api/UsuarioApi";
+import Modal from "./Modal";
 import "./AjustesBase.css";
+import { AuthContext } from "../context/AuthContext"; // Asegúrate de importar tu contexto
 
-const AjustesBase = ({ rol, notificaciones }) => {
-  const [nombre, setNombre] = useState("Diana Triana");
-  const [correo, setCorreo] = useState("dianatr@gmail.com");
+const AjustesBase = ({ imagenPerfil, notificaciones }) => {
+  // Obtenemos el usuario y setUser del contexto
+  const { user, setUser } = useContext(AuthContext);
 
-  const [notiEstado, setNotiEstado] = useState(() => {
-    const estadosIniciales = {};
-    notificaciones.forEach((n) => (estadosIniciales[n.key] = true));
-    return estadosIniciales;
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Cargar los datos del usuario al montar el componente
+  useEffect(() => {
+    const cargarUsuario = async () => {
+      if (user?.dni) {
+        try {
+          const usuario = await obtenerPorId(user.dni);
+          setNombre(usuario.nombre || "Nombre no disponible");
+          setCorreo(usuario.email || "Correo no disponible");
+        } catch (error) {
+          console.error("Error al cargar usuario:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    cargarUsuario();
+  }, [user]);
+
+  const [estadoNotificaciones, setEstadoNotificaciones] = useState(
+    notificaciones.reduce((acc, noti) => {
+      acc[noti.id] = true;
+      return acc;
+    }, {})
+  );
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: "confirm",
+    title: "",
+    message: "",
+    onConfirm: null,
   });
 
-  const [editable, setEditable] = useState({ nombre: false, correo: false });
+  const [editable, setEditable] = useState({ correo: false });
 
   const toggleEditable = (campo) => {
-    setEditable((prev) => ({ ...prev, [campo]: !prev[campo] }));
+    if (editable[campo]) {
+      if (campo === "correo") {
+        const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!regexCorreo.test(correo)) {
+          setModalConfig({
+            type: "confirm",
+            title: "Correo inválido",
+            message: "Por favor, ingrese un correo válido.",
+            onConfirm: () => setShowModal(false),
+          });
+          setShowModal(true);
+          return;
+        }
+
+        setModalConfig({
+          type: "confirm",
+          title: "Confirmar cambio de correo",
+          message: "¿Estás segura de que deseas cambiar tu correo electrónico?",
+          onConfirm: () => {
+            handleGuardar();
+            setShowModal(false);
+          },
+        });
+        setShowModal(true);
+      }
+      setEditable((prev) => ({ ...prev, [campo]: false }));
+    } else {
+      setEditable((prev) => ({ ...prev, [campo]: true }));
+    }
   };
 
-  const handleGuardar = () => {
-    alert(`Cambios guardados para ${rol}`);
-    setEditable({ nombre: false, correo: false });
+  const handleGuardar = async () => {
+    try {
+      await editarCorreo(user.dni, correo);
+
+      // Actualizar el contexto global
+      setUser((prevUser) => ({
+        ...prevUser,
+        email: correo,
+      }));
+
+      setModalConfig({
+        type: "success",
+        title: "¡Éxito!",
+        message: "Correo actualizado correctamente",
+        onConfirm: () => {
+          setShowModal(false);
+          setEditable({ correo: false });
+        },
+      });
+      setShowModal(true);
+    } catch (error) {
+      setModalConfig({
+        type: "confirm",
+        title: "Error",
+        message: error.message || "Error al actualizar el correo",
+        onConfirm: () => setShowModal(false),
+      });
+      setShowModal(true);
+    }
   };
+
+  const handleToggle = (id) => {
+    setEstadoNotificaciones((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!user) {
+    return <div>No hay un perfil con sesión activa</div>;
+  }
 
   return (
     <div className="ajustes-background">
       <h1 className="titulo-ajustes">Ajustes del sistema</h1>
-
       <div className="settings-card">
         <h2>Cuenta</h2>
         <div className="account-section">
           <div className="profile-container">
             <img
-              src="https://randomuser.me/api/portraits/women/65.jpg"
+              src={
+                imagenPerfil ||
+                "https://randomuser.me/api/portraits/women/65.jpg"
+              }
               alt="Perfil"
               className="profile-pic"
             />
@@ -39,7 +147,6 @@ const AjustesBase = ({ rol, notificaciones }) => {
               <img src="/public/create.png" alt="Editar perfil" />
             </span>
           </div>
-
           <div className="input-fields">
             <div className="input-group">
               <label>Nombre de perfil</label>
@@ -47,18 +154,9 @@ const AjustesBase = ({ rol, notificaciones }) => {
                 type="text"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                disabled={!editable.nombre}
+                disabled={true} // Deshabilitado ya que solo editamos el correo
               />
-              <span className="icon" onClick={() => toggleEditable("nombre")}>
-                <img
-                  src={
-                    editable.nombre ? "/public/save.png" : "/public/create.png"
-                  }
-                  alt={editable.nombre ? "Guardar nombre" : "Editar nombre"}
-                />
-              </span>
             </div>
-
             <div className="input-group">
               <label>Correo</label>
               <input
@@ -80,27 +178,29 @@ const AjustesBase = ({ rol, notificaciones }) => {
         </div>
 
         <div className="notifications-section">
-          <p>Notificaciones para {rol}</p>
+          <h2>Notificaciones</h2>
           {notificaciones.map((noti) => (
-            <div className="switch" key={noti.key}>
+            <div key={noti.id} className="switch">
               <span>{noti.label}</span>
               <div
-                className={`toggle ${notiEstado[noti.key] ? "on" : "off"}`}
-                onClick={() =>
-                  setNotiEstado((prev) => ({
-                    ...prev,
-                    [noti.key]: !prev[noti.key],
-                  }))
-                }
+                className={`toggle ${
+                  estadoNotificaciones[noti.id] ? "on" : "off"
+                }`}
+                onClick={() => handleToggle(noti.id)}
               ></div>
             </div>
           ))}
         </div>
-
-        <button className="save-button" onClick={handleGuardar}>
-          Guardar
-        </button>
       </div>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type={modalConfig.type}
+      />
     </div>
   );
 };
