@@ -21,6 +21,7 @@ import RegistrarVentasGestor from "../pages/gestorVentas/RegistrarVentasGestor";
 import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
 import NotificacionesAdmin from "../pages/administrador/Notificaciones";
 import NotificacionesGestor from "../pages/gestorVentas/NotificacionesGestor";
+import EstablecerContraseña from "../pages/publica/EstablecerContraseña";
 
 export default function AppRoutes() {
   return (
@@ -32,6 +33,10 @@ export default function AppRoutes() {
         element={<RestablecerContraseña />}
       />
       <Route path="/crearContraseña" element={<CrearContraseña />} />
+      <Route
+        path="/establecer-contraseña/:token"
+        element={<EstablecerContraseña />}
+      />
 
       {/* Rutas para Administrador */}
       <Route

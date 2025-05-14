@@ -72,3 +72,28 @@ export const cambiarEstadoUsuario = async (dni, estado) => {
     throw new Error(mensaje);
   }
 };
+
+
+export const enviarNuevaContraseña = async (token, contrasena) => {
+  try {
+    const response = await fetch(`${API_USUARIOS}/crear-contrasena/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ contrasena }), // ahora coincide con el backend
+    });
+
+    const data = await response.json();
+    console.log("Respuesta cruda del backend:", data);
+
+    if (!response.ok) {
+      throw new Error(data.message || "Error al crear la contraseña");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en enviar Nueva Contraseña:", error);
+    alert(error.message || "Error inesperado al enviar la nueva contraseña");
+  }
+};
