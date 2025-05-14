@@ -38,7 +38,7 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
         const datosActualizados = {
           nuevoNombre: formData.nombre,
           precio_venta: parseFloat(formData.precioVenta),
-          id_categoria: formData.categoria,
+          nombre_categoria: formData.categoria,
         };
         const productoActualizado = await editarProductoPorNombre(
           producto.producto, // Assuming 'producto.producto' contains the current name
