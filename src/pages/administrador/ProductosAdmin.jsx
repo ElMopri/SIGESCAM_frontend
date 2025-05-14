@@ -51,7 +51,7 @@ const ProductosAdmin = () => {
         const datosTransformados = productos.map((producto) => ({
           id: producto.nombre,
           producto: producto.nombre,
-          categoria: producto.id_categoria,
+          categoria: producto.categoria,
           unidades: producto.cantidad,
           precio: producto.precio_venta,
         }));
@@ -85,7 +85,7 @@ const ProductosAdmin = () => {
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
-            categoria: producto.id_categoria,
+            categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
           }));
@@ -103,7 +103,7 @@ const ProductosAdmin = () => {
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
-            categoria: producto.id_categoria,
+            categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
           }));
@@ -113,7 +113,7 @@ const ProductosAdmin = () => {
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
-            categoria: producto.id_categoria,
+            categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
           }));
@@ -178,7 +178,7 @@ const ProductosAdmin = () => {
         dni_usuario: dni,
         nombre_producto: nuevoProducto.producto,
         precio_compra: nuevoProducto.precioCompra,
-        id_categoria: nuevoProducto.categoria,
+        nombre_categoria: nuevoProducto.categoria,
         precio_venta: nuevoProducto.precio,
         cantidad_agregar: nuevoProducto.cantidadAgregar,
         fecha_compra: nuevoProducto.fechaCompra,
@@ -192,7 +192,7 @@ const ProductosAdmin = () => {
       const datosTransformados = productos.map((producto) => ({
         id: producto.nombre,
         producto: producto.nombre,
-        categoria: producto.id_categoria,
+        categoria: producto.categoria,
         unidades: producto.cantidad,
         precio: producto.precio_venta,
       }));
@@ -291,7 +291,7 @@ const ProductosAdmin = () => {
               const datosTransformados = productos.map((producto) => ({
                 id: producto.nombre,
                 producto: producto.nombre,
-                categoria: producto.id_categoria,
+                categoria: producto.categoria,
                 unidades: producto.cantidad,
                 precio: producto.precio_venta,
               }));
