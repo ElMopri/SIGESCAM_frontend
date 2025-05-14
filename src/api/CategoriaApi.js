@@ -26,27 +26,25 @@ export const crearCategoria = async (nombre, descripcion) => {
 };
 
 // Actualizar una categoría
-export const actualizarCategoria = async (nombreOriginal, nuevoNombre, nuevaDescripcion) => {
+export const actualizarCategoria = async (id_categoria, nuevoNombre, nuevaDescripcion) => {
   try {
-    const response = await axios.put(API_CATEGORIAS, {
-      nombreOriginal,
+    const response = await axios.put(`${API_CATEGORIAS}`, {
+      id_categoria,
       nuevoNombre,
-      nuevaDescripcion,
+      nuevaDescripcion
     });
     return response.data;
   } catch (error) {
-    console.error("Error al actualizar categoría:", error.response?.data?.message || error.message);
     throw new Error(error.response?.data?.message || "Error al actualizar categoría");
   }
 };
 
-// Eliminar una categoría
-export const eliminarCategoria = async (nombre) => {
+// DELETE (ahora usa id en la URL)
+export const eliminarCategoria = async (id_categoria) => {
   try {
-    const response = await axios.delete(`${API_CATEGORIAS}/${encodeURIComponent(nombre)}`);
+    const response = await axios.delete(`${API_CATEGORIAS}/${id_categoria}`);
     return response.data;
   } catch (error) {
-    console.error("Error al eliminar categoría:", error.response?.data?.message || error.message);
     throw new Error(error.response?.data?.message || "Error al eliminar categoría");
   }
 };

@@ -68,6 +68,7 @@ export const registrarCompra = async (compraData) => {
   isRegistrarCompraInProgress = true;
 
   try {
+    console.log(compraData);
     const response = await axios.post(`${API_COMPRAS}/registrar`, compraData);
     return response.data;
   } catch (error) {
