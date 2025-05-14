@@ -10,8 +10,12 @@ export const login = async ({ dni, contrasena }) => {
       dni,
       contrasena,
     });
+    const data = response.data;
 
-    return response.data;
+    // Guardar en localStorage
+    localStorage.setItem('usuario_dni', data.usuario.dni);
+
+    return data;
   } catch (error) {
     console.error("Error en login:", error.response?.data?.message || error.message);
     throw new Error(error.response?.data?.message || "Error en el inicio de sesión");

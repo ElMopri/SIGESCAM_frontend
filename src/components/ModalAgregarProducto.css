@@ -132,3 +132,14 @@
   cursor: pointer;
   font-weight: bold;
 }
+
+.btn-editar-modal {
+  background-color: #63c8f2;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}

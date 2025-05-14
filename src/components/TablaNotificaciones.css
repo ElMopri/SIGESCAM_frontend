@@ -1,0 +1,98 @@
+.notificaciones-container {
+  background-color: #fcf9e3;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.notificaciones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notificaciones-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.notificaciones-fecha {
+  font-size: 14px;
+  color: #444;
+}
+
+.notificaciones-panel {
+  border: 2px solid #4978d0;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
+  position: relative;
+}
+
+.notificaciones-campana {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  margin-bottom: 12px;
+  margin-top: -6px;
+}
+
+.notificaciones-campana svg {
+  background: none;
+}
+
+.notificacion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.color-fondo-uno {
+  background-color: #e2f5fb;
+}
+
+.color-fondo-dos {
+  background-color: #c7e4f0;
+}
+
+.notificacion-mensaje {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.notificaciones-carta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.btn-marcar {
+  background-color: #63c8f2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-marcar:hover {
+  background-color: #47b5df;
+}
+
+.btn-leida {
+  background-color: #edae38;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+}

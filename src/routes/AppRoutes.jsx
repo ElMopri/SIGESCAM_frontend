@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import ProtectedRoutes from "../routes/ProtectedRotes";
+import ProtectedRoutes from "./ProtectedRotes";
 import Inicio from "../pages/publica/Inicio";
 import Login from "../pages/publica/Login";
 import RestablecerContraseña from "../pages/publica/RestablecerContraseña";
+import CrearContraseña from "../pages/publica/CrearContraseña";
 import AdminLayout from "../layouts/AdminLayout";
 import GestorLayout from "../layouts/GestorLayout";
 import InicioAdmin from "../pages/administrador/InicioAdmin";
@@ -12,13 +13,14 @@ import AjustesAdmin from "../pages/administrador/AjustesAdmin";
 import InicioGestor from "../pages/gestorVentas/InicioGestor";
 import Usuarios from "../pages/administrador/Usuarios";
 import ProductosGestor from "../pages/gestorVentas/ProductosGestor";
-import CrearContraseña from "../pages/publica/CrearContraseña";
 import Estadisticas from "../pages/administrador/Estadisticas";
 import PorCobrarAdmin from "../pages/administrador/PorCobrarAdmin";
 import PorCobrarGestor from "../pages/gestorVentas/PorCobrarGestor";
 import SugerenciasGestor from "../pages/gestorVentas/SugerenciasGestor";
 import RegistrarVentasGestor from "../pages/gestorVentas/RegistrarVentasGestor";
 import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
+import NotificacionesAdmin from "../pages/administrador/Notificaciones";
+import NotificacionesGestor from "../pages/gestorVentas/NotificacionesGestor";
 
 export default function AppRoutes() {
   return (
@@ -31,28 +33,43 @@ export default function AppRoutes() {
       />
       <Route path="/crearContraseña" element={<CrearContraseña />} />
 
-      <Route element={<ProtectedRoutes rolRequerido="Administrador" />}>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<InicioAdmin />} />
-          <Route path="productos" element={<ProductosAdmin />} />
-          <Route path="por-cobrar" element={<PorCobrarAdmin />} />
-          <Route path="sugerencias" element={<SugerenciasAdmin />} />
-          <Route path="estadisticas" element={<Estadisticas />} />
-          <Route path="usuarios" element={<Usuarios />} />
-          <Route path="ajustes" element={<AjustesAdmin />} />
-        </Route>
+      {/* Rutas para Administrador */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoutes allowedRoles={["Administrador"]}>
+            <AdminLayout />
+          </ProtectedRoutes>
+        }
+      >
+        <Route index element={<InicioAdmin />} />
+        <Route path="productos" element={<ProductosAdmin />} />
+        <Route path="por-cobrar" element={<PorCobrarAdmin />} />
+        <Route path="sugerencias" element={<SugerenciasAdmin />} />
+        <Route path="estadisticas" element={<Estadisticas />} />
+        <Route path="usuarios" element={<Usuarios />} />
+        <Route path="ajustes" element={<AjustesAdmin />} />
+        <Route path="notificaciones" element={<NotificacionesAdmin />} />
       </Route>
 
-      <Route element={<ProtectedRoutes rolRequerido="Gestor de ventas" />}>
-        <Route path="/gestorDeVentas" element={<GestorLayout />}>
-          <Route index element={<InicioGestor />} />
-          <Route path="productos" element={<ProductosGestor />} />
-          <Route path="por-cobrar" element={<PorCobrarGestor />} />
-          <Route path="sugerencias" element={<SugerenciasGestor />} />
-          <Route path="registar-venta" element={<RegistrarVentasGestor />} />
-          <Route path="ajustes" element={<AjustesGestor />} />
-        </Route>
+      {/* Rutas para Gestor de Ventas */}
+      <Route
+        path="/gestorDeVentas"
+        element={
+          <ProtectedRoutes allowedRoles={["Gestor de Ventas"]}>
+            <GestorLayout />
+          </ProtectedRoutes>
+        }
+      >
+        <Route index element={<InicioGestor />} />
+        <Route path="productos" element={<ProductosGestor />} />
+        <Route path="por-cobrar" element={<PorCobrarGestor />} />
+        <Route path="sugerencias" element={<SugerenciasGestor />} />
+        <Route path="registar-venta" element={<RegistrarVentasGestor />} />
+        <Route path="ajustes" element={<AjustesGestor />} />
+        <Route path="notificaciones" element={<NotificacionesGestor />} />
       </Route>
+
       <Route path="*" element={<Inicio />} />
     </Routes>
   );
