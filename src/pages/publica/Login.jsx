@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EstructuraLogin from "../../components/EstructuraLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { login } from "../../api/LoginApi";
+import { login as apiLogin } from "../../api/LoginApi";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import "./Login.css";
@@ -12,40 +12,41 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { setUser, setRole } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
+    try {
+      const response = await apiLogin({ dni, contrasena: password });
+      login(response.usuario, response.usuario.rol);
 
-    const realizarLogin = async () => {
-      try {
-        const data = await login({ dni, contrasena: password });
-        setUser(data.usuario);
-        setRole(data.usuario.rol);
-
-        if (data.usuario.rol === "Administrador") {
+      switch (response.usuario.rol) {
+        case "Administrador":
           navigate("/admin");
-        } else if (data.usuario.rol === "Gestor de ventas") {
+          break;
+        case "Gestor de ventas":
           navigate("/gestorDeVentas");
-        } else {
-          navigate("/usuario");
-        }
-      } catch (err) {
-        setError(err.message);
-        setTimeout(() => {
-          setError("");
-        }, 1400);
+          break;
+        default:
+          navigate("/");
       }
-    };
-
-    realizarLogin();
+    } catch (err) {
+      console.error("Error en login:", err);
+      setError(err.message || "Credenciales incorrectas");
+      setTimeout(() => setError(""), 3000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const toggleMostrarContrasena = () =>
+  const toggleMostrarContrasena = () => {
     setMostrarContrasena(!mostrarContrasena);
+  };
 
   return (
     <EstructuraLogin>
