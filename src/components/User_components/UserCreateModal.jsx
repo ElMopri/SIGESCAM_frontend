@@ -73,6 +73,7 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
             required
           />
           <select name="rol" value={formData.rol} onChange={handleChange}>
+            <option value="">Rol</option>
             <option value="Administrador">Administrador</option>
             <option value="Gestor de ventas">Gestor de ventas </option>
           </select>
