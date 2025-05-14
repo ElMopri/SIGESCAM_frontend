@@ -140,14 +140,14 @@ const ProductosAdmin = () => {
       key: "acciones",
       label: "Acciones",
       render: (item) => (
-        <>
+        <div className="botones-accion">
           <button onClick={() => editar(item)} className="boton-icono editar">
             <img src={iconEditar} alt="Editar" className="icono-accion" />
           </button>
           <button onClick={() => eliminar(item.id)} className="boton-icono eliminar">
             <img src={iconDelete} alt="Eliminar" className="icono-accion" />
           </button>
-        </>
+        </div>
       ),
     },
   ];
@@ -287,27 +287,19 @@ const ProductosAdmin = () => {
           onClose={() => setMostrarModalEditarProducto(false)}
           onGuardar={async (productoActualizado) => {
             try {
-              const datosActualizados = {
-                nuevoNombre: productoActualizado.producto,
-                precio_venta: productoActualizado.precio,
-                id_categoria: productoActualizado.categoria,
-              };
+              const productos = await obtenerProductos();
+              const datosTransformados = productos.map((producto) => ({
+                id: producto.nombre,
+                producto: producto.nombre,
+                categoria: producto.id_categoria,
+                unidades: producto.cantidad,
+                precio: producto.precio_venta,
+              }));
+              setDatos(datosTransformados);
 
-              console.log("Datos enviados a editarProductoPorNombre:", datosActualizados);
-
-              await editarProductoPorNombre(productoSeleccionado.id, datosActualizados);
-
-              setDatos((prev) =>
-                prev.map((p) =>
-                  p.id === productoSeleccionado.id
-                    ? { ...p, ...productoActualizado }
-                    : p
-                )
-              );
               setMostrarModalEditarProducto(false);
             } catch (error) {
               console.error("Error al editar el producto:", error);
-              // Si hay un error, no se realiza ningún cambio
             }
           }}
         />

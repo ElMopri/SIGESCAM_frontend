@@ -74,6 +74,12 @@
   justify-content: center;
 }
 
+.botones-accion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
 
 .boton-icono:hover {
   transform: scale(1.1);

@@ -15,11 +15,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const checkAuth = useCallback(() => {
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+      clearAuth();
+      setLoading(false);
+      return;
+    }
     const storedUser = localStorage.getItem("user");
     const storedRole = localStorage.getItem("role");
-    const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
 
-    if (storedUser && storedRole && isLoggedIn) {
+    if (storedUser && storedRole) {
       setUser(JSON.parse(storedUser));
       setRole(storedRole);
     } else {

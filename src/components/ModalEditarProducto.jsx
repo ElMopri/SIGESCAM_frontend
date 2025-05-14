@@ -1,10 +1,12 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./ModalAgregarProducto.css";
 import { FaTimes } from "react-icons/fa";
 
+import { editarProductoPorNombre } from "../api/ProductoApi.js"; // Asegúrate de que la ruta sea correcta
+
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     nombre: producto?.producto || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
     precioVenta: producto?.precio || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
     categoria: producto?.categoria || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
@@ -13,7 +15,7 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
   // Sincroniza el estado si el producto cambia
   useEffect(() => {
 
-      console.log("Producto recibido:", producto);
+    console.log("Producto recibido:", producto);
 
     setFormData({
       nombre: producto?.producto || "",
@@ -33,11 +35,14 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
       formData.categoria
     ) {
       try {
-        const productoActualizado = await actualizarProducto(
-          producto.id,
-          formData.nombre,
-          parseFloat(formData.precioVenta),
-          formData.categoria
+        const datosActualizados = {
+          nuevoNombre: formData.nombre,
+          precio_venta: parseFloat(formData.precioVenta),
+          id_categoria: formData.categoria,
+        };
+        const productoActualizado = await editarProductoPorNombre(
+          producto.producto, // Assuming 'producto.producto' contains the current name
+          datosActualizados
         );
         onGuardar(productoActualizado);
         onClose();
