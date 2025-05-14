@@ -140,14 +140,14 @@ const ProductosAdmin = () => {
       key: "acciones",
       label: "Acciones",
       render: (item) => (
-        <>
+        <div className="botones-accion">
           <button onClick={() => editar(item)} className="boton-icono editar">
             <img src={iconEditar} alt="Editar" className="icono-accion" />
           </button>
           <button onClick={() => eliminar(item.id)} className="boton-icono eliminar">
             <img src={iconDelete} alt="Eliminar" className="icono-accion" />
           </button>
-        </>
+        </div>
       ),
     },
   ];
