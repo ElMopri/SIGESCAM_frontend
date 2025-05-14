@@ -11,12 +11,13 @@
   color: #333;
 }
 
-
 .usuarios-container {
   background-color: white;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 24px;
+  max-width: 80%;
+  margin: 0 auto; 
 }
 
 .usuarios-tools {

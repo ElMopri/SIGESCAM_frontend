@@ -49,3 +49,26 @@ export const registrar = async (usuario) => {
     throw new Error(mensaje);
   }
 };
+
+export const actualizarUsuario = async (dni, usuarioData) => {
+  try {
+    const response = await axios.put(`${API_USUARIOS}/${dni}`, usuarioData);
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al actualizar el usuario';
+    console.error('Error al actualizar usuario:', mensaje);
+    throw new Error(mensaje);
+  }
+};
+
+
+export const cambiarEstadoUsuario = async (dni, estado) => {
+  try {
+    const response = await axios.patch(`${API_USUARIOS}/${dni}`, { estado });
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al cambiar estado del usuario';
+    console.error('Error al cambiar estado:', mensaje);
+    throw new Error(mensaje);
+  }
+};
