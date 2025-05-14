@@ -1,12 +1,12 @@
 // src/pages/administrador/Usuarios.jsx
-
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/SearchBar";
 import ButtonNewElements from "../../components/ButtonNewElements";
 import TableElements from "../../components/User_components/TableElements";
-import { listarUsuarios, obtenerPorId } from "../../api/UsuarioApi";
+import { listarUsuarios, obtenerPorId,cambiarEstadoUsuario } from "../../api/UsuarioApi";
 import UserDetailModal from "../../components/User_components/UserDetailModal";
-import UserCreateModal from "../../components/User_components/UserCreateModal"; // NUEVO
+import UserCreateModal from "../../components/User_components/UserCreateModal";
+import UserEditModal from "../../components/User_components/UserEditModal"; // NUEVO IMPORT
 import "./Usuarios.css";
 
 const Usuarios = () => {
@@ -16,7 +16,9 @@ const Usuarios = () => {
   const [error, setError] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalCreateVisible, setModalCreateVisible] = useState(false); // NUEVO
+  const [modalCreateVisible, setModalCreateVisible] = useState(false);
+  const [modalEditVisible, setModalEditVisible] = useState(false); // NUEVO ESTADO
+  const [userToEdit, setUserToEdit] = useState(null); // NUEVO ESTADO
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -34,8 +36,8 @@ const Usuarios = () => {
   }, []);
 
   const handleEditUser = (usuario) => {
-    console.log("Editar usuario:", usuario);
-    // Aquí podrías abrir un modal en el futuro
+    setUserToEdit(usuario); 
+    setModalEditVisible(true);
   };
 
   const handleViewUser = async (usuario) => {
@@ -52,6 +54,19 @@ const Usuarios = () => {
     setSelectedUser(null);
     setModalVisible(false);
   };
+
+  const handleToggleStatus = async (dni, nuevoEstado) => {
+  try {
+    await cambiarEstadoUsuario(dni, nuevoEstado);
+    console.log("Estado cambiado:", dni, nuevoEstado);
+    // Actualiza la lista de usuarios después del cambio
+    const data = await listarUsuarios();
+    setUsuarios(data);
+  } catch (error) {
+    console.error("Error al cambiar estado:", error);
+    alert("No se pudo cambiar el estado del usuario");
+  }
+};
 
   return (
     <div className="usuarios-wrapper">
@@ -73,6 +88,7 @@ const Usuarios = () => {
             data={usuarios}
             onEdit={handleEditUser}
             onView={handleViewUser}
+            onToggleStatus={handleToggleStatus}
           />
         )}
       </div>
@@ -86,6 +102,25 @@ const Usuarios = () => {
           onClose={() => setModalCreateVisible(false)}
           onUserCreated={async () => {
             setModalCreateVisible(false);
+            try {
+              const data = await listarUsuarios();
+              setUsuarios(data);
+            } catch (err) {
+              console.error("Error actualizando la lista:", err.message);
+            }
+          }}
+        />
+      )}
+
+      {/* NUEVO MODAL DE EDICIÓN */}
+      {modalEditVisible && userToEdit && (
+        <UserEditModal
+          user={userToEdit}
+          onClose={() => {
+            setModalEditVisible(false);
+            setUserToEdit(null);
+          }}
+          onUpdate={async () => {
             try {
               const data = await listarUsuarios();
               setUsuarios(data);

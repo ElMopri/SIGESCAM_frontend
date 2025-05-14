@@ -7,9 +7,9 @@ import "./UserCreateModal.css";
 const UserCreateModal = ({ onClose, onUserCreated }) => {
   const [formData, setFormData] = useState({
     dni: "",
-    nombres: "",
-    correo: "",
-    contrasena: "",
+    nombre: "",
+    email: "",
+    telefono: "",
     rol: "admin",
   });
 
@@ -50,7 +50,7 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
           />
           <input
             type="text"
-            name="nombres"
+            name="nombre"
             placeholder="Nombres"
             value={formData.nombres}
             onChange={handleChange}
@@ -58,23 +58,23 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
           />
           <input
             type="email"
-            name="correo"
+            name="email"
             placeholder="Correo electrónico"
             value={formData.correo}
             onChange={handleChange}
             required
           />
           <input
-            type="password"
-            name="contrasena"
-            placeholder="Contraseña"
-            value={formData.contrasena}
+            type="text"
+            name="telefono"
+            placeholder="telefono"
+            value={formData.telefono}
             onChange={handleChange}
             required
           />
           <select name="rol" value={formData.rol} onChange={handleChange}>
-            <option value="admin">Administrador</option>
-            <option value="gestor">Gestor</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Gestor de ventas">Gestor de ventas </option>
           </select>
 
           {error && <p className="modal-error">{error}</p>}

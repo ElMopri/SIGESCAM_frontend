@@ -1,7 +1,8 @@
 import { FaEdit, FaEye } from "react-icons/fa";
 import "./TableElements.css";
+import iconEditar from "../../../public/EditYellow.png";
 
-const TableElements = ({ headers, data, onEdit, onView }) => {
+const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
   return (
     <div className="table-container">
       <div className="table-title">Usuarios del sistema</div>
@@ -12,29 +13,39 @@ const TableElements = ({ headers, data, onEdit, onView }) => {
               <th key={idx}>{header}</th>
             ))}
             <th>Acciones</th>
-            <th></th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody>
           {data.map((user, index) => (
             <tr key={index}>
               <td className="user-cell">
-                <FaEdit
-                  className="edit-icon"
-                  title="Editar"
-                  onClick={() => onEdit(user)}
-                />
-                {user.nombre}
+                <div className="user-name-container">
+                  <button
+                    onClick={() => onEdit(user)}
+                    className="boton-icono editar"
+                    aria-label="Editar usuario"
+                  >
+                    <img
+                      src={iconEditar}
+                      alt="Editar"
+                      className="icono-accion"
+                    />
+                  </button>
+                  <span className="user-name">{user.nombre}</span>
+                </div>
               </td>
               <td>{user.rol}</td>
-            
+
               <td className="action-cell">
-                <FaEye
-                  className="view-icon"
-                  title="Ver más"
-                  onClick={() => onView(user)}
-                  style={{ cursor: "pointer" }}
-                />
+                <div className="actions-container">
+                  <FaEye
+                    className="view-icon"
+                    title="Ver detalles"
+                    onClick={() => onView(user)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
               </td>
 
               <td>
@@ -44,6 +55,8 @@ const TableElements = ({ headers, data, onEdit, onView }) => {
                       ? "habilitado"
                       : "deshabilitado"
                   }`}
+                  onClick={() => onToggleStatus(user.dni, user.estado === "Habilitado" ? false : true)}
+                  style={{ cursor: 'pointer' }}
                 >
                   {user.estado}
                 </span>
