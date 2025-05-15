@@ -48,10 +48,10 @@ export const activarDesactivarProductoPorNombre = async (nombre, activo) => {
 };
 
 // Filtrar productos por cantidad, categoria y precio
-export const filtrarProductos = async (cantidad, id_categoria, precio) => {
+export const filtrarProductos = async (cantidad, nombre_categoria, precio) => {
     try {
         const response = await axios.get(`${API_PRODUCTOS}/cantidad_categoria_precio`, {
-            params: { cantidad, id_categoria, precio }
+            params: { cantidad, nombre_categoria, precio }
         });
         return response.data;
     } catch (error) {
@@ -59,4 +59,3 @@ export const filtrarProductos = async (cantidad, id_categoria, precio) => {
         throw new Error(error.response?.data?.message || "Error al filtrar productos");
     }
 };
-

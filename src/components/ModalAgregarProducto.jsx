@@ -103,15 +103,16 @@ const ModalAgregarProducto = ({
         </div>
 
         <div>
-          <label>Categoría:</label>
+          <label htmlFor="categoria">Categoría</label>
           <select
+            id="categoria"
             value={categoria}
-            onChange={(e) => setCategoria(parseInt(e.target.value))}
+            onChange={(e) => setCategoria(e.target.value)}
           >
             <option value="">Seleccione una categoría</option>
-            {categorias.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.nombre}
+            {categorias.map((cat, i) => (
+              <option key={i} value={cat}>
+                {cat}
               </option>
             ))}
           </select>

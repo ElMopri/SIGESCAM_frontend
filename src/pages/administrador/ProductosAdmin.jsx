@@ -51,7 +51,7 @@ const ProductosAdmin = () => {
         const datosTransformados = productos.map((producto) => ({
           id: producto.nombre,
           producto: producto.nombre,
-          categoria: producto.id_categoria,
+          categoria: producto.categoria,
           unidades: producto.cantidad,
           precio: producto.precio_venta,
         }));
