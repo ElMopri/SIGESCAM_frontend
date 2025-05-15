@@ -18,7 +18,7 @@ const CategoriasModal = ({ onClose }) => {
     descripcion: "",
   });
 
-  // 🔁 Cargar categorías desde la API al montar el componente
+  // Cargar categorías desde la API al montar el componente
   useEffect(() => {
     const cargarCategorias = async () => {
       try {
@@ -53,11 +53,11 @@ const CategoriasModal = ({ onClose }) => {
     }
   };
 
-  const handleEliminar = async (nombre) => {
+  const handleEliminar = async (id_categoria) => {
     if (confirm("¿Deseas eliminar esta categoría?")) {
       try {
-        await eliminarCategoria(nombre);
-        setCategorias((prev) => prev.filter((cat) => cat.nombre !== nombre));
+        await eliminarCategoria(id_categoria);
+        setCategorias((prev) => prev.filter((cat) => cat.id_categoria !== id_categoria));
       } catch (error) {
         alert(error.message);
       }
@@ -83,20 +83,14 @@ const CategoriasModal = ({ onClose }) => {
             </thead>
             <tbody>
               {categorias.map((cat) => (
-                <tr key={cat.nombre}>
+                <tr key={cat.id_categoria}>
                   <td>{cat.nombre}</td>
                   <td>{cat.descripcion}</td>
                   <td>
-                    <button
-                      className="btn-accion editar"
-                      onClick={() => setCategoriaSeleccionada(cat)}
-                    >
+                    <button className="btn-accion editar" onClick={() => setCategoriaSeleccionada(cat)}>
                       <img src={iconEditar} alt="Editar" />
                     </button>
-                    <button
-                      className="btn-accion eliminar"
-                      onClick={() => handleEliminar(cat.nombre)}
-                    >
+                    <button className="btn-accion eliminar" onClick={() => handleEliminar(cat.id_categoria)}>
                       <img src={iconDelete} alt="Eliminar" />
                     </button>
                   </td>

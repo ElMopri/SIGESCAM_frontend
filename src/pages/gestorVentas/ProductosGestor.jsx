@@ -12,7 +12,7 @@ const ProductosGestor = () => {
   const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("");
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
-  
+
   const [datos, setDatos] = useState([
     {
       id: 1,

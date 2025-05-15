@@ -128,7 +128,8 @@
 .botones-filtro {
   display: flex;
   margin-top: 20px;
-  margin-bottom: 20px; /* <- este crea el espacio con la tabla */
+  margin-bottom: 20px;
+  /* <- este crea el espacio con la tabla */
 }
 
 .btn-filtrar {
@@ -182,8 +183,10 @@
 }
 
 .contenedor-tabla {
-  max-width: 950px;  /* ajusta a tu gusto */
-  margin: 0 auto;    /* centra horizontalmente */
+  max-width: 950px;
+  /* ajusta a tu gusto */
+  margin: 0 auto;
+  /* centra horizontalmente */
   width: 100%;
 }
 
@@ -196,18 +199,22 @@
 }
 
 /* Estilo para las celdas de la tabla */
-.contenedor-tabla th, .contenedor-tabla td {
-  border-right: 1px solid #BFE0FF; /* Línea que separa las columnas */
+.contenedor-tabla th,
+.contenedor-tabla td {
+  border-right: 1px solid #BFE0FF;
+  /* Línea que separa las columnas */
 }
 
 /* Asegúrate de no tener una línea extra al final de la última columna */
-.contenedor-tabla th:last-child, .contenedor-tabla td:last-child {
+.contenedor-tabla th:last-child,
+.contenedor-tabla td:last-child {
   border-right: none;
 }
 
 /* Estilo opcional para las filas */
 .contenedor-tabla tr {
-  border-bottom: 1px solid #BFE0FF; /* Línea horizontal entre filas */
+  border-bottom: 1px solid #BFE0FF;
+  /* Línea horizontal entre filas */
 }
 
 .botones-filtro {
@@ -240,6 +247,3 @@
   margin-top: 0;
   margin-bottom: 1rem;
 }
-
-
-

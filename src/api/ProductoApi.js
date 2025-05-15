@@ -59,4 +59,3 @@ export const filtrarProductos = async (cantidad, nombre_categoria, precio) => {
         throw new Error(error.response?.data?.message || "Error al filtrar productos");
     }
 };
-

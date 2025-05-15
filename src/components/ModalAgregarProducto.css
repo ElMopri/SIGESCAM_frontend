@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +94,8 @@
   margin-top: 2px;
 }
 
-.modal-agregar input, .modal-agregar select {
+.modal-agregar input,
+.modal-agregar select {
   width: 100%;
   padding: 8px;
   font-size: 14px;

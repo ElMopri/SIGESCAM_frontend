@@ -3,8 +3,6 @@ import "./EditarCategoriaModal.css";
 import { actualizarCategoria } from "../api/CategoriaApi";
 
 
-
-
 const EditarCategoriaModal = ({ categoria, onClose, onGuardar }) => {
     const [formData, setFormData] = useState({
         nombre: categoria.nombre,
@@ -19,12 +17,12 @@ const EditarCategoriaModal = ({ categoria, onClose, onGuardar }) => {
         if (formData.nombre.trim() && formData.descripcion.trim()) {
             try {
                 const categoriaActualizada = await actualizarCategoria(
-                    categoria.nombre, // nombreOriginal
-                    formData.nombre,  // nuevoNombre
-                    formData.descripcion // nuevaDescripcion
+                    categoria.id_categoria,        // ← clave primaria
+                    formData.nombre,
+                    formData.descripcion
                 );
-                onGuardar(categoriaActualizada); // Actualiza en el frontend
-                onClose(); // Cierra el modal
+                onGuardar(categoriaActualizada);
+                onClose();
             } catch (error) {
                 alert(error.message);
             }
