@@ -55,6 +55,7 @@ export default function AppRoutes() {
         <Route path="usuarios" element={<Usuarios />} />
         <Route path="ajustes" element={<AjustesAdmin />} />
         <Route path="notificaciones" element={<NotificacionesAdmin />} />
+        <Route path="sugerenciasgestor" element={<SugerenciasGestor />} />
       </Route>
 
       {/* Rutas para Gestor de Ventas */}

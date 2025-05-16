@@ -1,0 +1,138 @@
+/* Estilos adicionales para la vista de gestor */
+.filtro-sugerencias {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.select-filtro {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  min-width: 150px;
+}
+
+.tabla-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: calc(110vh - 455px);
+  align-items: center;
+}
+
+.tabla-sugerencias {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-sugerencias th,
+.tabla-sugerencias td {
+  padding: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.tabla-sugerencias th {
+  background-color: #e3f2fd;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.tabla-sugerencias tr:hover {
+  background-color: #f5f5f5;
+}
+
+.descripcion-celda {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.descripcion-celda:hover {
+  white-space: normal;
+  overflow: visible;
+}
+
+.estado-pendiente {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.estado-aceptada {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.estado-rechazada {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.sin-datos {
+  text-align: center;
+  color: #888;
+  padding: 2rem !important;
+}
+
+@media (max-width: 768px) {
+  .filtro-sugerencias {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .select-filtro {
+    width: 100%;
+  }
+
+  .tabla-sugerencias th,
+  .tabla-sugerencias td {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .descripcion-celda {
+    max-width: 150px;
+  }
+
+  .filtro-sugerencias {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .select-filtro {
+    width: 100%;
+  }
+
+  .tabla-sugerencias th,
+  .tabla-sugerencias td {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .descripcion-celda {
+    max-width: 150px;
+  }
+
+  .label-sugerencia {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+.tabla-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 2px;
+  width: 320px;
+  align-items: center;
+  margin-top: 25px;
+  margin-left: -38px;
+}
+}
+

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Sugerencias.css";
 
-import InputSugerencia from "./InputSugerencia";
-import TabsSugerencias from "./TabsSugerencia";
-import TarjetaSugerencia from "./TarjetaSugerencia";
-import ModalSugerencia from "./ModalSugerencia";
+import InputSugerencia from "../../components/InputSugerencia.jsx";
+import TabsSugerencias from "../../components/TabsSugerencia.jsx";
+import TarjetaSugerencia from "../../components/TarjetaSugerencia.jsx";
+import ModalSugerencia from "../../components/ModalSugerencia.jsx";
 
 import {
   obtenerSugerencias,

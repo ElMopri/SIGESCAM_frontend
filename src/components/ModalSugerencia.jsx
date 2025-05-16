@@ -1,6 +1,5 @@
 import React from "react";
 import { FaCheckSquare, FaTrashAlt, FaTimes } from "react-icons/fa";
-import "./ModalSugerencia.css";
 
 const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
   const titulo = tipo === "aceptada" ? "Sugerencias Aceptadas" : "Sugerencias Rechazadas";
