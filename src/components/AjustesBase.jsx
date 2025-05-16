@@ -2,17 +2,30 @@ import React, { useState, useEffect, useContext } from "react";
 import { editarCorreo, obtenerPorId } from "../api/UsuarioApi";
 import Modal from "./Modal";
 import "./AjustesBase.css";
-import { AuthContext } from "../context/AuthContext"; // Asegúrate de importar tu contexto
+import { AuthContext } from "../context/AuthContext";
 
 const AjustesBase = ({ imagenPerfil, notificaciones }) => {
-  // Obtenemos el usuario y setUser del contexto
   const { user, setUser } = useContext(AuthContext);
-
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [loading, setLoading] = useState(true);
+  const [editable, setEditable] = useState({ correo: false });
+  const [showModal, setShowModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: "confirm",
+    title: "",
+    message: "",
+    onConfirm: null,
+    onCancel: null,
+  });
 
-  // Cargar los datos del usuario al montar el componente
+  const [estadoNotificaciones, setEstadoNotificaciones] = useState(
+    notificaciones.reduce((acc, noti) => {
+      acc[noti.id] = true;
+      return acc;
+    }, {})
+  );
+
   useEffect(() => {
     const cargarUsuario = async () => {
       if (user?.dni) {
@@ -22,6 +35,14 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
           setCorreo(usuario.email || "Correo no disponible");
         } catch (error) {
           console.error("Error al cargar usuario:", error);
+          setModalConfig({
+            type: "error",
+            title: "Error al cargar datos",
+            message: "No se pudieron cargar los datos del usuario",
+            onConfirm: null,
+            onCancel: null,
+          });
+          setShowModal(true);
         } finally {
           setLoading(false);
         }
@@ -33,33 +54,19 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
     cargarUsuario();
   }, [user]);
 
-  const [estadoNotificaciones, setEstadoNotificaciones] = useState(
-    notificaciones.reduce((acc, noti) => {
-      acc[noti.id] = true;
-      return acc;
-    }, {})
-  );
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalConfig, setModalConfig] = useState({
-    type: "confirm",
-    title: "",
-    message: "",
-    onConfirm: null,
-  });
-
-  const [editable, setEditable] = useState({ correo: false });
-
   const toggleEditable = (campo) => {
     if (editable[campo]) {
       if (campo === "correo") {
         const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!regexCorreo.test(correo)) {
+          setCorreo(user.email);
+          setEditable({ correo: false });
           setModalConfig({
-            type: "confirm",
+            type: "error",
             title: "Correo inválido",
             message: "Por favor, ingrese un correo válido.",
-            onConfirm: () => setShowModal(false),
+            onConfirm: null,
+            onCancel: null,
           });
           setShowModal(true);
           return;
@@ -69,14 +76,31 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
           type: "confirm",
           title: "Confirmar cambio de correo",
           message: "¿Estás segura de que deseas cambiar tu correo electrónico?",
-          onConfirm: () => {
-            handleGuardar();
+          onConfirm: async () => {
+            try {
+              await handleGuardar();
+              // Mostrar modal de éxito sin botones
+              setModalConfig({
+                type: "success",
+                title: "¡Éxito!",
+                message: "Correo actualizado correctamente",
+                onConfirm: null,
+                onCancel: null,
+              });
+              setShowModal(true);
+              setEditable({ correo: false }); // Desactivar edición
+            } catch (error) {
+              // El error ya se maneja en handleGuardar
+            }
+          },
+          onCancel: () => {
+            setCorreo(user.email);
+            setEditable({ correo: false });
             setShowModal(false);
           },
         });
         setShowModal(true);
       }
-      setEditable((prev) => ({ ...prev, [campo]: false }));
     } else {
       setEditable((prev) => ({ ...prev, [campo]: true }));
     }
@@ -85,31 +109,22 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
   const handleGuardar = async () => {
     try {
       await editarCorreo(user.dni, correo);
-
-      // Actualizar el contexto global
       setUser((prevUser) => ({
         ...prevUser,
         email: correo,
       }));
-
-      setModalConfig({
-        type: "success",
-        title: "¡Éxito!",
-        message: "Correo actualizado correctamente",
-        onConfirm: () => {
-          setShowModal(false);
-          setEditable({ correo: false });
-        },
-      });
-      setShowModal(true);
     } catch (error) {
+      setCorreo(user.email);
+      setEditable({ correo: false });
       setModalConfig({
-        type: "confirm",
+        type: "error",
         title: "Error",
         message: error.message || "Error al actualizar el correo",
-        onConfirm: () => setShowModal(false),
+        onConfirm: null,
+        onCancel: null,
       });
       setShowModal(true);
+      throw error;
     }
   };
 
@@ -119,10 +134,6 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
       [id]: !prev[id],
     }));
   };
-
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
 
   if (!user) {
     return <div>No hay un perfil con sesión activa</div>;
@@ -154,7 +165,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
                 type="text"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                disabled={true} // Deshabilitado ya que solo editamos el correo
+                disabled={true}
               />
             </div>
             <div className="input-group">
@@ -195,8 +206,12 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
 
       <Modal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={() => {
+          setShowModal(false);
+          if (modalConfig.onCancel) modalConfig.onCancel();
+        }}
         onConfirm={modalConfig.onConfirm}
+        onCancel={modalConfig.onCancel}
         title={modalConfig.title}
         message={modalConfig.message}
         type={modalConfig.type}

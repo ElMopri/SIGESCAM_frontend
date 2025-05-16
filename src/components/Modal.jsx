@@ -1,7 +1,7 @@
 import React from "react";
 import { keyframes } from "styled-components";
 import styled from "styled-components";
-import { FaCheckCircle, FaExclamationTriangle, FaTimes } from "react-icons/fa"; // Usando react-icons
+import { FaCheckCircle, FaExclamationTriangle, FaTimes } from "react-icons/fa";
 
 // Animaciones
 const fadeIn = keyframes`
@@ -41,7 +41,12 @@ const ModalContainer = styled.div`
 
 const ModalHeader = styled.div`
   padding: 20px;
-  background: ${(props) => (props.type === "success" ? "#4CAF50" : "#2196F3")};
+  background: ${(props) =>
+    props.type === "success"
+      ? "#4CAF50"
+      : props.type === "error"
+      ? "#F44336"
+      : "#2196F3"};
   color: white;
   display: flex;
   align-items: center;
@@ -141,7 +146,12 @@ const Modal = ({
 }) => {
   if (!isOpen) return null;
 
-  const Icon = type === "success" ? FaCheckCircle : FaExclamationTriangle;
+  const Icon =
+    type === "success"
+      ? FaCheckCircle
+      : type === "error"
+      ? FaExclamationTriangle
+      : FaExclamationTriangle;
 
   return (
     <ModalOverlay onClick={onClose}>
@@ -161,26 +171,16 @@ const Modal = ({
           {children}
         </ModalBody>
 
-        <ModalFooter>
-          {type === "confirm" && (
+        {type === "confirm" && (
+          <ModalFooter>
             <Button className="secondary" onClick={onClose}>
               {cancelText}
             </Button>
-          )}
-          <Button
-            className="primary"
-            onClick={type === "confirm" ? onConfirm : onClose}
-            type={type}
-          >
-            {type === "success" ? (
-              <>
-                <FaCheckCircle /> {confirmText}
-              </>
-            ) : (
-              confirmText
-            )}
-          </Button>
-        </ModalFooter>
+            <Button className="primary" onClick={onConfirm} type={type}>
+              {confirmText}
+            </Button>
+          </ModalFooter>
+        )}
       </ModalContainer>
     </ModalOverlay>
   );
