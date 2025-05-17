@@ -3,12 +3,13 @@ import "./CategoriasModal.css";
 import EditarCategoriaModal from "./EditarCategoriaModal";
 import iconEditar from "/EditYellow.png";
 import iconDelete from "/Delete.png";
+import Modal from "./Modal";
 
 import {
   obtenerCategorias,
   crearCategoria,
   eliminarCategoria,
-} from "../api/CategoriaApi"; // Asegúrate de que el nombre del archivo sea correcto
+} from "../api/CategoriaApi";
 
 const CategoriasModal = ({ onClose }) => {
   const [categorias, setCategorias] = useState([]);
@@ -18,19 +19,42 @@ const CategoriasModal = ({ onClose }) => {
     descripcion: "",
   });
 
-  // Cargar categorías desde la API al montar el componente
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "error",
+    onConfirm: null,
+    showButtons: false,
+  });
+
   useEffect(() => {
     const cargarCategorias = async () => {
       try {
         const data = await obtenerCategorias();
         setCategorias(data);
       } catch (err) {
-        alert("Error al cargar las categorías.");
+        mostrarModal("Error", "Error al cargar las categorías.");
       }
     };
 
     cargarCategorias();
   }, []);
+
+  const mostrarModal = (title, message, type = "error", showButtons = false, onConfirm = null) => {
+    setModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+      showButtons,
+      onConfirm,
+    });
+  };
+
+  const cerrarModal = () => {
+    setModal({ ...modal, isOpen: false, onConfirm: null });
+  };
 
   const handleChange = (e) => {
     setNuevaCategoria({ ...nuevaCategoria, [e.target.name]: e.target.value });
@@ -40,7 +64,7 @@ const CategoriasModal = ({ onClose }) => {
     const { nombre, descripcion } = nuevaCategoria;
 
     if (!nombre || !descripcion) {
-      alert("Nombre y descripción requeridos.");
+      mostrarModal("Campos incompletos", "Nombre y descripción son obligatorios.");
       return;
     }
 
@@ -49,18 +73,27 @@ const CategoriasModal = ({ onClose }) => {
       setCategorias((prev) => [...prev, nueva]);
       setNuevaCategoria({ nombre: "", descripcion: "" });
     } catch (error) {
-      alert(error.message);
+      mostrarModal("Error al crear", error.message || "No se pudo crear la categoría.");
     }
   };
 
+  const confirmarEliminar = (id_categoria) => {
+    mostrarModal(
+      "¿Eliminar categoría?",
+      "¿Deseas eliminar esta categoría?",
+      "confirm",
+      true,
+      () => handleEliminar(id_categoria)
+    );
+  };
+
   const handleEliminar = async (id_categoria) => {
-    if (confirm("¿Deseas eliminar esta categoría?")) {
-      try {
-        await eliminarCategoria(id_categoria);
-        setCategorias((prev) => prev.filter((cat) => cat.id_categoria !== id_categoria));
-      } catch (error) {
-        alert(error.message);
-      }
+    try {
+      await eliminarCategoria(id_categoria);
+      setCategorias((prev) => prev.filter((cat) => cat.id_categoria !== id_categoria));
+      cerrarModal();
+    } catch (error) {
+      mostrarModal("Error al eliminar", error.message || "No se pudo eliminar la categoría.");
     }
   };
 
@@ -90,7 +123,7 @@ const CategoriasModal = ({ onClose }) => {
                     <button className="btn-accion editar" onClick={() => setCategoriaSeleccionada(cat)}>
                       <img src={iconEditar} alt="Editar" />
                     </button>
-                    <button className="btn-accion eliminar" onClick={() => handleEliminar(cat.id_categoria)}>
+                    <button className="btn-accion eliminar" onClick={() => confirmarEliminar(cat.id_categoria)}>
                       <img src={iconDelete} alt="Eliminar" />
                     </button>
                   </td>
@@ -129,7 +162,7 @@ const CategoriasModal = ({ onClose }) => {
           onGuardar={(categoriaActualizada) => {
             setCategorias((prev) =>
               prev.map((cat) =>
-                cat.nombre === categoriaActualizada.nombre
+                cat.id_categoria === categoriaActualizada.id_categoria
                   ? categoriaActualizada
                   : cat
               )
@@ -138,6 +171,17 @@ const CategoriasModal = ({ onClose }) => {
           }}
         />
       )}
+
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={cerrarModal}
+        onConfirm={modal.onConfirm}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };
