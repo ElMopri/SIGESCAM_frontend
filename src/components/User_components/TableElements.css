@@ -4,6 +4,7 @@
   overflow-x: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #f5faff;
+  -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
 }
 
 .table-title {
@@ -116,4 +117,83 @@
 
 .view-icon:hover {
   color: #6366f1;
+}
+
+/* Estilos responsive */
+@media (max-width: 1000px) {
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .table-container {
+    margin: 0;
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .styled-table {
+    min-width: 100%;
+  }
+
+  .styled-table th,
+  .styled-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .user-name {
+    max-width: 150px;
+  }
+
+  .estado {
+    min-width: 70px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .boton-icono {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .view-icon {
+    font-size: 1.1rem;
+  }
+
+  .action-cell {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .styled-table th,
+  .styled-table td {
+    padding: 6px 4px;
+    font-size: 0.85rem;
+  }
+
+  .user-name {
+    max-width: 120px;
+  }
+
+  .user-name-container {
+    gap: 5px;
+  }
+
+  .boton-icono {
+    width: 20px;
+    height: 20px;
+  }
+
+  .estado {
+    min-width: 60px;
+    font-size: 0.75rem;
+  }
+
+  .table-title {
+    font-size: 18px;
+    padding: 8px;
+  }
 }
