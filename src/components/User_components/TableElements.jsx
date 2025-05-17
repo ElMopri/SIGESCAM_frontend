@@ -11,7 +11,7 @@ const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
           <tr>
             <th>Nombre</th>
             <th className="hide-on-mobile">Rol</th>
-            <th>Acciones</th>
+            <th>Ver mas</th>
             <th>Estado</th>
           </tr>
         </thead>
