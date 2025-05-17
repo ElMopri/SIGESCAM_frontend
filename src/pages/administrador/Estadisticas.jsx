@@ -22,6 +22,7 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
+        alert(error.message);
         console.error("Error al obtener el historial:", error);
       }
     };
@@ -150,22 +151,29 @@ const Estadisticas = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {compras.map((item, idx) => (
-                    <tr
-                      key={idx}
-                      className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
-                    >
-                      <td>{item.producto.nombre}</td>
-                      <td>{item.cantidad_agregar}</td>
-                      <td>${item.precio.toLocaleString()}</td>
-                      <td>
-                        {new Date(item.fecha_compra).toLocaleDateString(
-                          "es-ES"
-                        )}
+                  {compras.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        style={{ textAlign: "center", padding: "1rem" }}
+                      >
+                        No hay compras registradas.
                       </td>
-                      <td>${item.total_compra}</td>
                     </tr>
-                  ))}
+                  ) : (
+                    compras.map((item, idx) => (
+                      <tr
+                        key={idx}
+                        className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
+                      >
+                        <td>{item.producto.nombre}</td>
+                        <td>{item.cantidad_agregar}</td>
+                        <td>${item.precio.toLocaleString()}</td>
+                        <td>{item.fecha_compra.split("T")[0]}</td>
+                        <td>${item.total_compra}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
