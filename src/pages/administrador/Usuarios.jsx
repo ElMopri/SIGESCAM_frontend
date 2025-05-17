@@ -1,12 +1,15 @@
-// src/pages/administrador/Usuarios.jsx
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/SearchBar";
 import ButtonNewElements from "../../components/ButtonNewElements";
 import TableElements from "../../components/User_components/TableElements";
-import { listarUsuarios, obtenerPorId,cambiarEstadoUsuario } from "../../api/UsuarioApi";
+import {
+  listarUsuarios,
+  obtenerPorId,
+  cambiarEstadoUsuario,
+} from "../../api/UsuarioApi";
 import UserDetailModal from "../../components/User_components/UserDetailModal";
 import UserCreateModal from "../../components/User_components/UserCreateModal";
-import UserEditModal from "../../components/User_components/UserEditModal"; // NUEVO IMPORT
+import UserEditModal from "../../components/User_components/UserEditModal";
 import "./Usuarios.css";
 
 const Usuarios = () => {
@@ -17,8 +20,8 @@ const Usuarios = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalCreateVisible, setModalCreateVisible] = useState(false);
-  const [modalEditVisible, setModalEditVisible] = useState(false); // NUEVO ESTADO
-  const [userToEdit, setUserToEdit] = useState(null); // NUEVO ESTADO
+  const [modalEditVisible, setModalEditVisible] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -36,7 +39,7 @@ const Usuarios = () => {
   }, []);
 
   const handleEditUser = (usuario) => {
-    setUserToEdit(usuario); 
+    setUserToEdit(usuario);
     setModalEditVisible(true);
   };
 
@@ -56,17 +59,17 @@ const Usuarios = () => {
   };
 
   const handleToggleStatus = async (dni, nuevoEstado) => {
-  try {
-    await cambiarEstadoUsuario(dni, nuevoEstado);
-    console.log("Estado cambiado:", dni, nuevoEstado);
-    // Actualiza la lista de usuarios después del cambio
-    const data = await listarUsuarios();
-    setUsuarios(data);
-  } catch (error) {
-    console.error("Error al cambiar estado:", error);
-    alert("No se pudo cambiar el estado del usuario");
-  }
-};
+    try {
+      await cambiarEstadoUsuario(dni, nuevoEstado);
+      console.log("Estado cambiado:", dni, nuevoEstado);
+      // Actualiza la lista de usuarios después del cambio
+      const data = await listarUsuarios();
+      setUsuarios(data);
+    } catch (error) {
+      console.error("Error al cambiar estado:", error);
+      alert("No se pudo cambiar el estado del usuario");
+    }
+  };
 
   return (
     <div className="usuarios-wrapper">
@@ -74,7 +77,10 @@ const Usuarios = () => {
 
       <div className="usuarios-container">
         <div className="usuarios-tools">
-          <ButtonNewElements label="Nuevo +" onClick={() => setModalCreateVisible(true)} />
+          <ButtonNewElements
+            label="Nuevo +"
+            onClick={() => setModalCreateVisible(true)}
+          />
           <SearchBar placeholder="Buscar usuario..." />
         </div>
 

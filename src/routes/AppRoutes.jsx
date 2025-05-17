@@ -62,7 +62,7 @@ export default function AppRoutes() {
       <Route
         path="/gestorDeVentas"
         element={
-          <ProtectedRoutes allowedRoles={["Gestor de Ventas"]}>
+          <ProtectedRoutes allowedRoles={["Gestor de ventas"]}>
             <GestorLayout />
           </ProtectedRoutes>
         }
