@@ -1,95 +1,98 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import CategoriasModal from "../../components/CategoriasModal";
-import TablaProductos from "../../components/TablaProductos";
-import SearchBarProductos from "../../components/SearchBarProductos";
-import FiltroModal from "../../components/FiltroModal";
-import iconEditar from "/EditYellow.png";
-import iconDelete from "/Delete.png";
-import { FaPlus, FaUndo } from "react-icons/fa";
-import { MdOutlineFilterAlt } from "react-icons/md";
-import "./ProductosAdmin.css";
-import ModalAgregarProducto from "../../components/ModalAgregarProducto";
-import ModalEditarProducto from "../../components/ModalEditarProducto";
+"use client"
+
+import React, { useState, useContext } from "react"
+import { AuthContext } from "../../context/AuthContext"
+import CategoriasModal from "../../components/CategoriasModal"
+import TablaProductos from "../../components/TablaProductos"
+import SearchBarProductos from "../../components/SearchBarProductos"
+import FiltroModal from "../../components/FiltroModal"
+import iconEditar from "/EditYellow.png"
+import iconDelete from "/Delete.png"
+import { FaPlus, FaUndo } from "react-icons/fa"
+import { MdOutlineFilterAlt } from "react-icons/md"
+import "./ProductosAdmin.css"
+import ModalAgregarProducto from "../../components/ModalAgregarProducto"
+import ModalEditarProducto from "../../components/ModalEditarProducto"
+import Modal from "../../components/Modal"
 
 import {
   obtenerProductos,
   buscarProductosPorNombreParecido,
-  editarProductoPorNombre,
   activarDesactivarProductoPorNombre,
-  filtrarProductos
-} from "../../api/ProductoApi";
+  filtrarProductos,
+} from "../../api/ProductoApi"
 
-import {
-  registrarCompra
-} from "../../api/CompraApi";
+import { registrarCompra } from "../../api/CompraApi"
 
-import {
-  obtenerCategorias
-} from "../../api/CategoriaApi";
+import { obtenerCategorias } from "../../api/CategoriaApi"
 
 const ProductosAdmin = () => {
-  const { user } = useContext(AuthContext);
-  const [dni, setDni] = useState(user?.dni || "No hay un perfil con sesión activa");
+  const { user } = useContext(AuthContext)
+  const [dni, setDni] = useState(user?.dni || "No hay un perfil con sesión activa")
 
-  const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
-  const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
-  const [mostrarModalAgregarProducto, setMostrarModalAgregarProducto] = useState(false);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("");
-  const [filtroNombre, setFiltroNombre] = useState("");
-  const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
-  const [mostrarModalEditarProducto, setMostrarModalEditarProducto] = useState(false);
+  const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false)
+  const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false)
+  const [mostrarModalAgregarProducto, setMostrarModalAgregarProducto] = useState(false)
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null)
+  const [nombreBusquedaTemp, setNombreBusquedaTemp] = useState("")
+  const [filtroNombre, setFiltroNombre] = useState("")
+  const [filtrosAvanzados, setFiltrosAvanzados] = useState({})
+  const [mostrarModalEditarProducto, setMostrarModalEditarProducto] = useState(false)
 
-  const [datos, setDatos] = useState([]);
-  const [categoriasDisponibles, setCategoriasDisponibles] = useState([]);
+  const [errorModalOpen, setErrorModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+
+  const [datos, setDatos] = useState([])
+  const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
 
   React.useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const productos = await obtenerProductos();
+        const productos = await obtenerProductos()
         const datosTransformados = productos.map((producto) => ({
           id: producto.nombre,
           producto: producto.nombre,
           categoria: producto.categoria,
           unidades: producto.cantidad,
           precio: producto.precio_venta,
-        }));
-        setDatos(datosTransformados);
+        }))
+        setDatos(datosTransformados)
       } catch (error) {
-        console.error("Error al obtener los productos:", error);
+        console.error("Error al obtener los productos:", error)
+        mostrarError(`Error al obtener los productos: ${error.message || "Ocurrió un problema inesperado"}`)
       }
-    };
+    }
 
-    fetchProductos();
-  }, []);
+    fetchProductos()
+  }, [])
 
   React.useEffect(() => {
     const fetchCategorias = async () => {
       try {
-        const categorias = await obtenerCategorias();
-        setCategoriasDisponibles(categorias.map((categoria) => categoria.nombre));
+        const categorias = await obtenerCategorias()
+        setCategoriasDisponibles(categorias.map((categoria) => categoria.nombre))
       } catch (error) {
-        console.error("Error al obtener las categorías:", error);
+        console.error("Error al obtener las categorías:", error)
+        mostrarError(`Error al obtener las categorías: ${error.message || "Ocurrió un problema inesperado"}`)
       }
-    };
+    }
 
-    fetchCategorias();
-  }, []);
+    fetchCategorias()
+  }, [])
 
   React.useEffect(() => {
     const fetchProductosFiltrados = async () => {
       try {
         if (filtroNombre) {
-          const productos = await buscarProductosPorNombreParecido(filtroNombre);
+          const productos = await buscarProductosPorNombreParecido(filtroNombre)
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
             categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
+          }))
+          setDatos(datosTransformados)
         } else if (
           (filtrosAvanzados.cantidad !== undefined && filtrosAvanzados.cantidad !== "") ||
           (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
@@ -98,34 +101,35 @@ const ProductosAdmin = () => {
           const productos = await filtrarProductos(
             filtrosAvanzados.cantidad || null,
             filtrosAvanzados.categoria || null,
-            filtrosAvanzados.precio || null
-          );
+            filtrosAvanzados.precio || null,
+          )
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
             categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
+          }))
+          setDatos(datosTransformados)
         } else {
-          const productos = await obtenerProductos();
+          const productos = await obtenerProductos()
           const datosTransformados = productos.map((producto) => ({
             id: producto.nombre,
             producto: producto.nombre,
             categoria: producto.categoria,
             unidades: producto.cantidad,
             precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
+          }))
+          setDatos(datosTransformados)
         }
       } catch (error) {
-        console.error("Error al filtrar los productos:", error);
+        console.error("Error al filtrar los productos:", error)
+        mostrarError(`Error al filtrar los productos: ${error.message || "Ocurrió un problema inesperado"}`)
       }
-    };
+    }
 
-    fetchProductosFiltrados();
-  }, [filtroNombre, filtrosAvanzados]);
+    fetchProductosFiltrados()
+  }, [filtroNombre, filtrosAvanzados])
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -142,35 +146,36 @@ const ProductosAdmin = () => {
       render: (item) => (
         <div className="botones-accion">
           <button onClick={() => editar(item)} className="boton-icono editar">
-            <img src={iconEditar} alt="Editar" className="icono-accion" />
+            <img src={iconEditar || "/placeholder.svg"} alt="Editar" className="icono-accion" />
           </button>
           <button onClick={() => eliminar(item.id)} className="boton-icono eliminar">
-            <img src={iconDelete} alt="Eliminar" className="icono-accion" />
+            <img src={iconDelete || "/placeholder.svg"} alt="Eliminar" className="icono-accion" />
           </button>
         </div>
       ),
     },
-  ];
+  ]
 
   const editar = (producto) => {
-    setProductoSeleccionado(producto);
-    setMostrarModalEditarProducto(true);
-  };
+    setProductoSeleccionado(producto)
+    setMostrarModalEditarProducto(true)
+  }
 
   const eliminar = async (id) => {
     try {
-      await activarDesactivarProductoPorNombre(id, false);
-      setDatos(datos.filter((d) => d.id !== id));
-      console.log(`Producto con id ${id} desactivado.`);
+      await activarDesactivarProductoPorNombre(id, false)
+      setDatos(datos.filter((d) => d.id !== id))
+      console.log(`Producto con id ${id} desactivado.`)
     } catch (error) {
-      console.error("Error al desactivar el producto:", error);
+      console.error("Error al desactivar el producto:", error)
+      mostrarError(`Error al desactivar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
     }
-  };
+  }
 
   const revertirFiltros = () => {
-    setFiltroNombre("");
-    setFiltrosAvanzados({});
-  };
+    setFiltroNombre("")
+    setFiltrosAvanzados({})
+  }
 
   const agregarProducto = async (nuevoProducto) => {
     try {
@@ -182,28 +187,42 @@ const ProductosAdmin = () => {
         precio_venta: nuevoProducto.precio,
         cantidad_agregar: nuevoProducto.cantidadAgregar,
         fecha_compra: nuevoProducto.fechaCompra,
-      };
+      }
 
-      console.log("Datos enviados a registrarCompra:", compraData);
+      console.log("Datos enviados a registrarCompra:", compraData)
 
-      await registrarCompra(compraData);
+      await registrarCompra(compraData)
 
-      const productos = await obtenerProductos();
+      const productos = await obtenerProductos()
       const datosTransformados = productos.map((producto) => ({
         id: producto.nombre,
         producto: producto.nombre,
         categoria: producto.categoria,
         unidades: producto.cantidad,
         precio: producto.precio_venta,
-      }));
-      setDatos(datosTransformados);
+      }))
+      setDatos(datosTransformados)
 
-      setMostrarModalAgregarProducto(false);
-      setProductoSeleccionado(null);
+      setMostrarModalAgregarProducto(false)
+      setProductoSeleccionado(null)
     } catch (error) {
-      console.error("Error al registrar la compra:", error);
+      console.error("Error al registrar la compra:", error)
+      mostrarError(`Error al registrar la compra: ${error.message || "Ocurrió un problema inesperado"}`)
     }
-  };
+  }
+
+  const mostrarError = (mensaje) => {
+    setErrorMessage(mensaje)
+    setErrorModalOpen(true)
+
+    // Asegurarnos de que el modal de error tenga prioridad visual
+    const modalOverlays = document.querySelectorAll(".modal-overlay")
+    modalOverlays.forEach((overlay) => {
+      if (overlay.contains(document.querySelector('[type="error"]'))) {
+        overlay.style.zIndex = "1200" // Un valor mayor que el z-index de los otros modales
+      }
+    })
+  }
 
   return (
     <div className="productos-admin-container">
@@ -212,8 +231,8 @@ const ProductosAdmin = () => {
           value={nombreBusquedaTemp}
           onChange={(e) => setNombreBusquedaTemp(e.target.value)}
           onSearch={() => {
-            setFiltroNombre(nombreBusquedaTemp);
-            setNombreBusquedaTemp("");
+            setFiltroNombre(nombreBusquedaTemp)
+            setNombreBusquedaTemp("")
           }}
         />
       </div>
@@ -234,8 +253,8 @@ const ProductosAdmin = () => {
         <button
           className="btn-verde"
           onClick={() => {
-            setProductoSeleccionado(null);
-            setMostrarModalAgregarProducto(true);
+            setProductoSeleccionado(null)
+            setMostrarModalAgregarProducto(true)
           }}
         >
           Registrar Producto <FaPlus />
@@ -248,9 +267,8 @@ const ProductosAdmin = () => {
         </button>
       </div>
 
-      {mostrarModalCategorias && (
-        <CategoriasModal onClose={() => setMostrarModalCategorias(false)} />
-      )}
+      {/* Todos los demás modales deben ir antes del modal de error */}
+      {mostrarModalCategorias && <CategoriasModal onClose={() => setMostrarModalCategorias(false)} />}
 
       {mostrarFiltroModal && (
         <FiltroModal
@@ -260,8 +278,8 @@ const ProductosAdmin = () => {
               ...valores,
               cantidad: valores.cantidad !== "" && Number(valores.cantidad) < 0 ? 0 : valores.cantidad,
               precio: valores.precio !== "" && Number(valores.precio) < 0 ? 0 : valores.precio,
-            };
-            setFiltrosAvanzados(sanitizados);
+            }
+            setFiltrosAvanzados(sanitizados)
           }}
           onClose={() => setMostrarFiltroModal(false)}
         />
@@ -272,8 +290,8 @@ const ProductosAdmin = () => {
           categorias={categoriasDisponibles}
           productos={datos}
           onClose={() => {
-            setMostrarModalAgregarProducto(false);
-            setProductoSeleccionado(null);
+            setMostrarModalAgregarProducto(false)
+            setProductoSeleccionado(null)
           }}
           onSave={agregarProducto}
           productoInicial={productoSeleccionado}
@@ -285,27 +303,40 @@ const ProductosAdmin = () => {
           producto={productoSeleccionado}
           categorias={categoriasDisponibles}
           onClose={() => setMostrarModalEditarProducto(false)}
+          onError={mostrarError}
           onGuardar={async (productoActualizado) => {
             try {
-              const productos = await obtenerProductos();
+              const productos = await obtenerProductos()
               const datosTransformados = productos.map((producto) => ({
                 id: producto.nombre,
                 producto: producto.nombre,
                 categoria: producto.categoria,
                 unidades: producto.cantidad,
                 precio: producto.precio_venta,
-              }));
-              setDatos(datosTransformados);
+              }))
+              setDatos(datosTransformados)
 
-              setMostrarModalEditarProducto(false);
+              setMostrarModalEditarProducto(false)
             } catch (error) {
-              console.error("Error al editar el producto:", error);
+              console.error("Error al editar el producto:", error)
+              mostrarError(`Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
             }
           }}
         />
       )}
-    </div>
-  );
-};
 
-export default ProductosAdmin;
+      {/* El modal de error debe ser el último en renderizarse para estar por encima de los demás */}
+      {errorModalOpen && (
+        <Modal
+          isOpen={errorModalOpen}
+          onClose={() => setErrorModalOpen(false)}
+          title="Error"
+          message={errorMessage}
+          type="error"
+        />
+      )}
+    </div>
+  )
+}
+
+export default ProductosAdmin

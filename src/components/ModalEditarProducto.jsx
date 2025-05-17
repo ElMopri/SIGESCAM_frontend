@@ -5,6 +5,7 @@ import { FaTimes } from "react-icons/fa";
 import { editarProductoPorNombre } from "../api/ProductoApi.js"; // Asegúrate de que la ruta sea correcta
 
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
+  if (!producto) return null;
 
   const [formData, setFormData] = useState({
     nombre: producto?.producto || "", // Asegúrate de que el valor inicial sea una cadena vacía si no está definido
@@ -47,10 +48,13 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
         onGuardar(productoActualizado);
         onClose();
       } catch (error) {
-        alert(error.message);
+      console.error("Error al editar el producto:", error)
+      if (onError) {
+        onError(`Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
       }
     }
-  };
+  }
+}
 
   return (
     <div className="modal-agregar-overlay">
