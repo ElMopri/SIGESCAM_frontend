@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { registrar } from "../../api/UsuarioApi";
+import Modal from "../Modal";
 import "./UserCreateModal.css";
 
 const UserCreateModal = ({ onClose, onUserCreated }) => {
@@ -10,86 +11,118 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
     nombre: "",
     email: "",
     telefono: "",
-    rol: "admin",
+    rol: "",
   });
 
   const [error, setError] = useState(null);
   const [cargando, setCargando] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError(null);
+  };
+
+  const validateForm = () => {
+    if (!formData.rol) {
+      setError("Por favor, seleccione un rol para el usuario");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+    
     setCargando(true);
     setError(null);
     try {
       await registrar(formData);
-      onUserCreated(); // Notificar al componente padre
+      setShowSuccessModal(true);
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        onUserCreated();
+      }, 1500);
     } catch (err) {
-      setError("Error al registrar usuario");
+      setError(err.message || "Error al registrar usuario");
     } finally {
       setCargando(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Registrar nuevo usuario</h2>
-        <form onSubmit={handleSubmit} className="modal-form">
-          <input
-            type="text"
-            name="dni"
-            placeholder="DNI"
-            value={formData.dni}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombres"
-            value={formData.nombres}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            value={formData.correo}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="telefono"
-            placeholder="telefono"
-            value={formData.telefono}
-            onChange={handleChange}
-            required
-          />
-          <select name="rol" value={formData.rol} onChange={handleChange}>
-            <option value="">Rol</option>
-            <option value="Administrador">Administrador</option>
-            <option value="Gestor de ventas">Gestor de ventas </option>
-          </select>
+    <>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Registrar nuevo usuario</h2>
+          <form onSubmit={handleSubmit} className="modal-form">
+            <input
+              type="text"
+              name="dni"
+              placeholder="DNI"
+              value={formData.dni}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombres"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo electrónico"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="telefono"
+              placeholder="Teléfono"
+              value={formData.telefono}
+              onChange={handleChange}
+              required
+            />
+            <select 
+              name="rol" 
+              value={formData.rol} 
+              onChange={handleChange}
+              className={error && !formData.rol ? "error" : ""}
+            >
+              <option value="">Seleccione un rol</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Gestor de ventas">Gestor de ventas</option>
+            </select>
 
-          {error && <p className="modal-error">{error}</p>}
-          <div className="modal-buttons">
-            <button type="submit" disabled={cargando}>
-              {cargando ? "Guardando..." : "Registrar"}
-            </button>
-            <button type="button" onClick={onClose} className="btn-cancel">
-              Cancelar
-            </button>
-          </div>
-        </form>
+            {error && <p className="modal-error">{error}</p>}
+            <div className="modal-buttons">
+              <button type="submit" disabled={cargando}>
+                {cargando ? "Guardando..." : "Registrar"}
+              </button>
+              <button type="button" onClick={onClose} className="btn-cancel">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+      {/* Modal de éxito */}
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="¡Éxito!"
+        message="Usuario registrado correctamente"
+        type="success"
+      />
+    </>
   );
 };
 

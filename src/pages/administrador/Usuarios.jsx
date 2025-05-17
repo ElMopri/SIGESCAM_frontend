@@ -3,6 +3,7 @@ import SearchBar from "../../components/SearchBar";
 import ButtonNewElements from "../../components/ButtonNewElements";
 import TableElements from "../../components/User_components/TableElements";
 import FiltroUsuariosModal from "../../components/User_components/FiltroUsuariosModal";
+import Modal from "../../components/Modal";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import { FaUndo } from "react-icons/fa";
 import {
@@ -29,6 +30,11 @@ const Usuarios = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
   const [filtros, setFiltros] = useState({ rol: "", estado: "" });
+  const [confirmModal, setConfirmModal] = useState({
+    show: false,
+    user: null,
+    newStatus: null
+  });
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -45,7 +51,6 @@ const Usuarios = () => {
 
     fetchUsuarios();
   }, []);
-
 
   useEffect(() => {
     const filteredUsers = usuarios.filter(user => {
@@ -79,12 +84,19 @@ const Usuarios = () => {
   };
 
   const handleToggleStatus = async (dni, nuevoEstado) => {
+    setConfirmModal({
+      show: true,
+      user: dni,
+      newStatus: nuevoEstado
+    });
+  };
+
+  const confirmToggleStatus = async () => {
     try {
-      await cambiarEstadoUsuario(dni, nuevoEstado);
-      console.log("Estado cambiado:", dni, nuevoEstado);
-      // Actualiza la lista de usuarios después del cambio
+      await cambiarEstadoUsuario(confirmModal.user, confirmModal.newStatus);
       const data = await listarUsuarios();
       setUsuarios(data);
+      setConfirmModal({ show: false, user: null, newStatus: null });
     } catch (error) {
       console.error("Error al cambiar estado:", error);
       alert("No se pudo cambiar el estado del usuario");
@@ -187,6 +199,18 @@ const Usuarios = () => {
           onClose={() => setMostrarFiltroModal(false)}
         />
       )}
+
+      {/* Modal de confirmación para cambiar estado */}
+      <Modal
+        isOpen={confirmModal.show}
+        onClose={() => setConfirmModal({ show: false, user: null, newStatus: null })}
+        onConfirm={confirmToggleStatus}
+        title="Confirmar cambio de estado"
+        message={`¿Está seguro que desea ${confirmModal.newStatus ? 'habilitar' : 'deshabilitar'} este usuario?`}
+        type="confirm"
+        confirmText={confirmModal.newStatus ? "Habilitar" : "Deshabilitar"}
+        cancelText="Cancelar"
+      />
     </div>
   );
 };
