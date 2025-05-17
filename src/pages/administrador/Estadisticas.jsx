@@ -5,6 +5,7 @@ import {
   filtrarComprasPorProducto,
 } from "../../api/CompraApi";
 import "./Estadisticas.css";
+import Modal from "../../components/Modal";
 
 const Estadisticas = () => {
   const [filtroPor, setFiltroPor] = useState("fecha");
@@ -14,6 +15,30 @@ const Estadisticas = () => {
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
   const [compras, setCompras] = useState([]);
   const [total, setTotal] = useState(0);
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "error",
+  });
+
+  const cerrarModal = () => {
+    setModalConfig({
+      isOpen: false,
+      title: "",
+      message: "",
+      type: "error",
+    });
+  };
+
+  const mostrarError = (mensaje) => {
+    setModalConfig({
+      isOpen: true,
+      title: "Error",
+      message: mensaje,
+      type: "error",
+    });
+  };
 
   useEffect(() => {
     const mostrarHistorial = async () => {
@@ -22,7 +47,9 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
-        alert(error.message);
+        mostrarError(
+          error.message || "Error al obtener el historial de compras"
+        );
         console.error("Error al obtener el historial:", error);
       }
     };
@@ -37,7 +64,9 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
-        alert(error.message);
+        mostrarError(error.message || "Error al filtrar por fecha");
+        setFechaInicio("");
+        setFechaFin("");
       }
     } else {
       try {
@@ -45,7 +74,9 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
-        alert(error.message);
+        mostrarError(
+          error.message || "Error al obtener el historial de compras"
+        );
       }
     }
   };
@@ -58,7 +89,8 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
-        alert(error.message);
+        mostrarError(error.message || "Error al filtrar por producto");
+        setProducto("");
       }
     } else {
       try {
@@ -66,7 +98,9 @@ const Estadisticas = () => {
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
-        alert(error.message);
+        mostrarError(
+          error.message || "Error al obtener el historial de compras"
+        );
       }
     }
   };
@@ -84,6 +118,13 @@ const Estadisticas = () => {
 
   return (
     <div className="estadisticas-container">
+      <Modal
+        isOpen={modalConfig.isOpen}
+        onClose={cerrarModal}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type={modalConfig.type}
+      />
       <h1 className="titulo-general">
         <strong>Estadísticas</strong>
       </h1>
@@ -153,10 +194,7 @@ const Estadisticas = () => {
                 <tbody>
                   {compras.length === 0 ? (
                     <tr>
-                      <td
-                        colSpan="5"
-                        style={{ textAlign: "center", padding: "1rem" }}
-                      >
+                      <td colSpan="5" className="no-data-message">
                         No hay compras registradas.
                       </td>
                     </tr>

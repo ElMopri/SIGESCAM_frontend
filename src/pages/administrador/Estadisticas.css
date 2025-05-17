@@ -6,16 +6,13 @@
   padding-top: 0;
   display: flex;
   flex-direction: column;
-  min-height: 60vh;
 }
 
 .titulo-general {
-  margin-top: 20px;
-  font-size: 2em;
+  font-size: 48px;
   font-weight: bold;
-  margin-bottom: 5px;
-  padding-left: 10px;
-  padding-bottom: 20px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .tabs {
@@ -58,14 +55,26 @@
   background-color: #ebf8ff;
 }
 
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background-color: white;
+  align-items: center;
+  width: 100%;
+  max-height: calc(100vh - 250px);
+}
+
 .filtro-section {
   display: flex;
   align-items: center;
   gap: 1.2rem;
   flex-wrap: wrap;
-  background-color: #f8f9fa;
+  background-color: white;
   padding: 1.2rem;
   border-bottom: 1px solid #e2e8f0;
+  margin: 0;
+  width: 100%;
 }
 
 .filtro-label {
@@ -140,44 +149,43 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
+  background-color: white;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
+  align-items: center;
 }
 
 .tabla-container {
-  flex: 1;
+  width: 90%;
   overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 455px);
-  position: relative;
+  background-color: white;
+  margin: 0;
+  padding: 0;
 }
 
 .tabla-estadisticas {
   width: 100%;
+  min-width: 800px;
   background-color: white;
   border-collapse: collapse;
-  font-size: 0.95rem;
-  min-width: 800px;
+  border-spacing: 0;
+  margin: 0;
 }
 
-.tabla-estadisticas thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.tabla-estadisticas thead tr {
+  background-color: #edf2f7;
 }
 
 .tabla-estadisticas th {
+  position: sticky;
+  top: 0;
   background-color: #edf2f7;
   color: #2d3748;
   font-weight: 600;
   padding: 1rem;
   text-align: left;
   border-bottom: 2px solid #cbd5e0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
 }
 
 .tabla-estadisticas td {
@@ -199,6 +207,7 @@
 }
 
 .total-container {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -233,102 +242,39 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  color: #718096;
-  background-color: #f8f9fa;
   border-radius: 6px;
   font-size: 1.1rem;
-  border: 1px dashed #cbd5e0;
 }
 
-@media (max-width: 1024px) {
-  .estadisticas-container {
-    width: 95%;
-    padding: 1rem;
-  }
-
-  .tabla-container {
-    max-height: calc(100vh - 320px);
-  }
+.no-data-message {
+  text-align: center;
+  padding: 1rem;
 }
 
 @media (max-width: 768px) {
-  .estadisticas-container {
-    width: 100%;
-    padding: 0.8rem;
-    min-height: 95vh;
-  }
-
-  .titulo-general {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-  }
-
-  .filtro-section {
-    gap: 0.8rem;
-    padding: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .filtro-label {
-    width: 100%;
-    margin-bottom: 0.2rem;
-  }
-
-  .filtro-select,
-  .busqueda-input,
-  .fecha-inputs,
-  .fecha-inputs input {
-    width: 100%;
+  .tabla-container {
+    margin: 0;
+    padding: 0;
     max-width: 100%;
   }
 
-  .fecha-inputs {
-    width: 100%;
-    gap: 0.5rem;
+  .tabla-estadisticas {
+    font-size: 0.9rem;
   }
 
-  .tabla-container {
-    max-height: calc(100vh - 380px);
+  .tabla-estadisticas th,
+  .tabla-estadisticas td {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabla-estadisticas {
+    font-size: 0.85rem;
   }
 
   .tabla-estadisticas th,
   .tabla-estadisticas td {
     padding: 0.7rem;
-    font-size: 0.85rem;
-  }
-
-  .total-container {
-    padding: 1rem;
-  }
-
-  .total-input {
-    min-width: 150px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tabs {
-    flex-direction: column;
-  }
-
-  .tab {
-    padding: 0.8rem;
-  }
-
-  .tab:first-child {
-    border-radius: 12px 12px 0 0;
-    border-right: 1px solid #bde0e7;
-    border-bottom: none;
-  }
-
-  .tab:last-child {
-    border-radius: 0;
-    border-left: 1px solid #bde0e7;
-  }
-
-  .tabla-container {
-    max-height: calc(100vh - 400px);
   }
 }

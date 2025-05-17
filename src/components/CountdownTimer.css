@@ -1,0 +1,39 @@
+.countdown-timer {
+  background-color: #f3f4f6;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.timer-display {
+  font-size: 24px;
+  font-weight: bold;
+  color: #3b82f6;
+  font-family: monospace;
+  margin-bottom: 4px;
+}
+
+.timer-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Estilos para cuando el tiempo está por acabar (menos de 1 minuto) */
+.countdown-timer.expiring .timer-display {
+  color: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+} 

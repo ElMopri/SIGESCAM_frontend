@@ -54,7 +54,7 @@ const CrearContraseña = () => {
   return (
     <div className="reset-container">
       <div className="reset-card">
-        <h2>Crear contraseña</h2>
+        <h2>Restablecer contraseña</h2>
         <form onSubmit={handleSubmit}>
           <label>Nueva contraseña</label>
           <div className="input-password-container">

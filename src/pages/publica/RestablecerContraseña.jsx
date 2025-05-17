@@ -7,6 +7,7 @@ import {
   comprobarCodigo,
 } from "../../api/RecuperarContrasenaApi.js";
 import EstructuraLogin from "../../components/EstructuraLogin";
+import CountdownTimer from "../../components/CountdownTimer";
 import "./RestablecerContraseña.css";
 
 const RestablecerContraseña = () => {
@@ -17,6 +18,7 @@ const RestablecerContraseña = () => {
   const [mensajeValidacion, setMensajeValidacion] = useState("");
   const [mensajeColor, setMensajeColor] = useState("");
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("");
+  const [expiryTime, setExpiryTime] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const TIEMPO_EXPIRACION_MS = 5 * 60 * 1000; // 5 minutos
@@ -27,11 +29,18 @@ const RestablecerContraseña = () => {
     const timestamp = localStorage.getItem("recuperacion_token_timestamp");
     const ahora = Date.now();
 
-    if (timestamp && ahora - parseInt(timestamp, 10) > TIEMPO_EXPIRACION_MS) {
-      limpiarLocalStorage();
-    } else {
-      if (savedDocumento) setDocumento(savedDocumento);
-      if (savedOpcion) setOpcionSeleccionada(savedOpcion);
+    if (timestamp) {
+      const tiempoExpiracion = parseInt(timestamp, 10);
+      if (ahora >= tiempoExpiracion) {
+        // Si ya expiró, limpiar todo
+        limpiarLocalStorage();
+        setOpcionSeleccionada("");
+      } else {
+        // Si aún no expira, restaurar todo
+        if (savedDocumento) setDocumento(savedDocumento);
+        if (savedOpcion) setOpcionSeleccionada(savedOpcion);
+        setExpiryTime(tiempoExpiracion);
+      }
     }
   }, []);
 
@@ -64,12 +73,12 @@ const RestablecerContraseña = () => {
       setError(respuesta?.message || "Código enviado correctamente");
       setMensajeColor("green");
       setOpcionSeleccionada(opcion);
+      
+      const newExpiryTime = Date.now() + TIEMPO_EXPIRACION_MS;
+      setExpiryTime(newExpiryTime);
       localStorage.setItem("recuperacion_documento", documento);
       localStorage.setItem("recuperacion_opcion", opcion);
-      localStorage.setItem(
-        "recuperacion_token_timestamp",
-        Date.now().toString()
-      );
+      localStorage.setItem("recuperacion_token_timestamp", newExpiryTime.toString());
 
       setTimeout(() => {
         setError("");
@@ -81,6 +90,18 @@ const RestablecerContraseña = () => {
         setError("");
       }, 1800);
     }
+  };
+
+  const handleTokenExpired = () => {
+    setMensajeValidacion("El código ha expirado. Por favor, solicite uno nuevo.");
+    setMensajeColor("red");
+    setCodigoToken("");
+    limpiarLocalStorage();
+    setOpcionSeleccionada("");
+    setTimeout(() => {
+      setMostrarModal(false);
+      setMensajeValidacion("");
+    }, 3000);
   };
 
   const mostrarModalToken = () => {
@@ -172,6 +193,12 @@ const RestablecerContraseña = () => {
           </div>
         ) : (
           <div className="button-group-restablecer">
+            {expiryTime && (
+              <CountdownTimer
+                expiryTime={expiryTime}
+                onExpire={handleTokenExpired}
+              />
+            )}
             <button
               type="button"
               className="restablecer-btn"
