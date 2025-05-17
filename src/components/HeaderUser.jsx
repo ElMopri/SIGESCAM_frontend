@@ -1,14 +1,26 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import "./HeaderUser.css";
 
 const HeaderUser = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleNotificationClick = () => {
+    if (user?.rol === "Administrador") {
+      navigate("/admin/notificaciones");
+    } else if (user?.rol === "Gestor de ventas") {
+      navigate("/gestorDeVentas/notificaciones");
+    } else {
+      console.warn("Rol no reconocido o no autenticado");
+    }
+  };
 
   return (
     <header className="header-user">
-      <button className="notificacion-btn">
+      <button className="notificacion-btn" onClick={handleNotificationClick}>
         <FaBell className="bell-icon" size={20} />
       </button>
 
