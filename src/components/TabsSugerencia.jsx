@@ -1,5 +1,4 @@
 import React from "react";
-import "./Sugerencias.css";
 
 const TabSugerencia = ({ onVerAceptadas, onVerRechazadas }) => {
   return (

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Sugerencias.css";
 
 const InputSugerencia = ({ onAgregar }) => {
   const [nombre_producto, setNombreProducto] = useState("");

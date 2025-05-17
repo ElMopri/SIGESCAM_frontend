@@ -1,6 +1,5 @@
 import React from "react";
 import { FaCheckSquare, FaTrashAlt } from "react-icons/fa";
-import "./Sugerencias.css";
 
 const TarjetaSugerencia = ({ sugerencia, onAceptar, onRechazar }) => {
   return (
