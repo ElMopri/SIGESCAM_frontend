@@ -28,6 +28,20 @@ export const editarCorreo = async (dni, nuevoEmail) => {
   }
 };
 
+export const validarCorreoExistente = async (email, dniActual) => {
+  try {
+    const response = await axios.post(`${API_USUARIOS}/validar-email`, {
+      email,
+      dniActual
+    });
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al validar el correo';
+    console.error('Error al validar correo:', mensaje);
+    throw new Error(mensaje);
+  }
+};
+
 export const listarUsuarios = async () => {
   try {
     const response = await axios.get(API_USUARIOS);

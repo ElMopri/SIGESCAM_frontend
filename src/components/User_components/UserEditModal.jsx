@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { obtenerPorId, actualizarUsuario } from "../../api/UsuarioApi";
+import { obtenerPorId, actualizarUsuario, validarCorreoExistente } from "../../api/UsuarioApi";
 import "./UserEditModal.css";
 
 const UserEditModal = ({ user, onClose, onUpdate }) => {
@@ -11,6 +11,7 @@ const UserEditModal = ({ user, onClose, onUpdate }) => {
     rol: ""
   });
 
+  const [originalEmail, setOriginalEmail] = useState("");
   const [error, setError] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
@@ -26,6 +27,7 @@ const UserEditModal = ({ user, onClose, onUpdate }) => {
           telefono: userData.telefono,
           rol: userData.rol_id
         });
+        setOriginalEmail(userData.email);
       } catch (err) {
         setError("Error al cargar datos del usuario");
       } finally {
@@ -39,22 +41,55 @@ const UserEditModal = ({ user, onClose, onUpdate }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setError(null);
+  };
+
+  const validateForm = async () => {
+    if (!formData.rol) {
+      setError("Por favor, seleccione un rol para el usuario");
+      return false;
+    }
+    if (!formData.email) {
+      setError("El correo electrónico es requerido");
+      return false;
+    }
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Por favor, ingrese un correo electrónico válido");
+      return false;
+    }
+
+    // Solo validamos si el correo existe si es diferente al original
+    if (formData.email !== originalEmail) {
+      try {
+        await validarCorreoExistente(formData.email, formData.dni);
+      } catch (err) {
+        setError("El correo electrónico ingresado ya está en uso");
+        return false;
+      }
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCargando(true);
-    setError(null);
 
     try {
+      const isValid = await validateForm();
+      if (!isValid) {
+        setCargando(false);
+        return;
+      }
+
       await actualizarUsuario(formData.dni, {
         nombre: formData.nombre,
         email: formData.email,
         telefono: formData.telefono,
         id_rol: formData.rol
       });
-      onUpdate(); // Notificar al componente padre
-      onClose(); // Cerrar el modal
+      onUpdate();
+      onClose();
     } catch (err) {
       setError(err.message || "Error al actualizar usuario");
     } finally {
@@ -107,6 +142,7 @@ const UserEditModal = ({ user, onClose, onUpdate }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              className={error?.toLowerCase().includes('correo') ? 'error' : ''}
               required
             />
           </div>

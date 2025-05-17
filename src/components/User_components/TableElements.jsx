@@ -9,9 +9,10 @@ const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
       <table className="styled-table">
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th className="hide-on-mobile">Rol</th>
-            <th>Ver mas</th>
+            {headers.map((header, idx) => (
+              <th key={idx}>{header}</th>
+            ))}
+            <th>Acciones</th>
             <th>Estado</th>
           </tr>
         </thead>
@@ -34,7 +35,8 @@ const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
                   <span className="user-name">{user.nombre}</span>
                 </div>
               </td>
-              <td className="hide-on-mobile">{user.rol}</td>
+              <td>{user.rol}</td>
+
               <td className="action-cell">
                 <div className="actions-container">
                   <FaEye
@@ -45,6 +47,7 @@ const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
                   />
                 </div>
               </td>
+
               <td>
                 <span
                   className={`estado ${
