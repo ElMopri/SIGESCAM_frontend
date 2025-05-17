@@ -46,7 +46,14 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
         onUserCreated();
       }, 1500);
     } catch (err) {
-      setError(err.message || "Error al registrar usuario");
+      // Manejo específico de errores
+      if (err.message.toLowerCase().includes('dni') && err.message.toLowerCase().includes('existe')) {
+        setError("El DNI ingresado ya está registrado en el sistema");
+      } else if (err.message.toLowerCase().includes('correo') || err.message.toLowerCase().includes('email')) {
+        setError("El correo electrónico ingresado ya está en uso");
+      } else {
+        setError(err.message || "Error al registrar usuario");
+      }
     } finally {
       setCargando(false);
     }
@@ -58,48 +65,60 @@ const UserCreateModal = ({ onClose, onUserCreated }) => {
         <div className="modal-content">
           <h2>Registrar nuevo usuario</h2>
           <form onSubmit={handleSubmit} className="modal-form">
-            <input
-              type="text"
-              name="dni"
-              placeholder="DNI"
-              value={formData.dni}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Nombres"
-              value={formData.nombre}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Correo electrónico"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="telefono"
-              placeholder="Teléfono"
-              value={formData.telefono}
-              onChange={handleChange}
-              required
-            />
-            <select 
-              name="rol" 
-              value={formData.rol} 
-              onChange={handleChange}
-              className={error && !formData.rol ? "error" : ""}
-            >
-              <option value="">Seleccione un rol</option>
-              <option value="Administrador">Administrador</option>
-              <option value="Gestor de ventas">Gestor de ventas</option>
-            </select>
+            <div className="form-group">
+              <input
+                type="text"
+                name="dni"
+                placeholder="DNI"
+                value={formData.dni}
+                onChange={handleChange}
+                className={error?.includes('DNI') ? 'error' : ''}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Nombres"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Correo electrónico"
+                value={formData.email}
+                onChange={handleChange}
+                className={error?.includes('correo') ? 'error' : ''}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                name="telefono"
+                placeholder="Teléfono"
+                value={formData.telefono}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <select 
+                name="rol" 
+                value={formData.rol} 
+                onChange={handleChange}
+                className={error && !formData.rol ? "error" : ""}
+              >
+                <option value="">Seleccione un rol</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Gestor de ventas">Gestor de ventas</option>
+              </select>
+            </div>
 
             {error && <p className="modal-error">{error}</p>}
             <div className="modal-buttons">

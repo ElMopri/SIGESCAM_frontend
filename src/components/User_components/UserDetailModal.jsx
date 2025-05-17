@@ -1,24 +1,48 @@
-
+import React from "react";
 import "./UserDetailModal.css";
 
-const UserDetailModal = ({ user,onClose }) => {
+const UserDetailModal = ({ user, onClose }) => {
   if (!user) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Detalles del Usuario</h2>
-        <p><strong>Nombre:</strong> {user.nombre}</p>
-        <p><strong>Rol:</strong> {user.id_rol}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Teléfono:</strong> {user.telefono}</p>
-        <p><strong>Estado:</strong> {user.estado?"Habilitado":"Deshabilitado"}</p>
-        <button onClick={onClose} className="modal-close-button">
-          Cerrar
-        </button>
+        <div className="user-details">
+          <div className="detail-group">
+            <label>DNI:</label>
+            <span>{user.dni}</span>
+          </div>
+          <div className="detail-group">
+            <label>Nombre:</label>
+            <span>{user.nombre}</span>
+          </div>
+          <div className="detail-group">
+            <label>Rol:</label>
+            <span>{user.id_rol}</span>
+          </div>
+          <div className="detail-group">
+            <label>Email:</label>
+            <span>{user.email}</span>
+          </div>
+          <div className="detail-group">
+            <label>Teléfono:</label>
+            <span>{user.telefono}</span>
+          </div>
+          <div className="detail-group">
+            <label>Estado:</label>
+            <span className={user.estado ? "estado-activo" : "estado-inactivo"}>
+              {user.estado ? "Habilitado" : "Deshabilitado"}
+            </span>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button onClick={onClose} className="btn-cerrar">
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
-
   );
 };
 
