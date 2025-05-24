@@ -4,7 +4,13 @@ import { FaTimes } from "react-icons/fa";
 
 import { editarProductoPorNombre } from "../api/ProductoApi.js"; // Asegúrate de que la ruta sea correcta
 
+import Modal from "../components/Modal" // Para mostrar errores
+
 const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
+
+  const [errorModalOpen, setErrorModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+
   if (!producto) return null;
 
   const [formData, setFormData] = useState({
@@ -48,13 +54,24 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
         onGuardar(productoActualizado);
         onClose();
       } catch (error) {
-      console.error("Error al editar el producto:", error)
-      if (onError) {
-        onError(`Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
-      }
+        console.error("Error al editar el producto:", error)
+        mostrarError(`Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
     }
   }
 }
+
+  const mostrarError = (mensaje) => {
+    setErrorMessage(mensaje)
+    setErrorModalOpen(true)
+
+    // Asegurarnos de que el modal de error tenga prioridad visual
+    const modalOverlays = document.querySelectorAll(".modal-overlay")
+    modalOverlays.forEach((overlay) => {
+      if (overlay.contains(document.querySelector('[type="error"]'))) {
+        overlay.style.zIndex = "1200" // Un valor mayor que el z-index de los otros modales
+      }
+    })
+  }
 
   return (
     <div className="modal-agregar-overlay">
@@ -104,6 +121,16 @@ const ModalEditarProducto = ({ producto, categorias, onClose, onGuardar }) => {
           </button>
         </div>
       </div>
+            {/* El modal de error debe ser el último en renderizarse para estar por encima de los demás */}
+      {errorModalOpen && (
+        <Modal
+          isOpen={errorModalOpen}
+          onClose={() => setErrorModalOpen(false)}
+          title="Error"
+          message={errorMessage}
+          type="error"
+        />
+      )}
     </div>
   );
 };

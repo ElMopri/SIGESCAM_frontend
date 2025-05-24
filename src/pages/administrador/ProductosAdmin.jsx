@@ -45,6 +45,11 @@ const ProductosAdmin = () => {
   const [datos, setDatos] = useState([])
   const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
 
+  const [confirmModal, setConfirmModal] = useState({
+    show: false,
+    productId: null
+  });
+
   React.useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -148,7 +153,7 @@ const ProductosAdmin = () => {
           <button onClick={() => editar(item)} className="boton-icono editar">
             <img src={iconEditar || "/placeholder.svg"} alt="Editar" className="icono-accion" />
           </button>
-          <button onClick={() => eliminar(item.id)} className="boton-icono eliminar">
+          <button onClick={() => confirmarEliminar(item.id)} className="boton-icono eliminar">
             <img src={iconDelete || "/placeholder.svg"} alt="Eliminar" className="icono-accion" />
           </button>
         </div>
@@ -161,11 +166,19 @@ const ProductosAdmin = () => {
     setMostrarModalEditarProducto(true)
   }
 
-  const eliminar = async (id) => {
+  const confirmarEliminar = (id) => {
+    setConfirmModal({
+      show: true,
+      productId: id
+    });
+  };
+
+  const eliminar = async () => {
     try {
-      await activarDesactivarProductoPorNombre(id, false)
-      setDatos(datos.filter((d) => d.id !== id))
-      console.log(`Producto con id ${id} desactivado.`)
+      await activarDesactivarProductoPorNombre(confirmModal.productId, false)
+      setDatos(datos.filter((d) => d.id !== confirmModal.productId))
+      console.log(`Producto con id ${confirmModal.productId} desactivado.`)
+      setConfirmModal({ show: false, productId: null });
     } catch (error) {
       console.error("Error al desactivar el producto:", error)
       mostrarError(`Error al desactivar el producto: ${error.message || "Ocurrió un problema inesperado"}`)
@@ -324,6 +337,18 @@ const ProductosAdmin = () => {
           }}
         />
       )}
+
+      {/* Modal de confirmación para eliminar producto */}
+      <Modal
+        isOpen={confirmModal.show}
+        onClose={() => setConfirmModal({ show: false, productId: null })}
+        onConfirm={eliminar}
+        title="Confirmar eliminación"
+        message="¿Está seguro que desea eliminar este producto?"
+        type="confirm"
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
 
       {/* El modal de error debe ser el último en renderizarse para estar por encima de los demás */}
       {errorModalOpen && (
