@@ -1,37 +1,42 @@
-"use client"
-
-import { useRef, useEffect } from "react"
-import "./TablaProductos.css"
+import { useRef, useEffect } from "react";
+import "./TablaProductos.css";
 
 const TablaProductos = ({ columnas, datos }) => {
-  const scrollContainerRef = useRef(null)
-  const headerTableRef = useRef(null)
-  const bodyTableRef = useRef(null)
-  const scrollCornerRef = useRef(null)
+  const scrollContainerRef = useRef(null);
+  const headerTableRef = useRef(null);
+  const bodyTableRef = useRef(null);
+  const scrollCornerRef = useRef(null);
 
   // Ajustar el ancho del encabezado y el scroll corner
   useEffect(() => {
     const adjustLayout = () => {
-      if (scrollContainerRef.current && headerTableRef.current && bodyTableRef.current && scrollCornerRef.current) {
+      if (
+        scrollContainerRef.current &&
+        headerTableRef.current &&
+        bodyTableRef.current &&
+        scrollCornerRef.current
+      ) {
         // Obtener el ancho de la barra de desplazamiento
-        const scrollbarWidth = scrollContainerRef.current.offsetWidth - scrollContainerRef.current.clientWidth
+        const scrollbarWidth =
+          scrollContainerRef.current.offsetWidth -
+          scrollContainerRef.current.clientWidth;
 
         // Ajustar el ancho de la tabla de encabezado para compensar la barra de desplazamiento
-        headerTableRef.current.style.width = `calc(100% - ${scrollbarWidth}px)`
+        headerTableRef.current.style.width = `calc(100% - ${scrollbarWidth}px)`;
 
         // Ajustar el ancho del scroll corner
-        scrollCornerRef.current.style.width = `${scrollbarWidth}px`
+        scrollCornerRef.current.style.width = `${scrollbarWidth}px`;
       }
-    }
+    };
 
     // Ejecutar después de un pequeño retraso para asegurar que los elementos estén renderizados
-    setTimeout(adjustLayout, 0)
-    window.addEventListener("resize", adjustLayout)
+    setTimeout(adjustLayout, 0);
+    window.addEventListener("resize", adjustLayout);
 
     return () => {
-      window.removeEventListener("resize", adjustLayout)
-    }
-  }, [])
+      window.removeEventListener("resize", adjustLayout);
+    };
+  }, []);
 
   return (
     <div className="tabla-contenedor">
@@ -65,7 +70,9 @@ const TablaProductos = ({ columnas, datos }) => {
               datos.map((item, idx) => (
                 <tr key={idx}>
                   {columnas.map((col) => (
-                    <td key={col.key}>{col.render ? col.render(item) : item[col.key]}</td>
+                    <td key={col.key}>
+                      {col.render ? col.render(item) : item[col.key]}
+                    </td>
                   ))}
                 </tr>
               ))
@@ -80,7 +87,7 @@ const TablaProductos = ({ columnas, datos }) => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TablaProductos
+export default TablaProductos;
