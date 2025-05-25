@@ -6,27 +6,28 @@
   display: flex;
   justify-content: center;
   padding: 20px;
-  height: 417px !important;
+  height: 430px;
   margin-top: -15px;
 }
 
-.tabla-container {
+.tabla-deudores-container {
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: auto;
   width: 100%;
   max-width: 1200px;
   max-height: 500px;
   overflow-y: auto;
   position: relative;
-  height: 700px !important;
+  height: 384px;
 }
 
 .tabla-deudores {
   width: 100%;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
+  height: 300px;
 }
 
 .tabla-deudores thead {
