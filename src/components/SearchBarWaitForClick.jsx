@@ -1,13 +1,13 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
-import "./SearchBarProductos.css";
+import "./SearchBarWaitForClick.css";
 
-const SearchBarProductos = ({ value, onChange, onSearch }) => {
+const SearchBarWaitForClick = ({ placeholder="Buscar...", value, onChange, onSearch }) => {
   return (
     <div className="search-bar">
       <input
         type="text"
-        placeholder="Buscar producto..."
+        placeholder={placeholder}
         value={value}
         onChange={onChange}
         className="search-input"
@@ -19,4 +19,4 @@ const SearchBarProductos = ({ value, onChange, onSearch }) => {
   );
 };
 
-export default SearchBarProductos;
+export default SearchBarWaitForClick;

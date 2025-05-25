@@ -4,7 +4,7 @@ import React, { useState, useContext } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import CategoriasModal from "../../components/CategoriasModal"
 import TablaProductos from "../../components/TablaProductos"
-import SearchBarProductos from "../../components/SearchBarProductos"
+import SearchBarWaitForClick from "../../components/SearchBarWaitForClick"
 import FiltroModal from "../../components/FiltroModal"
 import iconEditar from "/EditYellow.png"
 import iconDelete from "/Delete.png"
@@ -23,7 +23,6 @@ import {
 } from "../../api/ProductoApi"
 
 import { registrarCompra } from "../../api/CompraApi"
-
 import { obtenerCategorias } from "../../api/CategoriaApi"
 
 const ProductosAdmin = () => {
@@ -240,7 +239,8 @@ const ProductosAdmin = () => {
   return (
     <div className="productos-admin-container">
       <div className="contenedor-centrado">
-        <SearchBarProductos
+        <SearchBarWaitForClick
+          placeholder="Buscar productos..." 
           value={nombreBusquedaTemp}
           onChange={(e) => setNombreBusquedaTemp(e.target.value)}
           onSearch={() => {
