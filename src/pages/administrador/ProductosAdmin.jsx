@@ -12,17 +12,15 @@ import "./ProductosAdmin.css";
 import ModalAgregarProducto from "../../components/ModalAgregarProducto";
 import ModalEditarProducto from "../../components/ModalEditarProducto";
 import Modal from "../../components/Modal";
-
+import ModalRegistrarVenta from "../../components/products_components/ModalRegistrarVenta";
+import { registrarCompra } from "../../api/CompraApi";
+import { obtenerCategorias } from "../../api/CategoriaApi";
 import {
   obtenerProductos,
   buscarProductosPorNombreParecido,
   activarDesactivarProductoPorNombre,
   filtrarProductos,
 } from "../../api/ProductoApi";
-
-import { registrarCompra } from "../../api/CompraApi";
-
-import { obtenerCategorias } from "../../api/CategoriaApi";
 
 const ProductosAdmin = () => {
   const { user } = useContext(AuthContext);
@@ -51,6 +49,9 @@ const ProductosAdmin = () => {
     show: false,
     productId: null,
   });
+
+  const [mostrarModalRegistrarVenta, setMostrarModalRegistrarVenta] =
+    useState(false);
 
   React.useEffect(() => {
     const fetchProductos = async () => {
@@ -320,7 +321,10 @@ const ProductosAdmin = () => {
         >
           Ver Categorías <FaPlus />
         </button>
-        <button className="btn-azul">
+        <button
+          className="btn-azul"
+          onClick={() => setMostrarModalRegistrarVenta(true)}
+        >
           Registrar Venta <FaPlus />
         </button>
       </div>
@@ -392,6 +396,12 @@ const ProductosAdmin = () => {
               );
             }
           }}
+        />
+      )}
+
+      {mostrarModalRegistrarVenta && (
+        <ModalRegistrarVenta
+          onClose={() => setMostrarModalRegistrarVenta(false)}
         />
       )}
 
