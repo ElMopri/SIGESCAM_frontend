@@ -7,7 +7,6 @@ const TablaProductos = ({ columnas, datos }) => {
   const bodyTableRef = useRef(null);
   const scrollCornerRef = useRef(null);
 
-  // Ajustar el ancho del encabezado y el scroll corner
   useEffect(() => {
     const adjustLayout = () => {
       if (

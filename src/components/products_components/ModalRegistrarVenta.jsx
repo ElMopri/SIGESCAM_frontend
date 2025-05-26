@@ -4,6 +4,13 @@ import "./ModalRegistrarVenta.css";
 
 const ModalRegistrarVenta = ({ onClose }) => {
   const [isPendingPayment, setIsPendingPayment] = useState(false);
+  const [fecha, setFecha] = useState(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
   const [productos, setProductos] = useState([
     { id: 1, nombre: "Cartera", cantidad: 1, precio: 2000 },
     { id: 2, nombre: "Esmalte", cantidad: 5, precio: 2000 },
@@ -43,11 +50,21 @@ const ModalRegistrarVenta = ({ onClose }) => {
         </div>
 
         <div className="modal-venta-body">
+          <div className="venta-date-container">
+            <label className="venta-date-label">Fecha de venta:</label>
+            <input
+              type="date"
+              className="venta-date-input"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+            />
+          </div>
+
           <div className="venta-form-row">
             <div className="venta-form-group">
               <input
                 type="text"
-                placeholder="Nombre del producto. Ej: Lentejas"
+                placeholder="Nombre del producto"
                 className="venta-form-input"
               />
             </div>
@@ -55,7 +72,7 @@ const ModalRegistrarVenta = ({ onClose }) => {
             <div className="venta-form-group">
               <input
                 type="number"
-                placeholder="Cantidad. Ej: 50"
+                placeholder="Cantidad"
                 min="1"
                 className="venta-form-input"
               />
@@ -64,7 +81,7 @@ const ModalRegistrarVenta = ({ onClose }) => {
             <div className="venta-form-group">
               <input
                 type="number"
-                placeholder="Precio. Ej: 1500"
+                placeholder="Precio"
                 min="0"
                 className="venta-form-input"
               />

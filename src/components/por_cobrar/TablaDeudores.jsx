@@ -1,35 +1,22 @@
-"use client"
-
-import { useState } from "react"
-import "./TablaDeudores.css"
-import ModalDeudor from "./ModalDeudor"
+import { useState } from "react";
+import ModalDetalleDeuda from "./ModalDetalleDeuda";
+import "./TablaDeudores.css";
 
 const TablaDeudores = ({ clientes }) => {
-  const [clientesActuales, setClientesActuales] = useState(clientes)
-  const [clienteSeleccionado, setClienteSeleccionado] = useState(null)
-  const [mostrarModal, setMostrarModal] = useState(false)
+  const [clientesActuales, setClientesActuales] = useState(clientes);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [clienteDetalle, setClienteDetalle] = useState(null);
 
-  const formatearMoneda = (monto) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
-    }).format(monto)
-  }
+  const formatearMoneda = (monto) => `$${monto.toFixed(2)}`;
 
   const eliminarCliente = (id) => {
-    setClientesActuales(clientesActuales.filter((cliente) => cliente.id !== id))
-  }
+    setClientesActuales(clientesActuales.filter((cliente) => cliente.id !== id));
+  };
 
   const verDetalles = (cliente) => {
-    setClienteSeleccionado(cliente)
-    setMostrarModal(true)
-  }
-
-  const cerrarModal = () => {
-    setMostrarModal(false)
-    setClienteSeleccionado(null)
-  }
+    setClienteDetalle(cliente);
+    setModalAbierto(true);
+  };
 
   return (
     <div className="tabla-wrapper">
@@ -46,9 +33,18 @@ const TablaDeudores = ({ clientes }) => {
           </thead>
           <tbody>
             {clientesActuales.map((cliente, index) => (
-              <tr key={cliente.id} className={index % 2 === 0 ? "fila-par" : "fila-impar"}>
+              <tr
+                key={cliente.id}
+                className={index % 2 === 0 ? "fila-par" : "fila-impar"}
+              >
                 <td className="icono-persona col-icono">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path
                       d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
                       stroke="#333"
@@ -66,11 +62,23 @@ const TablaDeudores = ({ clientes }) => {
                   </svg>
                 </td>
                 <td className="nombre col-nombre">{cliente.nombre}</td>
-                <td className="deuda col-deuda">{formatearMoneda(cliente.deuda)}</td>
+                <td className="deuda col-deuda">
+                  {formatearMoneda(cliente.deuda)}
+                </td>
                 <td className="cedula col-cedula">{cliente.cedula}</td>
                 <td className="acciones col-acciones">
-                  <button className="btn-ver" onClick={() => verDetalles(cliente)} title="Ver detalles">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <button
+                    className="btn-ver"
+                    onClick={() => verDetalles(cliente)}
+                    title="Ver detalles"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
                         stroke="#8B4513"
@@ -92,7 +100,13 @@ const TablaDeudores = ({ clientes }) => {
                     onClick={() => eliminarCliente(cliente.id)}
                     title="Marcar como pagado"
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M3 6H5H21"
                         stroke="#DC143C"
@@ -115,14 +129,14 @@ const TablaDeudores = ({ clientes }) => {
           </tbody>
         </table>
       </div>
-      {mostrarModal && clienteSeleccionado && (
-        <ModalDeudor 
-          cliente={clienteSeleccionado} 
-          onClose={cerrarModal} 
+      {modalAbierto && (
+        <ModalDetalleDeuda
+          onClose={() => setModalAbierto(false)}
+          cliente={clienteDetalle}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TablaDeudores
+export default TablaDeudores;

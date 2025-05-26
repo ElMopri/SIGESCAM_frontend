@@ -3,7 +3,6 @@
   background-color: #fff9dc;
 }
 
-/* Buscador con ícono */
 .barra-busqueda {
   display: flex;
   align-items: center;
@@ -18,7 +17,6 @@
   outline: none;
 }
 
-/* Botones de acción */
 .boton-icono {
   background-color: white;
   border: 2px solid transparent;
@@ -54,11 +52,11 @@
 .botones-inferiores {
   display: flex;
   justify-content: space-around;
-  margin-top: 30px;
+  margin-top: 25px;
 }
 
 .botones-inferiores button {
-  padding: 13px 20px;
+  padding: 12px 20px;
   border-radius: 10px;
   font-weight: bold;
   border: none;

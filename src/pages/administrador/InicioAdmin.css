@@ -1,0 +1,139 @@
+.inicio-admin {
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: 90vh;
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.mas-vendidos-container {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  min-height: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.mas-vendidos-container h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 35px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.productos-mas-vendidos {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.producto {
+  flex: 0 1 280px;
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.producto:hover {
+  transform: scale(1.05);
+}
+
+.producto p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.producto p:first-child {
+  font-weight: bold;
+}
+
+.producto strong {
+  font-size: 24px;
+  display: block;
+  margin-top: 12px;
+}
+
+.verde {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.amarillo {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.naranja {
+  background-color: #ffe5d0;
+  color: #d35400;
+}
+
+.ventas-dia-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ventas-dia-titulo {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: bold;
+  width: 100%;
+}
+
+.ventas-dia-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.ventas-dia-icono img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.ventas-numero {
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-left: 0;
+  text-align: center;
+}
+
+.registrar-venta-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 14px 22px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}

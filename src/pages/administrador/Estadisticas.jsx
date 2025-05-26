@@ -14,6 +14,8 @@ const datosEntradasEjemplo = [
     precio: 1500,
     fecha_entrada: "2024-05-01T00:00:00Z",
     total_entrada: 15000,
+    estado: "Pagado",
+    abono: 0,
   },
   {
     producto: { nombre: "Esmalte" },
@@ -21,6 +23,8 @@ const datosEntradasEjemplo = [
     precio: 800,
     fecha_entrada: "2024-05-03T00:00:00Z",
     total_entrada: 16000,
+    estado: "Pendiente",
+    abono: 8000,
   },
   {
     producto: { nombre: "Balaca" },
@@ -28,6 +32,8 @@ const datosEntradasEjemplo = [
     precio: 500,
     fecha_entrada: "2024-05-05T00:00:00Z",
     total_entrada: 7500,
+    estado: "Pagado",
+    abono: 0,
   },
 ];
 
@@ -332,18 +338,20 @@ const Estadisticas = () => {
                     <th>Precio (U)</th>
                     <th>Fecha Entrada</th>
                     <th>Total de la entrada</th>
+                    <th>Estado</th>
+                    <th>Abono</th>
                   </tr>
                 </thead>
                 <tbody>
                   {entradas.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="no-data-message">
+                      <td colSpan="7" className="no-data-message">
                         No hay entradas registradas.
                       </td>
                     </tr>
                   ) : entradasFiltradas.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="no-data-message">
+                      <td colSpan="7" className="no-data-message">
                         No hay entradas que coincidan con los filtros aplicados.
                       </td>
                     </tr>
@@ -358,6 +366,14 @@ const Estadisticas = () => {
                         <td>${item.precio.toLocaleString()}</td>
                         <td>{item.fecha_entrada.split("T")[0]}</td>
                         <td>${item.total_entrada.toLocaleString()}</td>
+                        <td>
+                          <span
+                            className={`estado-badge estado-${item.estado.toLowerCase()}`}
+                          >
+                            {item.estado}
+                          </span>
+                        </td>
+                        <td>${item.abono?.toLocaleString() || "0"}</td>
                       </tr>
                     ))
                   )}
