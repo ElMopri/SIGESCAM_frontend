@@ -27,7 +27,27 @@ const Inicio = () => {
         </div>
       </main>
 
-      
+      <IoArrowDownCircleOutline
+        className="icono-entrar"
+        onClick={() => {
+          const section = document.getElementById('productos');
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+      />
+
+      <ProductSection />
+
+      <a
+        href="https://wa.me/573001234567"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="boton-whatsapp"
+      >
+        <FaWhatsapp size={20} />
+        <span>Contáctanos</span>
+      </a>
     </div>
   );
 };
