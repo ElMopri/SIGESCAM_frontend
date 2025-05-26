@@ -4,15 +4,23 @@ import "./ModalRegistrarVenta.css";
 
 const ModalRegistrarVenta = ({ onClose }) => {
   const [isPendingPayment, setIsPendingPayment] = useState(false);
+  const [fecha, setFecha] = useState(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
   const [productos, setProductos] = useState([
     { id: 1, nombre: "Cartera", cantidad: 1, precio: 2000 },
     { id: 2, nombre: "Esmalte", cantidad: 5, precio: 2000 },
     { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 4, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 5, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 6, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 7, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 8, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
+    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
   ]);
 
   const eliminarProducto = (id) => {
@@ -42,6 +50,16 @@ const ModalRegistrarVenta = ({ onClose }) => {
         </div>
 
         <div className="modal-venta-body">
+          <div className="venta-date-container">
+            <label className="venta-date-label">Fecha de venta:</label>
+            <input
+              type="date"
+              className="venta-date-input"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+            />
+          </div>
+
           <div className="venta-form-row">
             <div className="venta-form-group">
               <input
@@ -90,15 +108,12 @@ const ModalRegistrarVenta = ({ onClose }) => {
                 {productos.map((producto) => (
                   <tr key={producto.id}>
                     <td className="venta-col-nombre">{producto.nombre}</td>
-                    <td className="venta-col-cantidad">
-                      {producto.cantidad}
-                    </td>
+                    <td className="venta-col-cantidad">{producto.cantidad}</td>
                     <td className="venta-col-precio">
                       ${producto.precio.toLocaleString()}
                     </td>
                     <td className="venta-col-total">
-                      $
-                      {(producto.precio * producto.cantidad).toLocaleString()}
+                      ${(producto.precio * producto.cantidad).toLocaleString()}
                     </td>
                     <td className="venta-col-acciones">
                       <button
@@ -138,7 +153,7 @@ const ModalRegistrarVenta = ({ onClose }) => {
               <div className="venta-deudor-info">
                 <input
                   type="text"
-                  placeholder="Nombre del deudor"
+                  placeholder="Ingrese nombre del deudor"
                   className="venta-form-input"
                 />
                 <input
