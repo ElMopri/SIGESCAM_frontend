@@ -59,3 +59,15 @@ export const filtrarProductos = async (cantidad, nombre_categoria, precio) => {
         throw new Error(error.response?.data?.message || "Error al filtrar productos");
     }
 };
+
+export const autocompletarCampos = async (nombre) => {
+    try {
+        const response = await axios.get(`${API_PRODUCTOS}/autocompletar`, {
+            params: { nombre }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al buscar productos:", error.response?.data?.message || error.message);
+        throw new Error(error.response?.data?.message || "Error al buscar productos");
+    }
+};

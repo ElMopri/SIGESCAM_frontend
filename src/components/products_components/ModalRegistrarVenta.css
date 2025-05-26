@@ -1,0 +1,354 @@
+.modal-venta-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-venta-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 95%;
+  max-width: 650px;
+  max-height: 90vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.modal-venta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-venta-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.modal-venta-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  color: #666;
+}
+
+/* Formulario superior */
+.venta-form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.venta-form-group {
+  flex: 1;
+}
+
+.venta-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.venta-form-input::placeholder {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.venta-form-input:focus {
+  outline: none;
+  border-color: #58c0f8;
+  box-shadow: 0 0 0 2px #e3f1fb;
+}
+
+/* Botones */
+.venta-btn-agregar,
+.venta-btn-registrar {
+  background-color: #58c0f8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  padding: 10px;
+}
+
+.venta-btn-agregar {
+  min-width: 100px;
+}
+
+.venta-btn-registrar {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.venta-btn-agregar:hover,
+.venta-btn-registrar:hover {
+  background-color: #0875db;
+}
+
+.venta-subtitle {
+  margin: 15px 0;
+  font-size: 1.1rem;
+  color: #2f2f2f;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Tabla de productos */
+.venta-productos-container {
+  margin: 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  position: relative;
+  background: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: #58c0f8 #e3f1fb;
+}
+
+.venta-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background: #fff;
+}
+
+.venta-table th,
+.venta-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #d4d3d3;
+  word-break: break-word;
+}
+
+.venta-table th {
+  background-color: #f1f1f1;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.venta-total-row {
+  font-weight: 600;
+  background-color: #f8f8f8;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+
+.venta-total-row td {
+  box-shadow: 0 -2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.venta-col-nombre {
+  width: 40%;
+  text-align: left;
+}
+.venta-col-cantidad {
+  width: 15%;
+  text-align: center;
+}
+.venta-col-precio {
+  width: 20%;
+  text-align: right;
+}
+.venta-col-total {
+  width: 20%;
+  text-align: right;
+}
+.venta-col-acciones {
+  width: 6%;
+  text-align: center;
+  padding: 10px 5px;
+}
+
+/* Botón eliminar */
+.venta-btn-eliminar {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: color 0.2s;
+}
+
+.venta-btn-eliminar:hover {
+  color: #c0392b;
+}
+
+/* Estado de pago */
+.venta-payment-status {
+  margin: 20px 0;
+}
+
+.venta-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.venta-checkbox-label input {
+  margin-right: 8px;
+}
+
+/* Inputs de deudor */
+.venta-deudor-info {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.venta-deudor-info .venta-form-input {
+  flex: 1;
+  width: 98%;
+}
+
+.venta-productos-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: #e3f1fb;
+  border-radius: 8px;
+}
+
+.venta-productos-container::-webkit-scrollbar-thumb {
+  background: #58c0f8;
+  border-radius: 8px;
+  border: 2px solid #e3f1fb;
+}
+
+.venta-productos-container::-webkit-scrollbar-thumb:hover {
+  background: #0875db;
+}
+
+.venta-date-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.venta-date-label {
+  font-weight: 500;
+  color: #2f2f2f;
+  font-size: 1rem;
+  min-width: 120px;
+}
+
+.venta-date-input {
+  padding: 9px 14px;
+  border: 1px solid #bdc0c2;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #f8fbff;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .modal-venta-container {
+    gap: 10px;
+    padding: 15px;
+  }
+  .venta-form-row {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .venta-productos-container {
+    min-width: 100%;
+    max-height: 200px;
+  }
+  .venta-table {
+    font-size: 0.85rem;
+    min-width: 100%;
+  }
+  .venta-table th,
+  .venta-table td {
+    padding: 8px 6px;
+  }
+  .venta-deudor-info {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .venta-deudor-info .venta-form-input {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-venta-title {
+    font-size: 1.3rem;
+  }
+  .venta-subtitle {
+    font-size: 1rem;
+  }
+  .venta-form-input {
+    min-width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+  .venta-table {
+    min-width: 100%;
+  }
+  .venta-date-label {
+    min-width: 90px;
+    font-size: 0.95rem;
+  }
+  .venta-date-input {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+}
+.venta-sugerencias-lista {
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  list-style: none;
+  padding: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+.venta-sugerencia-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.venta-sugerencia-item:hover {
+  background-color: #f0f0f0;
+}

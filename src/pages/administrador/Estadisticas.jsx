@@ -7,11 +7,47 @@ import {
 import "./Estadisticas.css";
 import Modal from "../../components/Modal";
 
+const datosEntradasEjemplo = [
+  {
+    producto: { nombre: "Cartera" },
+    cantidad: 10,
+    precio: 1500,
+    fecha_entrada: "2024-05-01T00:00:00Z",
+    total_entrada: 15000,
+    estado: "Pagado",
+    abono: 0,
+  },
+  {
+    producto: { nombre: "Esmalte" },
+    cantidad: 20,
+    precio: 800,
+    fecha_entrada: "2024-05-03T00:00:00Z",
+    total_entrada: 16000,
+    estado: "Pendiente",
+    abono: 8000,
+  },
+  {
+    producto: { nombre: "Balaca" },
+    cantidad: 15,
+    precio: 500,
+    fecha_entrada: "2024-05-05T00:00:00Z",
+    total_entrada: 7500,
+    estado: "Pagado",
+    abono: 0,
+  },
+];
+
 const Estadisticas = () => {
-  const [filtroPor, setFiltroPor] = useState("fecha");
-  const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
-  const [producto, setProducto] = useState("");
+  const [filtroPorEntradas, setFiltroPorEntradas] = useState("fecha");
+  const [fechaInicioEntradas, setFechaInicioEntradas] = useState("");
+  const [fechaFinEntradas, setFechaFinEntradas] = useState("");
+  const [productoEntradas, setProductoEntradas] = useState("");
+
+  const [filtroPorSalidas, setFiltroPorSalidas] = useState("fecha");
+  const [fechaInicioSalidas, setFechaInicioSalidas] = useState("");
+  const [fechaFinSalidas, setFechaFinSalidas] = useState("");
+  const [productoSalidas, setProductoSalidas] = useState("");
+
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
   const [compras, setCompras] = useState([]);
   const [total, setTotal] = useState(0);
@@ -21,6 +57,13 @@ const Estadisticas = () => {
     message: "",
     type: "error",
   });
+
+  // Estado para las entradas de ejemplo
+  const [entradas] = useState(datosEntradasEjemplo);
+  const totalEntradas = entradas.reduce(
+    (acc, item) => acc + item.total_entrada,
+    0
+  );
 
   const cerrarModal = () => {
     setModalConfig({
@@ -58,15 +101,18 @@ const Estadisticas = () => {
 
   // Función para manejar el filtrado por fecha
   const filtrarPorFecha = async () => {
-    if (fechaInicio && fechaFin) {
+    if (fechaInicioSalidas && fechaFinSalidas) {
       try {
-        const data = await filtrarComprasPorFecha(fechaInicio, fechaFin);
+        const data = await filtrarComprasPorFecha(
+          fechaInicioSalidas,
+          fechaFinSalidas
+        );
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
         mostrarError(error.message || "Error al filtrar por fecha");
-        setFechaInicio("");
-        setFechaFin("");
+        setFechaInicioSalidas("");
+        setFechaFinSalidas("");
       }
     } else {
       try {
@@ -83,14 +129,14 @@ const Estadisticas = () => {
 
   // Función para manejar el filtrado por producto
   const filtrarPorProducto = async () => {
-    if (producto) {
+    if (productoSalidas) {
       try {
-        const data = await filtrarComprasPorProducto(producto);
+        const data = await filtrarComprasPorProducto(productoSalidas);
         setCompras(data.compras);
         setTotal(data.totalGeneral);
       } catch (error) {
         mostrarError(error.message || "Error al filtrar por producto");
-        setProducto("");
+        setProductoSalidas("");
       }
     } else {
       try {
@@ -106,15 +152,34 @@ const Estadisticas = () => {
   };
 
   useEffect(() => {
-    if (filtroPor === "fecha") {
-      setProducto("");
+    if (filtroPorSalidas === "fecha") {
+      setProductoSalidas("");
       filtrarPorFecha();
-    } else if (filtroPor === "producto") {
-      setFechaInicio("");
-      setFechaFin("");
+    } else if (filtroPorSalidas === "producto") {
+      setFechaInicioSalidas("");
+      setFechaFinSalidas("");
       filtrarPorProducto();
     }
-  }, [filtroPor, fechaInicio, fechaFin, producto]);
+  }, [filtroPorSalidas, fechaInicioSalidas, fechaFinSalidas, productoSalidas]);
+
+  const entradasFiltradas = entradas.filter((item) => {
+    if (filtroPorEntradas === "producto" && productoEntradas) {
+      return item.producto.nombre
+        .toLowerCase()
+        .includes(productoEntradas.toLowerCase());
+    }
+    if (
+      filtroPorEntradas === "fecha" &&
+      fechaInicioEntradas &&
+      fechaFinEntradas
+    ) {
+      return (
+        item.fecha_entrada >= fechaInicioEntradas &&
+        item.fecha_entrada <= fechaFinEntradas
+      );
+    }
+    return true;
+  });
 
   return (
     <div className="estadisticas-container">
@@ -150,24 +215,24 @@ const Estadisticas = () => {
               <label className="filtro-label">Filtro por</label>
               <select
                 className="filtro-select"
-                value={filtroPor}
-                onChange={(e) => setFiltroPor(e.target.value)}
+                value={filtroPorSalidas}
+                onChange={(e) => setFiltroPorSalidas(e.target.value)}
               >
                 <option value="fecha">Fecha</option>
                 <option value="producto">Producto</option>
               </select>
 
-              {filtroPor === "fecha" ? (
+              {filtroPorSalidas === "fecha" ? (
                 <div className="fecha-inputs">
                   <input
                     type="date"
-                    value={fechaInicio}
-                    onChange={(e) => setFechaInicio(e.target.value)}
+                    value={fechaInicioSalidas}
+                    onChange={(e) => setFechaInicioSalidas(e.target.value)}
                   />
                   <input
                     type="date"
-                    value={fechaFin}
-                    onChange={(e) => setFechaFin(e.target.value)}
+                    value={fechaFinSalidas}
+                    onChange={(e) => setFechaFinSalidas(e.target.value)}
                   />
                 </div>
               ) : (
@@ -175,8 +240,8 @@ const Estadisticas = () => {
                   type="text"
                   placeholder="Buscar producto..."
                   className="busqueda-input"
-                  value={producto}
-                  onChange={(e) => setProducto(e.target.value)}
+                  value={productoSalidas}
+                  onChange={(e) => setProductoSalidas(e.target.value)}
                 />
               )}
             </div>
@@ -229,9 +294,102 @@ const Estadisticas = () => {
         )}
 
         {pestañaActiva === "entradas" && (
-          <div className="salidas-placeholder">
-            <p>Aquí va el histórico de Entradas.</p>
-          </div>
+          <>
+            <div className="filtro-section">
+              <label className="filtro-label">Filtro por</label>
+              <select
+                className="filtro-select"
+                value={filtroPorEntradas}
+                onChange={(e) => setFiltroPorEntradas(e.target.value)}
+              >
+                <option value="fecha">Fecha</option>
+                <option value="producto">Producto</option>
+              </select>
+
+              {filtroPorEntradas === "fecha" ? (
+                <div className="fecha-inputs">
+                  <input
+                    type="date"
+                    value={fechaInicioEntradas}
+                    onChange={(e) => setFechaInicioEntradas(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    value={fechaFinEntradas}
+                    onChange={(e) => setFechaFinEntradas(e.target.value)}
+                  />
+                </div>
+              ) : (
+                <input
+                  type="text"
+                  placeholder="Buscar producto..."
+                  className="busqueda-input"
+                  value={productoEntradas}
+                  onChange={(e) => setProductoEntradas(e.target.value)}
+                />
+              )}
+            </div>
+            <div className="tabla-container">
+              <table className="tabla-estadisticas">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio (U)</th>
+                    <th>Fecha Entrada</th>
+                    <th>Total de la entrada</th>
+                    <th>Estado</th>
+                    <th>Abono</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entradas.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="no-data-message">
+                        No hay entradas registradas.
+                      </td>
+                    </tr>
+                  ) : entradasFiltradas.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="no-data-message">
+                        No hay entradas que coincidan con los filtros aplicados.
+                      </td>
+                    </tr>
+                  ) : (
+                    entradasFiltradas.map((item, idx) => (
+                      <tr
+                        key={idx}
+                        className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
+                      >
+                        <td>{item.producto.nombre}</td>
+                        <td>{item.cantidad}</td>
+                        <td>${item.precio.toLocaleString()}</td>
+                        <td>{item.fecha_entrada.split("T")[0]}</td>
+                        <td>${item.total_entrada.toLocaleString()}</td>
+                        <td>
+                          <span
+                            className={`estado-badge estado-${item.estado.toLowerCase()}`}
+                          >
+                            {item.estado}
+                          </span>
+                        </td>
+                        <td>${item.abono?.toLocaleString() || "0"}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="total-container">
+              <span>Total:</span>
+              <input
+                type="text"
+                value={`$ ${totalEntradas.toLocaleString()}`}
+                readOnly
+                className="total-input"
+              />
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -1,0 +1,146 @@
+.modal-deuda-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-deuda {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-header p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.modal-header-right-detalle-deuda {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  text-align: center;
+}
+
+.close-button {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.modal-title {
+  background-color: #dff6ff;
+  padding: 8px 0;
+  margin: 20px 0 10px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tabla-deuda {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.tabla-deuda th,
+.tabla-deuda td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.fila-par-detalle-deuda {
+  background-color: #E3FBFF;
+}
+
+.fila-impar-detalle-deuda {
+  background-color: #c8e2e7;
+}
+
+.modal-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.modal-total div {
+  flex: 1;
+  text-align: right;
+}
+
+.modal-total label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.modal-total input {
+  width: 80%;
+  padding: 5px;
+  font-size: 14px;
+  text-align: right;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-guardar {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+}
+
+.btn-guardar:hover {
+  background-color: #1976d2;
+}
+
+thead {
+  background-color: #f8f9fa;
+}
+
+.modal-title {
+  background-color: #E3FBFF;
+}
+
+.fecha-actual-detalle-deuda {
+  font-size: 14px;
+  color: #000000;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+.close-button-detalle-deuda {
+  font-size: 1.3rem;
+  margin-top: 3px;
+  color: red;
+  cursor: pointer;
+}

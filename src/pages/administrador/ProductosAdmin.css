@@ -1,11 +1,8 @@
-/* Contenedor principal */
 .productos-admin-container {
   padding: 20px;
   background-color: #fff9dc;
-  border-radius: 10px;
 }
 
-/* Buscador con ícono */
 .barra-busqueda {
   display: flex;
   align-items: center;
@@ -20,47 +17,6 @@
   outline: none;
 }
 
-.btn-buscar {
-  margin-left: -45px;
-  background-color: #00bfff;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  color: white;
-  cursor: pointer;
-}
-
-/* Tabla de productos */
-.tabla-productos {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.tabla-productos th,
-.tabla-productos td {
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  text-align: left;
-}
-
-.tabla-productos th {
-  background-color: #63c8f2;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-}
-
-.tabla-productos td {
-  background-color: #ffffff;
-  font-size: 15px;
-  text-align: center;
-}
-
-/* Botones de acción */
 .boton-icono {
   background-color: white;
   border: 2px solid transparent;
@@ -96,7 +52,7 @@
 .botones-inferiores {
   display: flex;
   justify-content: space-around;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .botones-inferiores button {
@@ -109,7 +65,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -183,38 +139,9 @@
 }
 
 .contenedor-tabla {
-  max-width: 950px;
-  /* ajusta a tu gusto */
+  max-width: 1000px;
   margin: 0 auto;
-  /* centra horizontalmente */
   width: 100%;
-}
-
-.contenedor-tabla th {
-  background-color: #99d4ea;
-  padding: 12px 20px;
-  text-align: center;
-  color: #000000;
-  font-weight: bold;
-}
-
-/* Estilo para las celdas de la tabla */
-.contenedor-tabla th,
-.contenedor-tabla td {
-  border-right: 1px solid #BFE0FF;
-  /* Línea que separa las columnas */
-}
-
-/* Asegúrate de no tener una línea extra al final de la última columna */
-.contenedor-tabla th:last-child,
-.contenedor-tabla td:last-child {
-  border-right: none;
-}
-
-/* Estilo opcional para las filas */
-.contenedor-tabla tr {
-  border-bottom: 1px solid #BFE0FF;
-  /* Línea horizontal entre filas */
 }
 
 .botones-filtro {
@@ -263,15 +190,14 @@
 }
 
 @media screen and (max-width: 768px) {
-.botones-inferiores {
+  .botones-inferiores {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
   }
 
-.botones-filtro {
-  margin-bottom: 17px !important;
-}
-
+  .botones-filtro {
+    margin-bottom: 17px !important;
+  }
 }

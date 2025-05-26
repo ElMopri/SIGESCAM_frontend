@@ -5,8 +5,8 @@ const Ajustes = () => {
   const imagenPerfil = "https://randomuser.me/api/portraits/women/65.jpg";
 
   const notificaciones = [
-    { id: "sugerencias", label: "Activar notificaciones de sugerencias" },
-    { id: "productos", label: "Activar notificaciones de productos" },
+    { id: "sugerencias", label: "Notificaciones de sugerencias" },
+    { id: "productos", label: "Notificaciones de Stock" },
   ];
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TablaProductos from "../../components/TablaProductos";
-import SearchBarProductos from "../../components/SearchBarProductos";
+import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
 import FiltroModal from "../../components/FiltroModal";
 import { FaPlus, FaUndo } from "react-icons/fa";
 import { MdOutlineFilterAlt } from "react-icons/md";
@@ -147,7 +147,8 @@ const ProductosGestor = () => {
   return (
     <div className="productos-admin-container">
       <div className="contenedor-centrado">
-        <SearchBarProductos
+        <SearchBarWaitForClick
+          placeholder="Buscar productos..."
           value={nombreBusquedaTemp}
           onChange={(e) => setNombreBusquedaTemp(e.target.value)}
           onSearch={() => {

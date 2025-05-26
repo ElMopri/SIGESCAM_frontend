@@ -1,0 +1,96 @@
+.padre-por-cobrar-container {
+    border-radius: 16px;
+    padding: 16px;
+    max-width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.por-cobrar-container {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.informacion-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.titulo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.fecha_actual {
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+}
+
+.buscador-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.buscador {
+  display: flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  border-radius: 25px;
+  padding: 5px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-buscar {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none;
+  color: #666;
+}
+
+.input-buscar::placeholder {
+  color: #999;
+}
+
+.input-buscar:disabled {
+  cursor: not-allowed;
+}
+
+.btn-buscar {
+  background-color: #5dade2;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-buscar:hover:not(:disabled) {
+  background-color: #3498db;
+}
+
+.btn-buscar:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
