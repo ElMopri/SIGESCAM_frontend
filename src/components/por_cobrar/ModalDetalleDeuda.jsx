@@ -1,4 +1,5 @@
 import React from "react";
+import { FaTimes } from "react-icons/fa";
 import "./ModalDetalleDeuda.css";
 
 const ModalDetalleDeuda = ({ onClose, cliente }) => {
@@ -40,8 +41,17 @@ const ModalDetalleDeuda = ({ onClose, cliente }) => {
     0
   );
 
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [clienteDetalle, setClienteDetalle] = useState(null);
+  const obtenerFechaActual = () => {
+  const fecha = new Date();
+  const opciones = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  };
+  const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
+  return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+};
 
   return (
     <div className="modal-deuda-overlay">
@@ -49,22 +59,21 @@ const ModalDetalleDeuda = ({ onClose, cliente }) => {
         <div className="modal-header">
           <div>
             <p>
-              <strong>Nombre:</strong> Juan Perez
+              <strong>Nombre:</strong> {cliente?.nombre}
             </p>
             <p>
-              <strong>Documento de identidad:</strong> 1111111111
+              <strong>Documento de identidad:</strong> {cliente?.documento}
             </p>
             <p>
-              <strong>Teléfono:</strong> 3214444444
+              <strong>Teléfono:</strong> {cliente?.telefono}
             </p>
           </div>
-          <div className="modal-header-right">
-            <p>Domingo 09 de marzo de 2025</p>
-            <img
-              src={closeIcon}
-              alt="Cerrar"
-              className="close-button"
+          <div className="modal-header-right-detalle-deuda">
+            <span className="fecha-actual-detalle-deuda">{obtenerFechaActual()}</span>
+            <FaTimes
+              className="close-button-detalle-deuda"
               onClick={onClose}
+              title="Cerrar"
             />
           </div>
         </div>
@@ -82,7 +91,7 @@ const ModalDetalleDeuda = ({ onClose, cliente }) => {
           </thead>
           <tbody>
             {detalles.map((item, index) => (
-              <tr key={index} className={index % 2 === 0 ? "fila-par" : ""}>
+              <tr key={index} className={index % 2 === 0 ? "fila-par-detalle-deuda" : "fila-impar-detalle-deuda"}>
                 <td>{item.nombre}</td>
                 <td>{item.cantidad}</td>
                 <td>${item.precio.toLocaleString()}</td>

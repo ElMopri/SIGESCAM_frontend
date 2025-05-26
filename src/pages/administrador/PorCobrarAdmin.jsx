@@ -63,16 +63,17 @@ const PorCobrarAdmin = () => {
     },
   ]
 
-  const obtenerFechaActual = () => {
-    const fecha = new Date()
-    const opciones = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "2-digit",
-    }
-    return fecha.toLocaleDateString("es-ES", opciones)
-  }
+const obtenerFechaActual = () => {
+  const fecha = new Date();
+  const opciones = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  };
+  const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
+  return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+};
 
   return (
     <div className="padre-por-cobrar-container">
