@@ -32,7 +32,8 @@ const InicioAdmin = () => {
     cargarVentas();
     cargarProductosMasVendidos();
     const intervalo = setInterval(() => {
-      cargarDatos();
+      cargarVentas();
+      cargarProductosMasVendidos();
     }, 10000); //
 
     return () => clearInterval(intervalo);
@@ -50,7 +51,6 @@ const InicioAdmin = () => {
               <p>No hay productos vendidos esta semana.</p>
             ) : (
               productosMasVendidos.map((producto, index) => {
-               
                 let claseColor = "";
                 if (index === 0) claseColor = "verde";
                 else if (index === 1) claseColor = "amarillo";
