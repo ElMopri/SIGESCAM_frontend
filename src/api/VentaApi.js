@@ -53,3 +53,13 @@ export const obtenerVentasDelDia = async () => {
         throw new Error(error.response?.data?.message || "Error al obtener ventas del día");
     }
 };
+
+
+export const obtenerProductosMasVendidos = async () => {
+    try {
+        const response = await axios.get(`${API_VENTAS}/top3-semana`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || "Error al obtener ventas del día");
+    }
+};

@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import "./ModalRegistrarVenta.css";
+import {
+  agregarProductoAVentaTemporal,
+  registrarVenta,
+} from "../../api/VentaApi.js";
+import { autocompletarCampos } from "../../api/ProductoApi.js";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
 
 const ModalRegistrarVenta = ({ onClose }) => {
+  const [deudorExistente, setDeudorExistente] = useState(false);
+  const { user, setUser } = useContext(AuthContext);
   const [isPendingPayment, setIsPendingPayment] = useState(false);
   const [fecha, setFecha] = useState(() => {
     const today = new Date();
@@ -11,25 +20,115 @@ const ModalRegistrarVenta = ({ onClose }) => {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   });
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: "Cartera", cantidad: 1, precio: 2000 },
-    { id: 2, nombre: "Esmalte", cantidad: 5, precio: 2000 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-    { id: 3, nombre: "Balaca", cantidad: 2, precio: 500 },
-  ]);
+
+  const [productos, setProductos] = useState([]);
+  const [nombreProducto, setNombreProducto] = useState("");
+  const [cantidad, setCantidad] = useState("");
+
+  const [nombreDeudor, setNombreDeudor] = useState("");
+  const [dniDeudor, setDniDeudor] = useState("");
+  const [telefonoDeudor, setTelefonoDeudor] = useState("");
+
+  const dni_usuario = user?.dni || "00000000";
+
+  const [sugerencias, setSugerencias] = useState([]);
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
+
+  const handleNombreProductoChange = async (e) => {
+    const valor = e.target.value;
+    setNombreProducto(valor);
+
+    if (valor.length >= 2) {
+      try {
+        const resultados = await autocompletarCampos(valor);
+        setSugerencias(resultados);
+        setMostrarSugerencias(true);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setSugerencias([]);
+      setMostrarSugerencias(false);
+    }
+  };
+
+  const handleSeleccionarSugerencia = (nombreSeleccionado) => {
+    setNombreProducto(nombreSeleccionado);
+    setSugerencias([]);
+    setMostrarSugerencias(false);
+  };
+
+  const handleAgregarProducto = async () => {
+    if (!nombreProducto || !cantidad)
+      return alert("Todos los campos son obligatorios");
+
+    const cantidadNueva = parseInt(cantidad);
+    const productoExistente = productos.find(
+      (p) => p.nombreProducto === nombreProducto
+    );
+
+    const cantidadTotal = productoExistente
+      ? productoExistente.cantidad + cantidadNueva
+      : cantidadNueva;
+
+    try {
+      const productoAgregado = await agregarProductoAVentaTemporal({
+        nombreProducto,
+        cantidad: cantidadTotal,
+      });
+
+      setProductos((prevProductos) => {
+        if (productoExistente) {
+          return prevProductos.map((p) =>
+            p.nombreProducto === nombreProducto
+              ? { ...productoAgregado, cantidad: cantidadTotal }
+              : p
+          );
+        } else {
+          return [...prevProductos, productoAgregado];
+        }
+      });
+      setNombreProducto("");
+      setCantidad("");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleRegistrarVenta = async () => {
+    if (productos.length === 0) {
+      return alert("Debe agregar al menos un producto");
+    }
+    const venta = {
+      productos,
+      dni_usuario,
+      deudor: isPendingPayment
+        ? {
+            nombre: nombreDeudor,
+            dni: dniDeudor,
+            telefono: telefonoDeudor,
+          }
+        : null,
+      es_fiado: isPendingPayment,
+      fecha,
+    };
+
+    try {
+      await registrarVenta(venta);
+      alert("Venta registrada con éxito");
+      onClose();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const eliminarProducto = (id) => {
-    setProductos(productos.filter((producto) => producto.id !== id));
+    setProductos(productos.filter((producto) => producto.idProducto !== id));
   };
 
   const calcularTotal = () => {
     return productos.reduce((total, producto) => {
-      return total + producto.precio * producto.cantidad;
+      return total + producto.total;
     }, 0);
   };
 
@@ -66,7 +165,22 @@ const ModalRegistrarVenta = ({ onClose }) => {
                 type="text"
                 placeholder="Nombre del producto"
                 className="venta-form-input"
+                value={nombreProducto}
+                onChange={handleNombreProductoChange}
               />
+              {mostrarSugerencias && sugerencias.length > 0 && (
+                <ul className="venta-sugerencias-lista">
+                  {sugerencias.map((s, i) => (
+                    <li
+                      key={i}
+                      onClick={() => handleSeleccionarSugerencia(s.nombre)}
+                      className="venta-sugerencia-item"
+                    >
+                      {s.nombre}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <div className="venta-form-group">
@@ -75,19 +189,16 @@ const ModalRegistrarVenta = ({ onClose }) => {
                 placeholder="Cantidad"
                 min="1"
                 className="venta-form-input"
+                value={cantidad}
+                onChange={(e) => setCantidad(e.target.value)}
               />
             </div>
 
-            <div className="venta-form-group">
-              <input
-                type="number"
-                placeholder="Precio"
-                min="0"
-                className="venta-form-input"
-              />
-            </div>
-
-            <button type="button" className="venta-btn-agregar">
+            <button
+              type="button"
+              className="venta-btn-agregar"
+              onClick={handleAgregarProducto}
+            >
               Agregar
             </button>
           </div>
@@ -106,19 +217,21 @@ const ModalRegistrarVenta = ({ onClose }) => {
               </thead>
               <tbody>
                 {productos.map((producto) => (
-                  <tr key={producto.id}>
-                    <td className="venta-col-nombre">{producto.nombre}</td>
+                  <tr key={producto.idProducto}>
+                    <td className="venta-col-nombre">
+                      {producto.nombreProducto}
+                    </td>
                     <td className="venta-col-cantidad">{producto.cantidad}</td>
                     <td className="venta-col-precio">
-                      ${producto.precio.toLocaleString()}
+                      ${producto.precioVenta.toLocaleString()}
                     </td>
                     <td className="venta-col-total">
-                      ${(producto.precio * producto.cantidad).toLocaleString()}
+                      ${producto.total.toLocaleString()}
                     </td>
                     <td className="venta-col-acciones">
                       <button
                         className="venta-btn-eliminar"
-                        onClick={() => eliminarProducto(producto.id)}
+                        onClick={() => eliminarProducto(producto.idProducto)}
                         aria-label="Eliminar producto"
                       >
                         <FaTrash />
@@ -153,24 +266,62 @@ const ModalRegistrarVenta = ({ onClose }) => {
               <div className="venta-deudor-info">
                 <input
                   type="text"
-                  placeholder="Ingrese nombre del deudor"
-                  className="venta-form-input"
-                />
-                <input
-                  type="text"
                   placeholder="Documento del deudor"
                   className="venta-form-input"
+                  value={dniDeudor}
+                  onChange={async (e) => {
+                    const valor = e.target.value;
+                    setDniDeudor(valor);
+
+                    if (valor.length >= 2) {
+                      try {
+                        const deudor = await obtenerDeudorPorDNI(valor);
+                        if (deudor) {
+                          setNombreDeudor(deudor.nombre);
+                          setTelefonoDeudor(deudor.telefono);
+                          setDeudorExistente(true);
+                        } else {
+                          setNombreDeudor("");
+                          setTelefonoDeudor("");
+                          setDeudorExistente(false);
+                        }
+                      } catch (error) {
+                        setNombreDeudor("");
+                        setTelefonoDeudor("");
+                        setDeudorExistente(false);
+                      }
+                    } else {
+                      setDeudorExistente(false);
+                    }
+                  }}
                 />
+
+                <input
+                  type="text"
+                  placeholder="Ingrese nombre del deudor"
+                  className="venta-form-input"
+                  value={nombreDeudor}
+                  onChange={(e) => setNombreDeudor(e.target.value)}
+                  disabled={deudorExistente}
+                />
+
                 <input
                   type="text"
                   placeholder="Teléfono"
                   className="venta-form-input"
+                  value={telefonoDeudor}
+                  onChange={(e) => setTelefonoDeudor(e.target.value)}
+                  disabled={deudorExistente}
                 />
               </div>
             )}
           </div>
 
-          <button type="submit" className="venta-btn-registrar">
+          <button
+            type="submit"
+            className="venta-btn-registrar"
+            onClick={handleRegistrarVenta}
+          >
             Registrar Venta
           </button>
         </div>

@@ -331,3 +331,24 @@
     padding: 8px 10px;
   }
 }
+.venta-sugerencias-lista {
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  list-style: none;
+  padding: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+.venta-sugerencia-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.venta-sugerencia-item:hover {
+  background-color: #f0f0f0;
+}

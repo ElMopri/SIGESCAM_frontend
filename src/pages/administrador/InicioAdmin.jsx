@@ -1,7 +1,43 @@
 import React from "react";
 import "./InicioAdmin.css";
+import {
+  obtenerVentasDelDia,
+  obtenerProductosMasVendidos,
+} from "../../api/VentaApi";
+import { useEffect, useState } from "react";
 
 const InicioAdmin = () => {
+  const [ventasDelDia, setVentasDelDia] = useState(0);
+  const [productosMasVendidos, setProductosMasVendidos] = useState([]);
+
+  useEffect(() => {
+    const cargarVentas = async () => {
+      try {
+        const ventas = await obtenerVentasDelDia();
+        setVentasDelDia(ventas);
+      } catch (error) {
+        console.error("No se pudieron cargar las ventas del día.");
+      }
+    };
+
+    const cargarProductosMasVendidos = async () => {
+      try {
+        const productos = await obtenerProductosMasVendidos();
+        setProductosMasVendidos(productos);
+      } catch (error) {
+        console.error("No se pudieron cargar los productos más vendidos.");
+      }
+    };
+
+    cargarVentas();
+    cargarProductosMasVendidos();
+    const intervalo = setInterval(() => {
+      cargarDatos();
+    }, 10000); //
+
+    return () => clearInterval(intervalo);
+  }, []);
+
   return (
     <div className="inicio-admin">
       {/* Contenedor de todo el dashboard */}
@@ -10,18 +46,27 @@ const InicioAdmin = () => {
         <div className="mas-vendidos-container">
           <h2>Más vendidos de la semana</h2>
           <div className="productos-mas-vendidos">
-            <div className="producto verde">
-              <p>Detodito Picante de 165 g</p>
-              <strong>10unds</strong>
-            </div>
-            <div className="producto amarillo">
-              <p>Detodito Natural de 165 g</p>
-              <strong>8unds</strong>
-            </div>
-            <div className="producto naranja">
-              <p>Lápiz Mongol H2</p>
-              <strong>5unds</strong>
-            </div>
+            {productosMasVendidos.length === 0 ? (
+              <p>No hay productos vendidos esta semana.</p>
+            ) : (
+              productosMasVendidos.map((producto, index) => {
+               
+                let claseColor = "";
+                if (index === 0) claseColor = "verde";
+                else if (index === 1) claseColor = "amarillo";
+                else if (index === 2) claseColor = "naranja";
+
+                return (
+                  <div
+                    key={producto.idProducto}
+                    className={`producto ${claseColor}`}
+                  >
+                    <p>{producto.nombre}</p>
+                    <strong>{producto.totalVendido} unds</strong>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -32,7 +77,7 @@ const InicioAdmin = () => {
             <div className="ventas-dia-icono">
               <img src="/carrito.png" alt="Carrito de ventas" />
             </div>
-            <span className="ventas-numero">15</span>
+            <span className="ventas-numero">{ventasDelDia}</span>
           </div>
         </div>
       </div>
