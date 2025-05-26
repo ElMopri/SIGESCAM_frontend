@@ -2,12 +2,19 @@
 
 import { useState } from "react"
 import "./TablaDeudores.css"
+import ModalDeudor from "./ModalDeudor"
 
 const TablaDeudores = ({ clientes }) => {
   const [clientesActuales, setClientesActuales] = useState(clientes)
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null)
+  const [mostrarModal, setMostrarModal] = useState(false)
 
   const formatearMoneda = (monto) => {
-    return `$${monto.toFixed(2)}`
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0
+    }).format(monto)
   }
 
   const eliminarCliente = (id) => {
@@ -15,8 +22,13 @@ const TablaDeudores = ({ clientes }) => {
   }
 
   const verDetalles = (cliente) => {
-    // Por ahora no hace nada, como solicitado
-    console.log("Ver detalles de:", cliente.nombre)
+    setClienteSeleccionado(cliente)
+    setMostrarModal(true)
+  }
+
+  const cerrarModal = () => {
+    setMostrarModal(false)
+    setClienteSeleccionado(null)
   }
 
   return (
@@ -103,6 +115,12 @@ const TablaDeudores = ({ clientes }) => {
           </tbody>
         </table>
       </div>
+      {mostrarModal && clienteSeleccionado && (
+        <ModalDeudor 
+          cliente={clienteSeleccionado} 
+          onClose={cerrarModal} 
+        />
+      )}
     </div>
   )
 }
