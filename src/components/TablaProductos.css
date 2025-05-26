@@ -35,6 +35,16 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: bold;
+  background-color: #63c8f2;
+  color: white;
+  font-weight: bold;
+}
+
+.tabla-productos th,
+.tabla-productos td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
 }
 
 .tabla-cuerpo-scroll {
@@ -44,16 +54,14 @@
   width: 100%;
 }
 
-/* Elemento decorativo a la derecha del thead */
 .scroll-corner {
-  height: 60px; /* Altura del thead */
-  width: 7px; /* Igual al ancho del scrollbar */
-  background-color: #63c8f2; /* Igual al fondo del encabezado */
+  height: 60px; 
+  width: 7px; 
+  background-color: #63c8f2;
   box-sizing: border-box;
   flex-shrink: 0;
 }
 
-/* Scrollbars personalizados */
 .tabla-cuerpo-scroll::-webkit-scrollbar {
   width: 7px;
 }
@@ -63,7 +71,7 @@
 }
 
 .tabla-cuerpo-scroll::-webkit-scrollbar-thumb {
-  background: #9f9f9f;
+  background: #babbbbd2;
 }
 
 .tabla-cuerpo-scroll::-webkit-scrollbar-corner {
@@ -80,6 +88,11 @@
 
 .tabla-contenedor::-webkit-scrollbar-thumb {
   background: #9f9f9f;
+}
+
+.tabla-productos tbody tr:hover {
+  background-color: #efeded; /* Color de fondo al pasar el mouse */
+  transition: background-color 0.2s ease; /* Transición suave */
 }
 
 .boton-icono {

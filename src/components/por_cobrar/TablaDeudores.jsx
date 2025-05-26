@@ -21,7 +21,7 @@ const TablaDeudores = ({ clientes }) => {
 
   return (
     <div className="tabla-wrapper">
-      <div className="tabla-container">
+      <div className="tabla-deudores-container">
         <table className="tabla-deudores">
           <thead>
             <tr>

@@ -3,7 +3,7 @@ import SearchBarWaitForClick from "../../components/SearchBarWaitForClick"
 import "./PorCobrarAdmin.css"
 
 const PorCobrarAdmin = () => {
-  // Datos estáticos para pruebas
+  
   const clientesDeudores = [
     {
       id: 1,

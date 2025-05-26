@@ -1,32 +1,24 @@
-.tr {
-  background-color: #99d4ea;
-}
-
 .tabla-wrapper {
   display: flex;
   justify-content: center;
   padding: 20px;
-  height: 417px !important;
   margin-top: -15px;
 }
 
-.tabla-container {
+.tabla-deudores-container {
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: auto;
   width: 100%;
-  max-width: 1200px;
-  max-height: 500px;
+  max-height: 440px;
   overflow-y: auto;
   position: relative;
-  height: 700px !important;
 }
 
 .tabla-deudores {
   width: 100%;
   border-collapse: collapse;
-  font-family: Arial, sans-serif;
 }
 
 .tabla-deudores thead {
@@ -39,22 +31,22 @@
 .tabla-deudores th {
   padding: 15px 20px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 600;
   color: #333;
   border-bottom: 2px solid #e9ecef;
   font-size: 16px;
-  background-color: #f8f9fa;
 }
 
 .tabla-deudores td {
   padding: 15px 20px;
   border-bottom: 1px solid #e9ecef;
   vertical-align: middle;
+  font-size: 15px;
+  color: #333;
 }
 
-/* Definir anchos de columnas específicos */
 .col-icono {
-  width: 80px;
+  width: 60px;
   text-align: center;
 }
 
@@ -62,10 +54,7 @@
   width: 250px;
 }
 
-.col-deuda {
-  width: 150px;
-}
-
+.col-deuda,
 .col-cedula {
   width: 150px;
 }
@@ -76,37 +65,25 @@
 }
 
 .fila-par {
-  background-color: #E4FBFF;
+  background-color: #e4fbff;
 }
 
 .fila-impar {
   background-color: #cae6eb;
 }
 
-
-.icono-persona {
-  text-align: center;
-}
-
-.nombre {
+/* Estilo uniforme para todo el contenido */
+.tabla-deudores td {
   font-weight: 500;
   color: #333;
-  font-size: 15px;
-}
-
-.deuda {
-  font-weight: bold;
-  color: #2c5aa0;
-  font-size: 15px;
-}
-
-.cedula {
-  color: #666;
   font-size: 14px;
 }
 
+/* Botones de acción */
 .acciones {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-ver,
@@ -115,12 +92,13 @@
   border: none;
   cursor: pointer;
   padding: 8px;
-  margin: 0 2px;
   border-radius: 50%;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
 }
 
 .btn-ver:hover {
@@ -139,88 +117,44 @@
   stroke: white;
 }
 
-/* Personalizar scrollbar */
-.tabla-container::-webkit-scrollbar {
+/* Scrollbar */
+.tabla-deudores-container::-webkit-scrollbar {
   width: 8px;
 }
 
-.tabla-container::-webkit-scrollbar-track {
+.tabla-deudores-container::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 10px;
 }
 
-.tabla-container::-webkit-scrollbar-thumb {
+.tabla-deudores-container::-webkit-scrollbar-thumb {
   background: #c1c1c1;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
-.tabla-container::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Responsividad */
+/* Responsive */
 @media (max-width: 768px) {
   .tabla-wrapper {
     padding: 10px;
   }
 
-  .tabla-deudores {
-    font-size: 14px;
-  }
-
   .tabla-deudores th,
   .tabla-deudores td {
-    padding: 10px 15px;
-  }
-
-  .col-nombre {
-    width: 180px;
-  }
-
-  .col-deuda {
-    width: 120px;
-  }
-
-  .col-cedula {
-    width: 120px;
-  }
-
-  .nombre {
-    font-size: 14px;
-  }
-
-  .deuda {
-    font-size: 14px;
-  }
-
-  .cedula {
+    padding: 12px 15px;
     font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  .col-icono {
-    width: 50px;
-  }
-
-  .col-nombre {
-    width: 140px;
-  }
-
-  .col-deuda {
-    width: 100px;
-  }
-
-  .col-cedula {
-    width: 100px;
-  }
-
-  .col-acciones {
-    width: 100px;
-  }
-
   .tabla-deudores th,
   .tabla-deudores td {
-    padding: 8px 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .btn-ver,
+  .btn-eliminar {
+    width: 30px;
+    height: 30px;
+    padding: 6px;
   }
 }
