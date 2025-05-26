@@ -49,7 +49,7 @@
 
 .tabla-cuerpo-scroll {
   height: 370px;
-  overflow-y: scroll; /* Siempre mostrar scroll vertical */
+  overflow-y: scroll;
   overflow-x: hidden;
   width: 100%;
 }

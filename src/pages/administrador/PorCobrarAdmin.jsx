@@ -33,25 +33,25 @@ const PorCobrarAdmin = () => {
       id: 5,
       nombre: "Daniela Vargas",
       deuda: 40000,
-      cedula: "xxxxxxxx",
+      cedula: "1111111111",
     },
     {
       id: 6,
       nombre: "Jose Perez",
       deuda: 120000,
-      cedula: "xxxxxxxxx",
+      cedula: "2222222222",
     },
     {
       id: 7,
-      nombre: "Xxxxx",
-      deuda: 0,
-      cedula: "xxxxxxxxx",
+      nombre: "Daniela Barreto",
+      deuda: 200000,
+      cedula: "1005028830",
     },
     {
       id: 8,
-      nombre: "xxxx xxxx",
-      deuda: 0,
-      cedula: "xxxxxxxxxx",
+      nombre: "Shakira Mebarak",
+      deuda: 15000,
+      cedula: "1210149200",
     },
   ]
 
