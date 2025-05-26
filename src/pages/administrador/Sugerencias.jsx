@@ -77,7 +77,7 @@ const Sugerencias = () => {
   const sugerenciasRechazadas = sugerencias.filter((s) => s.estado === "rechazada")
 
   return (
-    <div className="sugerencias-admin">
+  <div className="sugerencias-admin">
       <InputSugerencia onAgregar={agregarSugerencia} />
 
       <TabsSugerencias
@@ -89,6 +89,7 @@ const Sugerencias = () => {
         <label>Sugerencias Pendientes</label>
       </div>
 
+    <div className="contenedor-scroll-sugerencias">
       <div className="grid-sugerencias">
         {sugerenciasPendientes.map((sug) => (
           <TarjetaSugerencia
@@ -118,6 +119,7 @@ const Sugerencias = () => {
         message={modalNotificacion.message}
       />
     </div>
+  </div>
   )
 }
 

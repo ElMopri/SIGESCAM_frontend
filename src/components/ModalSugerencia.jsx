@@ -8,7 +8,7 @@ const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
     : "No se encontraron sugerencias rechazadas.";
 
   return (
-    <div className="modal-sugerencias">
+    <div className="sugerencias-modal">
       <div className="modal-content">
         <FaTimes className="cerrar-icono" onClick={onCerrar} />
         <h2>{titulo}</h2>
@@ -27,7 +27,7 @@ const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
               </thead>
               <tbody>
                 {sugerencias.map((s) => (
-                  <tr key={s.id}>
+                  <tr key={s.id_sugerencia}>
                     <td>{new Date(s.fecha_registro).toLocaleDateString()}</td>
                     <td>{s.nombre_producto}</td>
                     <td>{s.descripcion}</td>
