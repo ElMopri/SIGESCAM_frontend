@@ -1,35 +1,89 @@
 import { useEffect, useState } from "react";
 import TablaDeudores from "../../components/por_cobrar/TablaDeudores";
 import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
-import { obtenerDeudores } from "../../api/DeudorApi.js";
+import { obtenerDeudores, obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
 import "./PorCobrarAdmin.css";
+import Modal from "../../components/Modal";
+
 
 const PorCobrarAdmin = () => {
   const [clientesDeudores, setClientesDeudores] = useState([]);
+  const [busqueda, setBusqueda] = useState(""); // ⬅️ Estado del input
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mensajeModal, setMensajeModal] = useState("");
 
+  // Carga inicial de todos los deudores
   useEffect(() => {
-    const cargarDeudores = async () => {
-      try {
-        const datos = await obtenerDeudores();
-        if (datos) {
-          // Mapear los datos para que coincidan con las propiedades que espera la tabla
-          const datosFormateados = datos.map((deudor) => ({
+    cargarDeudores();
+  }, []);
+
+  const cargarDeudores = async () => {
+    try {
+      const datos = await obtenerDeudores();
+      if (datos) {
+        const datosFormateados = datos.map((deudor) => ({
+          id: deudor.dni_deudor,
+          nombre: deudor.nombre,
+          telefono: deudor.telefono,
+          cedula: deudor.dni_deudor,
+          monto_pendiente: parseFloat(deudor.deuda_total),
+        }));
+        setClientesDeudores(datosFormateados);
+      }
+    } catch (error) {
+      console.error("Error al cargar deudores:", error.message);
+    }
+  };
+
+  const buscarClientes = async () => {
+    const texto = busqueda.trim();
+    if (!texto) {
+      cargarDeudores(); // Si está vacío, carga todos
+      return;
+    }
+
+    try {
+      // Buscar por cédula
+      const deudor = await obtenerDeudorPorDNI(texto);
+      if (deudor) {
+        setClientesDeudores([
+          {
             id: deudor.dni_deudor,
             nombre: deudor.nombre,
             telefono: deudor.telefono,
             cedula: deudor.dni_deudor,
-            monto_pendiente: parseFloat(deudor.monto_pendiente)
-          }));
-          setClientesDeudores(datosFormateados);
-          console.log(clientesDeudores);
-        }
-      } catch (error) {
-        console.error("Error al cargar deudores:", error.message);
+            monto_pendiente: parseFloat(deudor.monto_pendiente),
+          },
+        ]);
+        return;
       }
-    };
 
-    cargarDeudores();
-  }, []);
+      // Si no se encuentra por cédula, buscar por nombre
+      const todos = await obtenerDeudores();
+      const filtrados = todos.filter((deudor) =>
+        deudor.nombre.toLowerCase().includes(texto.toLowerCase())
+      );
+
+      if (filtrados.length === 0) {
+        // Mostrar modal si no se encuentra ningún cliente
+        setMensajeModal(`No se encontró ningún deudor con el nombre o cédula: "${texto}"`);
+        setMostrarModal(true);
+      }
+
+      const datosFormateados = filtrados.map((deudor) => ({
+        id: deudor.dni_deudor,
+        nombre: deudor.nombre,
+        telefono: deudor.telefono,
+        cedula: deudor.dni_deudor,
+        monto_pendiente: parseFloat(deudor.monto_pendiente),
+      }));
+
+      setClientesDeudores(datosFormateados);
+    } catch (error) {
+      console.error("Error al buscar clientes:", error.message);
+    }
+  };
+
 
   const obtenerFechaActual = () => {
     const fecha = new Date();
@@ -52,10 +106,22 @@ const PorCobrarAdmin = () => {
         </div>
 
         <div className="buscador-container">
-          <SearchBarWaitForClick placeholder="Buscar clientes..." />
+          <SearchBarWaitForClick
+            placeholder="Buscar clientes por nombre o cédula..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            onSearch={buscarClientes}
+          />
         </div>
 
         <TablaDeudores clientes={clientesDeudores} />
+        <Modal
+          isOpen={mostrarModal}
+          onClose={() => setMostrarModal(false)}
+          title="Deudor no encontrado"
+          message={mensajeModal}
+          type="error"
+        />
       </div>
     </div>
   );

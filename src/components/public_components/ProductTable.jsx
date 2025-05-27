@@ -1,14 +1,7 @@
 import React from "react";
 import "./PublicProducts.css";
 
-const products = [
-  { id: 1, nombre: "Arroz Diana", precio: 3500, stock: 15 },
-  { id: 2, nombre: "Aceite Premier", precio: 8500, stock: 7 },
-  { id: 3, nombre: "Pan Bimbo", precio: 5000, stock: 20 },
-  { id: 4, nombre: "Leche Alquería", precio: 4000, stock: 30 },
-];
-
-const ProductTable = () => {
+const ProductTable = ({ products }) => {
   return (
     <div className="product-table-container">
       <table className="product-table">
@@ -20,13 +13,19 @@ const ProductTable = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((producto) => (
-            <tr key={producto.id}>
-              <td>{producto.nombre}</td>
-              <td>{producto.stock}</td>
-              <td>${producto.precio.toLocaleString()}</td>
+          {products.length === 0 ? (
+            <tr>
+              <td colSpan="3">No se encontraron productos</td>
             </tr>
-          ))}
+          ) : (
+            products.map((producto) => (
+              <tr key={producto.id}>
+                <td>{producto.nombre}</td>
+                <td>{producto.cantidad}</td>
+                <td>{producto.precio_venta}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -7,8 +7,8 @@ const TablaDeudores = ({ clientes }) => {
   const [clientesActuales, setClientesActuales] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [clienteDetalle, setClienteDetalle] = useState(null);
+  const navigate = useNavigate();
 
-  // Cada vez que cambien las props, actualiza el estado local
   useEffect(() => {
     if (Array.isArray(clientes)) {
       setClientesActuales(clientes);
@@ -16,14 +16,30 @@ const TablaDeudores = ({ clientes }) => {
   }, [clientes]);
 
   const formatearMoneda = (monto) => `$${monto.toFixed(2)}`;
-  const navigate = useNavigate();
-  
-  const eliminarCliente = (id) => {
-    setClientesActuales((prev) => prev.filter((cliente) => cliente.id !== id));
+
+  const eliminarCliente = async (dni) => {
+    try {
+      const respuesta = await fetch(`http://localhost:3000/deudor/${dni}`, {
+        method: "DELETE",
+      });
+
+      if (!respuesta.ok) {
+        throw new Error("No se pudo eliminar el cliente");
+      }
+
+      setClientesActuales((prev) =>
+        prev.filter((cliente) => cliente.cedula !== dni)
+      );
+
+      alert("Cliente eliminado correctamente.");
+    } catch (error) {
+      console.error("Error al eliminar el cliente:", error);
+      alert("No se pudo eliminar el cliente. Revisa si tiene deudas activas.");
+    }
   };
 
-  const irADetalleCliente = (clienteId) => {
-    navigate(`/admin/por-cobrar/deudor/${clienteId}`);
+  const irADetalleCliente = (dni) => {
+    navigate(`/admin/por-cobrar/deudor/${dni}`);
   };
 
   return (
@@ -45,7 +61,7 @@ const TablaDeudores = ({ clientes }) => {
             <tbody>
               {clientesActuales.map((cliente, index) => (
                 <tr
-                  key={cliente.id}
+                  key={cliente.cedula}
                   className={index % 2 === 0 ? "fila-par" : "fila-impar"}
                 >
                   <td className="icono-persona col-icono">
@@ -74,7 +90,7 @@ const TablaDeudores = ({ clientes }) => {
                   <td className="acciones col-acciones">
                     <button
                       className="btn-ver"
-                      onClick={() => irADetalleCliente(cliente.id)}
+                      onClick={() => irADetalleCliente(cliente.cedula)}
                       title="Ver detalles"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -96,7 +112,7 @@ const TablaDeudores = ({ clientes }) => {
                     </button>
                     <button
                       className="btn-eliminar"
-                      onClick={() => eliminarCliente(cliente.id)}
+                      onClick={() => eliminarCliente(cliente.cedula)}
                       title="Marcar como pagado"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
