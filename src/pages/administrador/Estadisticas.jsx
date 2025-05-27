@@ -7,16 +7,8 @@ import {
 } from "../../api/CompraApi";
 import "./Estadisticas.css";
 import Modal from "../../components/Modal";
-
-const datosGananciasEjemplo = [
-  { mes: "Febrero", margen: 700000 },
-  { mes: "Marzo", margen: 500000 },
-  { mes: "Abril", margen: 436000 },
-  { mes: "Abril", margen: 436000 },
-  { mes: "Abril", margen: 436000 },
-  { mes: "Abril", margen: 436000 },
-  { mes: "Abril", margen: 436000 },
-];
+import { obtenerHistorialMargenesDeGanancia } from "../../api/VentaApi";
+const obtenerAnioActual = () => new Date().getFullYear();
 
 const datosEntradasEjemplo = [
   {
@@ -59,6 +51,11 @@ const Estadisticas = () => {
   const [fechaFinSalidas, setFechaFinSalidas] = useState("");
   const [productoSalidas, setProductoSalidas] = useState("");
 
+  const [anioFiltro, setAnioFiltro] = useState(obtenerAnioActual());
+
+  // Estado para márgenes de ganancia desde la API
+  const [datosMargenes, setDatosMargenes] = useState([]);
+
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
   const [compras, setCompras] = useState([]);
   const [total, setTotal] = useState(0);
@@ -69,9 +66,28 @@ const Estadisticas = () => {
     type: "error",
   });
 
+  // Cargar márgenes de ganancia desde la API cuando cambia el año
+  useEffect(() => {
+    const cargarMargenes = async () => {
+      try {
+        const data = await obtenerHistorialMargenesDeGanancia(anioFiltro);
+        setDatosMargenes(data.historial || []);
+      } catch (error) {
+        mostrarError(
+          error.message || "Error al obtener el histórico de márgenes"
+        );
+        setDatosMargenes([]);
+      }
+    };
+    cargarMargenes();
+  }, [anioFiltro]);
+
+  const gananciasFiltradas = datosMargenes;
   const promedioGanancias =
-    datosGananciasEjemplo.reduce((acc, item) => acc + item.margen, 0) /
-    datosGananciasEjemplo.length;
+    gananciasFiltradas.length > 0
+      ? gananciasFiltradas.reduce((acc, item) => acc + item.margenNegocio, 0) /
+        gananciasFiltradas.length
+      : 0;
 
   // Estado para las entradas de ejemplo
   const [entradas] = useState(datosEntradasEjemplo);
@@ -447,7 +463,21 @@ const Estadisticas = () => {
 
         {/* Sección de Histórico de Ganancias */}
         <div className="seccion-ganancias">
-          <h3 className="titulo-ganancias">Histórico de márgenes</h3>
+          <div className="header-ganancias">
+            <h3 className="titulo-ganancias">Histórico de márgenes</h3>
+            <div className="filtro-anio-container">
+              <input
+                type="number"
+                className="input-anio"
+                value={anioFiltro}
+                onChange={(e) =>
+                  setAnioFiltro(parseInt(e.target.value) || obtenerAnioActual())
+                }
+                min="2000"
+                max="2100"
+              />
+            </div>
+          </div>
           <div className="contenedor-tabla-ganancias">
             <table className="tabla-ganancias">
               <thead>
@@ -457,33 +487,45 @@ const Estadisticas = () => {
                 </tr>
               </thead>
               <tbody>
-                {datosGananciasEjemplo.map((item, idx) => (
-                  <tr key={idx} className="fila-ganancias" tabIndex={0}>
-                    <td className="celda-mes">{item.mes}</td>
-                    <td
-                      className={`celda-margen ${
-                        item.margen >= 0 ? "valor-positivo" : "valor-negativo"
-                      }`}
-                    >
-                      $ {item.margen.toLocaleString()}
+                {gananciasFiltradas.length === 0 ? (
+                  <tr>
+                    <td colSpan="2" className="no-data-message">
+                      No hay datos disponibles para {anioFiltro}
                     </td>
                   </tr>
-                ))}
-                <tr className="fila-promedio-ganancias">
-                  <td className="celda-promedio">Promedio mensual</td>
-                  <td
-                    className={`celda-total ${
-                      promedioGanancias >= 0
-                        ? "valor-positivo"
-                        : "valor-negativo"
-                    }`}
-                  >
-                    ${" "}
-                    {promedioGanancias.toLocaleString(undefined, {
-                      maximumFractionDigits: 0,
-                    })}
-                  </td>
-                </tr>
+                ) : (
+                  <>
+                    {gananciasFiltradas.map((item, idx) => (
+                      <tr key={idx} className="fila-ganancias" tabIndex={0}>
+                        <td className="celda-mes">{item.mes}</td>
+                        <td
+                          className={`celda-margen ${
+                            item.margenNegocio >= 0
+                              ? "valor-positivo"
+                              : "valor-negativo"
+                          }`}
+                        >
+                          $ {item.margenNegocio.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="fila-promedio-ganancias">
+                      <td className="celda-promedio">Promedio mensual</td>
+                      <td
+                        className={`celda-total ${
+                          promedioGanancias >= 0
+                            ? "valor-positivo"
+                            : "valor-negativo"
+                        }`}
+                      >
+                        ${" "}
+                        {promedioGanancias.toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })}
+                      </td>
+                    </tr>
+                  </>
+                )}
               </tbody>
             </table>
           </div>
