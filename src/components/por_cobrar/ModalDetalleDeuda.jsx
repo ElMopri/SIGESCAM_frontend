@@ -98,7 +98,7 @@ const ModalDetalleDeuda = ({ onClose, cliente }) => {
           </div>
         </div>
 
-        <h2 className="modal-title">Detalle de Deuda</h2>
+        <h2 className="modal-title">Productos de la Venta</h2>
 
         <table className="tabla-deuda">
           <thead>

@@ -1,72 +1,53 @@
-import { useEffect, useState } from "react";
-import { listarDeudores } from "../../api/DeudorApi";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ModalDetalleDeuda from "./ModalDetalleDeuda";
 import "./TablaDeudores.css";
-import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
 
-
-const TablaDeudores = () => {
-  const [busqueda, setBusqueda] = useState("");
-  const [resultadosFiltrados, setResultadosFiltrados] = useState([]);
+const TablaDeudores = ({ clientes }) => {
   const [clientesActuales, setClientesActuales] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [clienteDetalle, setClienteDetalle] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const obtenerClientes = async () => {
-      try {
-        const data = await listarDeudores();
-        setClientesActuales(data);
-      } catch (err) {
-        setError("Error al obtener deudores");
-      } finally {
-        setCargando(false);
+    if (Array.isArray(clientes)) {
+      setClientesActuales(clientes);
+    }
+  }, [clientes]);
+
+  const formatearMoneda = (monto) => `$${monto.toFixed(2)}`;
+
+  const eliminarCliente = async (dni) => {
+    try {
+      const respuesta = await fetch(`http://localhost:3000/deudor/${dni}`, {
+        method: "DELETE",
+      });
+
+      if (!respuesta.ok) {
+        throw new Error("No se pudo eliminar el cliente");
       }
-    };
-    obtenerClientes();
-  }, []);
 
-  const formatearMoneda = (monto) => {
-    const valor = parseFloat(monto);
-    if (isNaN(valor)) return "$0.00";
-    return `$${valor.toFixed(2)}`;
+      setClientesActuales((prev) =>
+        prev.filter((cliente) => cliente.cedula !== dni)
+      );
+
+      alert("Cliente eliminado correctamente.");
+    } catch (error) {
+      console.error("Error al eliminar el cliente:", error);
+      alert("No se pudo eliminar el cliente. Revisa si tiene deudas activas.");
+    }
   };
 
-  const handleSearch = () => {
-    const termino = busqueda.toLowerCase();
-
-    const filtrados = clientesActuales.filter((cliente) =>
-      cliente.nombre.toLowerCase().includes(termino) ||
-      cliente.dni_deudor.toLowerCase().includes(termino)
-    );
-
-    setResultadosFiltrados(filtrados);
-  };
-
-
-  const eliminarCliente = (id) => {
-    setClientesActuales(clientesActuales.filter((cliente) => cliente.id !== id));
-  };
-
-  const verDetalles = (cliente) => {
-    setClienteDetalle(cliente);
-    setModalAbierto(true);
+  const irADetalleCliente = (dni) => {
+    navigate(`/admin/por-cobrar/deudor/${dni}`);
   };
 
   return (
     <div className="tabla-wrapper">
       <div className="tabla-deudores-container">
-        <h2>Lista de Deudores</h2>
-
-        {cargando && <p>Cargando deudores...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-        {!cargando && clientesActuales.length === 0 && (
+        {clientesActuales.length === 0 ? (
           <p>No hay deudores registrados.</p>
-        )}
-
-        {clientesActuales.length > 0 && (
+        ) : (
           <table className="tabla-deudores">
             <thead>
               <tr>
@@ -80,11 +61,11 @@ const TablaDeudores = () => {
             <tbody>
               {clientesActuales.map((cliente, index) => (
                 <tr
-                  key={cliente.id}
+                  key={cliente.cedula}
                   className={index % 2 === 0 ? "fila-par" : "fila-impar"}
                 >
                   <td className="icono-persona col-icono">
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
                         d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
                         stroke="#333"
@@ -102,15 +83,17 @@ const TablaDeudores = () => {
                     </svg>
                   </td>
                   <td className="nombre col-nombre">{cliente.nombre}</td>
-                  <td className="deuda col-deuda">{formatearMoneda(cliente.monto_pendiente)}</td>
-                  <td className="cedula col-cedula">{cliente.dni_deudor}</td>
+                  <td className="deuda col-deuda">
+                    {formatearMoneda(cliente.monto_pendiente)}
+                  </td>
+                  <td className="cedula col-cedula">{cliente.cedula}</td>
                   <td className="acciones col-acciones">
                     <button
                       className="btn-ver"
-                      onClick={() => verDetalles(cliente)}
+                      onClick={() => irADetalleCliente(cliente.cedula)}
                       title="Ver detalles"
                     >
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path
                           d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
                           stroke="#8B4513"
@@ -129,10 +112,10 @@ const TablaDeudores = () => {
                     </button>
                     <button
                       className="btn-eliminar"
-                      onClick={() => eliminarCliente(cliente.id)}
+                      onClick={() => eliminarCliente(cliente.cedula)}
                       title="Marcar como pagado"
                     >
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path
                           d="M3 6H5H21"
                           stroke="#DC143C"

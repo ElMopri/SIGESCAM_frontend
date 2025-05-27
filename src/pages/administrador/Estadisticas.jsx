@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { IoWalletOutline } from "react-icons/io5";
 import {
   obtenerHistorialCompras,
   filtrarComprasPorFecha,
@@ -6,6 +7,8 @@ import {
 } from "../../api/CompraApi";
 import "./Estadisticas.css";
 import Modal from "../../components/Modal";
+import { obtenerHistorialMargenesDeGanancia } from "../../api/VentaApi";
+const obtenerAnioActual = () => new Date().getFullYear();
 
 const datosEntradasEjemplo = [
   {
@@ -48,6 +51,11 @@ const Estadisticas = () => {
   const [fechaFinSalidas, setFechaFinSalidas] = useState("");
   const [productoSalidas, setProductoSalidas] = useState("");
 
+  const [anioFiltro, setAnioFiltro] = useState(obtenerAnioActual());
+
+  // Estado para márgenes de ganancia desde la API
+  const [datosMargenes, setDatosMargenes] = useState([]);
+
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
   const [compras, setCompras] = useState([]);
   const [total, setTotal] = useState(0);
@@ -57,6 +65,29 @@ const Estadisticas = () => {
     message: "",
     type: "error",
   });
+
+  // Cargar márgenes de ganancia desde la API cuando cambia el año
+  useEffect(() => {
+    const cargarMargenes = async () => {
+      try {
+        const data = await obtenerHistorialMargenesDeGanancia(anioFiltro);
+        setDatosMargenes(data.historial || []);
+      } catch (error) {
+        mostrarError(
+          error.message || "Error al obtener el histórico de márgenes"
+        );
+        setDatosMargenes([]);
+      }
+    };
+    cargarMargenes();
+  }, [anioFiltro]);
+
+  const gananciasFiltradas = datosMargenes;
+  const promedioGanancias =
+    gananciasFiltradas.length > 0
+      ? gananciasFiltradas.reduce((acc, item) => acc + item.margenNegocio, 0) /
+        gananciasFiltradas.length
+      : 0;
 
   // Estado para las entradas de ejemplo
   const [entradas] = useState(datosEntradasEjemplo);
@@ -391,6 +422,114 @@ const Estadisticas = () => {
             </div>
           </>
         )}
+      </div>
+
+      <div className="secciones-inferiores">
+        {/* seccion de análisis entradas/salidas*/}
+        <div className="widget-margen-negocio">
+          <div className="header-estadisticas">
+            <span>Análisis de Entradas / Salidas</span>
+            <IoWalletOutline className="wallet-icon" />
+          </div>
+          <div className="campo">
+            <label>Entradas:</label>
+            <input
+              className="campo-texto"
+              type="text"
+              value={`$ ${total.toLocaleString()}`}
+              readOnly
+            />
+          </div>
+          <div className="campo">
+            <label>Salidas:</label>
+            <input
+              className="campo-texto"
+              type="text"
+              value={`$ ${totalEntradas.toLocaleString()}`}
+              readOnly
+            />
+          </div>
+          <div className="campo margen">
+            <label>Margen de Negocio:</label>
+            <span
+              className={
+                total - totalEntradas >= 0 ? "valor-positivo" : "valor-negativo"
+              }
+            >
+              ${(total - totalEntradas).toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        {/* Sección de Histórico de Ganancias */}
+        <div className="seccion-ganancias">
+          <div className="header-ganancias">
+            <h3 className="titulo-ganancias">Histórico de márgenes</h3>
+            <div className="filtro-anio-container">
+              <input
+                type="number"
+                className="input-anio"
+                value={anioFiltro}
+                onChange={(e) =>
+                  setAnioFiltro(parseInt(e.target.value) || obtenerAnioActual())
+                }
+                min="2000"
+                max="2100"
+              />
+            </div>
+          </div>
+          <div className="contenedor-tabla-ganancias">
+            <table className="tabla-ganancias">
+              <thead>
+                <tr className="encabezado-ganancias">
+                  <th className="columna-mes">Mes</th>
+                  <th className="columna-margen">Margen de ganancia</th>
+                </tr>
+              </thead>
+              <tbody>
+                {gananciasFiltradas.length === 0 ? (
+                  <tr>
+                    <td colSpan="2" className="no-data-message">
+                      No hay datos disponibles para {anioFiltro}
+                    </td>
+                  </tr>
+                ) : (
+                  <>
+                    {gananciasFiltradas.map((item, idx) => (
+                      <tr key={idx} className="fila-ganancias" tabIndex={0}>
+                        <td className="celda-mes">{item.mes}</td>
+                        <td
+                          className={`celda-margen ${
+                            item.margenNegocio >= 0
+                              ? "valor-positivo"
+                              : "valor-negativo"
+                          }`}
+                        >
+                          $ {item.margenNegocio.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="fila-promedio-ganancias">
+                      <td className="celda-promedio">Promedio mensual</td>
+                      <td
+                        className={`celda-total ${
+                          promedioGanancias >= 0
+                            ? "valor-positivo"
+                            : "valor-negativo"
+                        }`}
+                      >
+                        ${" "}
+                        {promedioGanancias.toLocaleString(undefined, {
+                          maximumFractionDigits: 0,
+                        })}
+                      </td>
+                    </tr>
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
