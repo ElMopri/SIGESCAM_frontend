@@ -16,12 +16,10 @@ const PorCobrarAdmin = () => {
           const datosFormateados = datos.map((deudor) => ({
             id: deudor.dni_deudor,
             nombre: deudor.nombre,
-            telefono: deudor.telefono,
             cedula: deudor.dni_deudor,
-            monto_pendiente: parseFloat(deudor.monto_pendiente)
+            monto_pendiente: parseFloat(deudor.deuda_total)
           }));
           setClientesDeudores(datosFormateados);
-          console.log(clientesDeudores);
         }
       } catch (error) {
         console.error("Error al cargar deudores:", error.message);
