@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-const API_DEUDOR = `${API_URL}/deudor`;
+const API_DEUDOR = `${API_URL}/deudores`;
 
 export const obtenerDeudorPorDNI = async (dni) => {
     try {
