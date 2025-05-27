@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ModalDetalleDeuda from "./ModalDetalleDeuda";
 import "./TablaDeudores.css";
 
@@ -6,6 +7,7 @@ const TablaDeudores = ({ clientes }) => {
   const [clientesActuales, setClientesActuales] = useState(clientes);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [clienteDetalle, setClienteDetalle] = useState(null);
+  const navigate = useNavigate();
 
   const formatearMoneda = (monto) => `$${monto.toFixed(2)}`;
 
@@ -13,9 +15,8 @@ const TablaDeudores = ({ clientes }) => {
     setClientesActuales(clientesActuales.filter((cliente) => cliente.id !== id));
   };
 
-  const verDetalles = (cliente) => {
-    setClienteDetalle(cliente);
-    setModalAbierto(true);
+  const irADetalleCliente = (clienteId) => {
+    navigate(`/admin/por-cobrar/deudor/${clienteId}`);
   };
 
   return (
@@ -69,7 +70,7 @@ const TablaDeudores = ({ clientes }) => {
                 <td className="acciones col-acciones">
                   <button
                     className="btn-ver"
-                    onClick={() => verDetalles(cliente)}
+                    onClick={() => irADetalleCliente(cliente.id)}
                     title="Ver detalles"
                   >
                     <svg
@@ -129,12 +130,7 @@ const TablaDeudores = ({ clientes }) => {
           </tbody>
         </table>
       </div>
-      {modalAbierto && (
-        <ModalDetalleDeuda
-          onClose={() => setModalAbierto(false)}
-          cliente={clienteDetalle}
-        />
-      )}
+      
     </div>
   );
 };
