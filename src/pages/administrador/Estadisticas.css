@@ -359,6 +359,38 @@
   flex-direction: column;
 }
 
+.header-ganancias {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 15px;
+}
+
+.filtro-anio-container {
+  display: flex;
+  align-items: center;
+}
+
+.input-anio {
+  padding: 8px 12px;
+  border: 1px solid #bde0e7;
+  border-radius: 6px;
+  background-color: #f0f9fb;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.input-anio:focus {
+  outline: none;
+  border-color: #4fa9c7;
+  box-shadow: 0 0 0 2px rgba(79, 169, 199, 0.2);
+}
+
+/* Mantén los demás estilos existentes */
+
 .titulo-ganancias {
   font-size: 1.2rem;
   color: #333;

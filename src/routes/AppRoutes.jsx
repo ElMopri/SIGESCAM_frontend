@@ -22,6 +22,7 @@ import AjustesGestor from "../pages/gestorVentas/AjustesGestor";
 import NotificacionesAdmin from "../pages/administrador/Notificaciones";
 import NotificacionesGestor from "../pages/gestorVentas/NotificacionesGestor";
 import EstablecerContraseña from "../pages/publica/EstablecerContraseña";
+import DetalleDeudor from "../pages/administrador/DetalleDeudor";
 
 export default function AppRoutes() {
   return (
@@ -55,6 +56,8 @@ export default function AppRoutes() {
         <Route path="usuarios" element={<Usuarios />} />
         <Route path="ajustes" element={<AjustesAdmin />} />
         <Route path="notificaciones" element={<NotificacionesAdmin />} />
+        <Route path="/admin/por-cobrar/deudor/:clienteId" element={<DetalleDeudor />}
+/>
       </Route>
 
       {/* Rutas para Gestor de Ventas */}
