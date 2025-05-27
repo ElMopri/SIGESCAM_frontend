@@ -1,98 +1,68 @@
-import TablaDeudores from "../../components/por_cobrar/TablaDeudores"
-import SearchBarWaitForClick from "../../components/SearchBarWaitForClick"
-import "./PorCobrarAdmin.css"
+import { useState } from "react";
+import TablaDeudores from "../../components/por_cobrar/TablaDeudores";
+import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
+import { buscarDeudoresPorNombreODNI } from "../../api/DeudorApi";
+import Modal from "../../components/Modal"; 
+import "./PorCobrarAdmin.css";
 
 const PorCobrarAdmin = () => {
-  
-  const clientesDeudores = [
-    {
-      id: 1,
-      nombre: "Michelle Rojas",
-      deuda: 120000,
-      cedula: "1094131661",
-      telefono: "3214444444",
-    },
-    {
-      id: 2,
-      nombre: "Juan Perez",
-      deuda: 20000,
-      cedula: "135665688",
-      telefono: "3214444444",
-    },
-    {
-      id: 3,
-      nombre: "Alexander Blanco",
-      deuda: 2000,
-      cedula: "118416478",
-      telefono: "3214444444",
-    },
-    {
-      id: 4,
-      nombre: "Felipe López",
-      deuda: 1200000,
-      cedula: "135665688",
-      telefono: "3214444444",
-    },
-    {
-      id: 5,
-      nombre: "Daniela Vargas",
-      deuda: 40000,
-      cedula: "1111111111",
-      telefono: "3214444444",
-    },
-    {
-      id: 6,
-      nombre: "Jose Perez",
-      deuda: 120000,
-      cedula: "2222222222",
-      telefono: "3214444444",
-    },
-    {
-      id: 7,
-      nombre: "Daniela Barreto",
-      deuda: 200000,
-      cedula: "1005028830",
-      telefono: "3214444444",
-    },
-    {
-      id: 8,
-      nombre: "Shakira Mebarak",
-      deuda: 15000,
-      cedula: "1210149200",
-      telefono: "3214444444",
-    },
-  ]
+  const [busqueda, setBusqueda] = useState("");
+  const [deudores, setDeudores] = useState([]);
+  const [mostrarModal, setMostrarModal] = useState(false); // 👉 Modal visible o no
 
-const obtenerFechaActual = () => {
-  const fecha = new Date();
-  const opciones = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
+  const manejarBusqueda = async () => {
+    if (!busqueda.trim()) return;
+
+    try {
+      const resultados = await buscarDeudoresPorNombreODNI(busqueda);
+      if (resultados.length === 0) {
+        setMostrarModal(true); // 👉 Mostrar modal si no hay resultados
+      }
+      setDeudores(resultados);
+    } catch (error) {
+      console.error("Error al buscar deudores:", error.message);
+      setDeudores([]);
+      setMostrarModal(true); // 👉 Mostrar modal en caso de error también
+    }
   };
-  const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
-  return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-};
 
   return (
     <div className="padre-por-cobrar-container">
-    <div className="por-cobrar-container">
-      <div className="informacion-superior">
-        <h1 className="titulo">Pendientes de pago</h1>
-        <span className="fecha_actual">{obtenerFechaActual()}</span>
-      </div>
+      <div className="por-cobrar-container">
+        <div className="informacion-superior">
+          <h1 className="titulo">Pendientes de pago</h1>
+          <span className="fecha_actual">
+            {new Date().toLocaleDateString("es-ES", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "2-digit",
+            })}
+          </span>
+        </div>
 
-      <div className="buscador-container">
-        <SearchBarWaitForClick
-          placeholder="Buscar clientes..."
+        <div className="buscador-container">
+          <SearchBarWaitForClick
+            placeholder="Buscar clientes..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            onSearch={manejarBusqueda}
+          />
+        </div>
+
+        <TablaDeudores clientes={deudores} textoBusqueda={busqueda} />
+
+        {/* Modal de error si no se encuentran resultados */}
+        <Modal
+          isOpen={mostrarModal}
+          onClose={() => setMostrarModal(false)}
+          title="Sin resultados"
+          message={`No se encontraron coincidencias para "${busqueda}".`}
+          type="error"
         />
       </div>
-
-      <TablaDeudores clientes={clientesDeudores} />
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default PorCobrarAdmin
+export default PorCobrarAdmin;
