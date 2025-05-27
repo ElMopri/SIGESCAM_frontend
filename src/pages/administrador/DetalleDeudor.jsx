@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import '../../components/por_cobrar/ModalDetalleDeuda.css';
+import { obtenerDeudorPorDNI } from '../../api/DeudorApi';
+
 
 const DetalleDeudor = ({ onClose, onGuardar }) => {
-  const { clienteId } = useParams(); // Obtener ID de la URL
+  const { clienteId } = useParams();
+  const navigate = useNavigate();
   const [deudor, setDeudor] = useState(null);
   const [detalles, setDetalles] = useState([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    // Simulación de carga desde una API o fuente de datos
     const fetchDeudor = async () => {
       try {
-        // Aquí simulas una petición al backend:
-        const response = await fetch(`/api/deudores/${clienteId}`);
-        const data = await response.json();
-
+        const data = await obtenerDeudorPorDNI(clienteId);
+        if (!data) {
+          console.warn("No se encontró deudor con ese DNI");
+          return;
+        }
         setDeudor(data.deudor);
-        setDetalles(data.detalles);
-        setTotal(data.total);
+        setDetalles(data.detalles || []);
+        setTotal(data.total || 0);
       } catch (error) {
         console.error('Error cargando detalles del deudor:', error);
       }
@@ -26,6 +29,11 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
 
     if (clienteId) fetchDeudor();
   }, [clienteId]);
+
+  const handleAbono = (index) => {
+    console.log(`Registrar abono para venta ${index + 1}`);
+    // Aquí puedes abrir un modal, lanzar un formulario o emitir un evento
+  };
 
   return (
     <div className="modal-detalle-deudor-overlay">
@@ -40,7 +48,7 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
             </p>
           </div>
           <div className="modal-header-right-detalle-deuda">
-            <span className="close-button-detalle-deuda" onClick={onClose}>&times;</span>
+            <span className="close-button-detalle-deuda" onClick={() => {navigate('/admin/por-cobrar');}}>&times;</span>
           </div>
         </div>
 
@@ -49,9 +57,10 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
         <table className="tabla-deuda">
           <thead>
             <tr>
+              <th>Venta</th>
+              <th>Monto pendiente</th>
               <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Valor</th>
+              <th>Registrar Abono</th>
             </tr>
           </thead>
           <tbody>
@@ -60,9 +69,17 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
                 key={index}
                 className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}
               >
-                <td>{item.fecha}</td>
-                <td>{item.concepto}</td>
+                <td>Venta {index + 1}</td>
                 <td>${parseFloat(item.valor).toFixed(2)}</td>
+                <td>{item.fecha}</td>
+                <td>
+                  <button
+                    className="btn-abono"
+                    onClick={() => handleAbono(index)}
+                  >
+                    Registrar Abono
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
