@@ -14,3 +14,16 @@ export const obtenerDeudorPorDNI = async (dni) => {
         throw new Error(error.response?.data?.mensaje || "Error al obtener deudor");
     }
 };
+
+export const obtenerDeudores = async () => {
+    try {
+        const response = await axios.get(`${API_DEUDOR}`);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw new Error(error.response?.data?.mensaje || "Error al obtener deudor");
+    }
+};
+
