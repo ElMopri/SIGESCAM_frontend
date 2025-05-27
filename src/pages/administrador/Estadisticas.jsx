@@ -8,6 +8,12 @@ import {
 import "./Estadisticas.css";
 import Modal from "../../components/Modal";
 
+const datosGananciasEjemplo = [
+  { mes: "Febrero", margen: 700000 },
+  { mes: "Marzo", margen: 500000 },
+  { mes: "Abril", margen: 436000 },
+];
+
 const datosEntradasEjemplo = [
   {
     producto: { nombre: "Cartera" },
@@ -58,6 +64,10 @@ const Estadisticas = () => {
     message: "",
     type: "error",
   });
+
+  const promedioGanancias =
+    datosGananciasEjemplo.reduce((acc, item) => acc + item.margen, 0) /
+    datosGananciasEjemplo.length;
 
   // Estado para las entradas de ejemplo
   const [entradas] = useState(datosEntradasEjemplo);
@@ -292,7 +302,6 @@ const Estadisticas = () => {
               />
             </div>
           </>
-          
         )}
 
         {pestañaActiva === "entradas" && (
@@ -394,31 +403,96 @@ const Estadisticas = () => {
           </>
         )}
       </div>
-            <div className="widget-margen-negocio">
-              <div className="header-estadisticas">
-                <span>Análisis de Entradas / Salidas</span>
-                <IoWalletOutline
-                  className="wallet-icon"
-                />
-              </div>
-              <div className="campo">
-                <label>Entradas:</label>
-                <input className="campo-texto" type="text" value={`$ ${total.toLocaleString()}`} readOnly />
-              </div>
-              <div className="campo">
-                <label>Salidas:</label>
-                <input className="campo-texto" type="text" value={`$ ${totalEntradas.toLocaleString()}`} readOnly />
-              </div>
-              <div className="campo margen">
-                <label>Margen de Negocio:</label>
-                <span className={total - totalEntradas >= 0 ? "valor-positivo" : "valor-negativo"}>
-                  ${ (total - totalEntradas).toLocaleString() }
-                </span>
-              </div>
-            </div>
-    </div>
 
-    
+      <div className="secciones-inferiores">
+        {/* Widget de análisis */}
+        <div className="widget-margen-negocio">
+          <div className="header-estadisticas">
+            <span>Análisis de Entradas / Salidas</span>
+            <IoWalletOutline className="wallet-icon" />
+          </div>
+          <div className="campo">
+            <label>Entradas:</label>
+            <input
+              className="campo-texto"
+              type="text"
+              value={`$ ${total.toLocaleString()}`}
+              readOnly
+            />
+          </div>
+          <div className="campo">
+            <label>Salidas:</label>
+            <input
+              className="campo-texto"
+              type="text"
+              value={`$ ${totalEntradas.toLocaleString()}`}
+              readOnly
+            />
+          </div>
+          <div className="campo margen">
+            <label>Margen de Negocio:</label>
+            <span
+              className={
+                total - totalEntradas >= 0 ? "valor-positivo" : "valor-negativo"
+              }
+            >
+              ${(total - totalEntradas).toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        {/* Sección de Histórico de Ganancias */}
+        <div className="seccion-ganancias">
+          <h3 className="titulo-ganancias">Histórico de márgenes</h3>
+          <div className="contenedor-tabla-ganancias">
+            <table className="tabla-ganancias">
+              <thead>
+                <tr className="encabezado-ganancias">
+                  <th className="columna-mes">Mes</th>
+                  <th className="columna-margen">Margen de ganancia</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datosGananciasEjemplo.map((item, idx) => (
+                  <tr
+                    key={idx}
+                    className={`fila-ganancias ${
+                      idx % 2 === 0
+                        ? "fila-par-ganancias"
+                        : "fila-impar-ganancias"
+                    }`}
+                  >
+                    <td className="celda-mes">{item.mes}</td>
+                    <td
+                      className={`celda-margen ${
+                        item.margen >= 0 ? "valor-positivo" : "valor-negativo"
+                      }`}
+                    >
+                      $ {item.margen.toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+                <tr className="fila-promedio-ganancias">
+                  <td className="celda-promedio">Promedio mensual</td>
+                  <td
+                    className={`celda-total ${
+                      promedioGanancias >= 0
+                        ? "valor-positivo"
+                        : "valor-negativo"
+                    }`}
+                  >
+                    ${" "}
+                    {promedioGanancias.toLocaleString(undefined, {
+                      maximumFractionDigits: 0,
+                    })}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -246,14 +246,24 @@
   padding: 1rem;
 }
 
+.secciones-inferiores {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  align-items: stretch; /* Asegura misma altura */
+}
+
+/* Widget de análisis - ajustes para el nuevo layout */
 .widget-margen-negocio {
-  width: 300px;
-  padding: 1.2rem;
+  width: 380px; /* Aumentado de 300px a 380px */
+  padding: 1.5rem; /* Un poco más de padding */
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  margin: 2rem auto 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .widget-margen-negocio .header-estadisticas {
@@ -297,7 +307,7 @@
   font-weight: 600;
   color: #2d3748;
   font-size: 0.9rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .widget-margen-negocio .margen {
@@ -317,7 +327,7 @@
   width: 140px;
   text-align: right;
   display: inline-block;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .widget-margen-negocio .valor-negativo {
@@ -331,13 +341,140 @@
   width: 140px;
   text-align: right;
   display: inline-block;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .wallet-icon {
   width: 20px;
   height: 20px;
 }
+
+/* Sección de ganancias - ajustes para el nuevo layout */
+.seccion-ganancias {
+  flex: 1;
+  min-width: 0;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.titulo-ganancias {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.contenedor-tabla-ganancias {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px; /* Altura máxima para el scroll */
+}
+
+.tabla-ganancias {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.encabezado-ganancias {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.columna-mes {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+}
+
+.columna-margen {
+  padding: 12px 15px;
+  text-align: right;
+  font-weight: 600;
+  color: #495057;
+}
+
+.fila-ganancias {
+  border-bottom: 1px solid #eee;
+}
+
+.fila-par-ganancias {
+  background-color: #f8f9fa;
+}
+
+.fila-impar-ganancias {
+  background-color: #fff;
+}
+
+.celda-mes {
+  padding: 12px 15px;
+  color: #333;
+}
+
+.celda-margen {
+  padding: 12px 15px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.fila-promedio-ganancias {
+  background-color: #e9ecef;
+  border-top: 2px solid #dee2e6;
+}
+
+.celda-promedio {
+  padding: 12px 15px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.celda-total {
+  padding: 12px 15px;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* Scroll personalizado */
+.contenedor-tabla-ganancias::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contenedor-tabla-ganancias::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.contenedor-tabla-ganancias::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.contenedor-tabla-ganancias::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .secciones-inferiores {
+    flex-direction: column;
+  }
+
+  .widget-margen-negocio {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .tabla-container {
     margin: 0;
