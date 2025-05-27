@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../components/por_cobrar/ModalDetalleDeuda.css';
+import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
 import { obtenerDeudorPorDNI } from '../../api/DeudorApi';
 
 
@@ -9,7 +10,8 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
   const navigate = useNavigate();
   const [deudor, setDeudor] = useState(null);
   const [detalles, setDetalles] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [clienteIdSeleccionado, setClienteIdSeleccionado] = useState(null);
 
   useEffect(() => {
     const fetchDeudor = async () => {
@@ -30,9 +32,9 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
     if (clienteId) fetchDeudor();
   }, [clienteId]);
 
-  const handleAbono = (index) => {
-    console.log(`Registrar abono para venta ${index + 1}`);
-    // Aquí puedes abrir un modal, lanzar un formulario o emitir un evento
+  const handleRegistrarClick = (clienteId) => {
+    setClienteIdSeleccionado(clienteId);
+    setMostrarModal(true);
   };
 
   return (
@@ -52,7 +54,7 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
           </div>
         </div>
 
-        <div className="modal-title">Detalle de la Deuda</div>
+        <div className="modal-title">Detalle de Ventas Fiadas</div>
 
         <table className="tabla-deuda">
           <thead>
@@ -75,17 +77,20 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
                 <td>
                   <button
                     className="btn-abono"
-                    onClick={() => handleAbono(index)}
+                    onClick={() => handleRegistrarClick(index)}
                   >
-                    Registrar Abono
+                    Registrar
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        <button className="btn-guardar" onClick={onGuardar}>Guardar</button>
+        {mostrarModal && (
+        <DetalleDeudor
+          onClose={() => setMostrarModal(false)}
+        />
+      )}
       </div>
     </div>
   );
