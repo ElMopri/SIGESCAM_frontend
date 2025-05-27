@@ -53,6 +53,8 @@ const ProductosAdmin = () => {
   const [mostrarModalRegistrarVenta, setMostrarModalRegistrarVenta] =
     useState(false);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   React.useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -227,42 +229,40 @@ const ProductosAdmin = () => {
   };
 
   const agregarProducto = async (nuevoProducto) => {
-    try {
-      const compraData = {
-        dni_usuario: dni,
-        nombre_producto: nuevoProducto.producto,
-        precio_compra: nuevoProducto.precioCompra,
-        nombre_categoria: nuevoProducto.categoria,
-        precio_venta: nuevoProducto.precio,
-        cantidad_agregar: nuevoProducto.cantidadAgregar,
-        fecha_compra: nuevoProducto.fechaCompra,
-      };
+  try {
+    const compraData = {
+      dni_usuario: dni,
+      nombre_producto: nuevoProducto.producto,
+      precio_compra: nuevoProducto.precioCompra,
+      nombre_categoria: nuevoProducto.categoria,
+      precio_venta: nuevoProducto.precio,
+      cantidad_agregar: nuevoProducto.cantidadAgregar,
+      fecha_compra: nuevoProducto.fechaCompra,
+    };
 
-      console.log("Datos enviados a registrarCompra:", compraData);
+    console.log("Datos enviados a registrarCompra:", compraData);
 
-      await registrarCompra(compraData);
+    await registrarCompra(compraData);
 
-      const productos = await obtenerProductos();
-      const datosTransformados = productos.map((producto) => ({
-        id: producto.nombre,
-        producto: producto.nombre,
-        categoria: producto.categoria,
-        unidades: producto.cantidad,
-        precio: producto.precio_venta,
-      }));
-      setDatos(datosTransformados);
+    const productos = await obtenerProductos();
+    const datosTransformados = productos.map((producto) => ({
+      id: producto.nombre,
+      producto: producto.nombre,
+      categoria: producto.categoria,
+      unidades: producto.cantidad,
+      precio: producto.precio_venta,
+    }));
+    setDatos(datosTransformados);
 
-      setMostrarModalAgregarProducto(false);
-      setProductoSeleccionado(null);
+    setMostrarModalAgregarProducto(false);
+    setProductoSeleccionado(null);
+
+    setShowSuccessModal(true);
     } catch (error) {
-      console.error("Error al registrar la compra:", error);
-      mostrarError(
-        `Error al registrar la compra: ${
-          error.message || "Ocurrió un problema inesperado"
-        }`
-      );
+      console.error("Error al agregar producto:", error);
     }
   };
+
 
   const mostrarError = (mensaje) => {
     setErrorMessage(mensaje);
@@ -428,6 +428,14 @@ const ProductosAdmin = () => {
           type="error"
         />
       )}
+
+      <Modal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Producto agregado"
+        message="El producto fue agregado exitosamente."
+        type="success"
+      />
     </div>
   );
 };
