@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { IoWalletOutline } from "react-icons/io5";
 import {
   obtenerHistorialCompras,
   filtrarComprasPorFecha,
@@ -291,6 +292,7 @@ const Estadisticas = () => {
               />
             </div>
           </>
+          
         )}
 
         {pestañaActiva === "entradas" && (
@@ -392,7 +394,31 @@ const Estadisticas = () => {
           </>
         )}
       </div>
+            <div className="widget-margen-negocio">
+              <div className="header-estadisticas">
+                <span>Análisis de Entradas / Salidas</span>
+                <IoWalletOutline
+                  className="wallet-icon"
+                />
+              </div>
+              <div className="campo">
+                <label>Entradas:</label>
+                <input type="text" value={`$ ${total.toLocaleString()}`} readOnly />
+              </div>
+              <div className="campo">
+                <label>Salidas:</label>
+                <input type="text" value={`$ ${totalEntradas.toLocaleString()}`} readOnly />
+              </div>
+              <div className="campo margen">
+                <label>Margen de Negocio:</label>
+                <span className="valor-positivo">
+                  ${ (total - totalEntradas).toLocaleString() }
+                </span>
+              </div>
+            </div>
     </div>
+
+    
   );
 };
 

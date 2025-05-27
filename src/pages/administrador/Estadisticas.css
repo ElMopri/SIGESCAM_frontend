@@ -246,6 +246,80 @@
   padding: 1rem;
 }
 
+.widget-margen-negocio {
+  width: 300px;
+  padding: 1.2rem;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 2rem auto 0;
+}
+
+.widget-margen-negocio .header-estadisticas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  color: #2d3748;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.widget-margen-negocio .campo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.widget-margen-negocio label {
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 600;
+  flex: 1;
+}
+
+.widget-margen-negocio input {
+  border: 1px solid #e2e8f0;
+  background: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  width: 140px;
+  text-align: right;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.widget-margen-negocio .margen {
+  margin-top: 0.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.widget-margen-negocio .valor-positivo {
+  font-weight: 600;
+  color: #38a169;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  width: 140px;
+  text-align: right;
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.wallet-icon {
+  width: 20px;
+  height: 20px;
+}
 @media (max-width: 768px) {
   .tabla-container {
     margin: 0;
