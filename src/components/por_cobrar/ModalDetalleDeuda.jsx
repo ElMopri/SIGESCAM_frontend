@@ -2,47 +2,14 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import "./ModalDetalleDeuda.css";
 
-const ModalDetalleDeuda = ({ onClose, cliente }) => {
-  const [detalles, setDetalles] = useState([
-    {
-      nombre: "DetoDito Picante de 165 g",
-      cantidad: 20,
-      precio: 1500,
-      fecha: "23/02/2025",
-    },
-    {
-      nombre: "DetoDito Natural de 165 g",
-      cantidad: 20,
-      precio: 1500,
-      fecha: "23/02/2025",
-    },
-    {
-      nombre: "Doritos de 150 g",
-      cantidad: 20,
-      precio: 1000,
-      fecha: "28/02/2025",
-    },
-    {
-      nombre: "Lapicero Mongol H2",
-      cantidad: 40,
-      precio: 500,
-      fecha: "28/02/2025",
-    },
-    {
-      nombre: "Bolsas de globos rosa x 20",
-      cantidad: 10,
-      precio: 4500,
-      fecha: "24/02/2025",
-    },
-  ]);
-
+const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicial }) => {
   const totalOriginal = detalles.reduce(
     (sum, item) => sum + item.precio * item.cantidad,
     0
   );
 
   const [abono, setAbono] = useState("");
-  const [deudaRestante, setDeudaRestante] = useState(totalOriginal);
+  const [deudaRestante, setDeudaRestante] = useState(totalVenta - abonoInicial);
 
   const obtenerFechaActual = () => {
     const fecha = new Date();
@@ -106,16 +73,14 @@ const ModalDetalleDeuda = ({ onClose, cliente }) => {
               <th>Nombre</th>
               <th>Cantidad</th>
               <th>Precio (U)</th>
-              <th>Fecha</th>
             </tr>
           </thead>
           <tbody>
             {detalles.map((item, index) => (
               <tr key={index} className={index % 2 === 0 ? "fila-par-detalle-deuda" : "fila-impar-detalle-deuda"}>
-                <td>{item.nombre}</td>
+                <td>{item.producto.nombre}</td>
                 <td>{item.cantidad}</td>
                 <td>${item.precio.toLocaleString()}</td>
-                <td>{item.fecha}</td>
               </tr>
             ))}
           </tbody>

@@ -96,3 +96,18 @@ export const obtenerHistorialMargenesDeGanancia = async (anio) => {
     );
   }
 };
+
+
+//traer los detalles de una venta fiada
+
+export const obtenerDetalleVenta = async (id) => {
+    try {
+        const response = await axios.get(`${API_VENTAS}/ventas-fiadas/detalles/${id}`);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 404) {
+            return null;
+        }
+        throw new Error(error.response?.data?.mensaje || "Error al obtener deudor");
+    }
+};

@@ -135,6 +135,7 @@
   float: right;
 }
 
+
 .btn-guardar:hover {
   background-color: #1976d2;
 }
@@ -167,4 +168,19 @@ thead {
   text-align: center;
   margin: 20px 20px 20px;
   color: #333;
+}
+.btn-abono {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 14px; /* reduce padding para alinear mejor */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center; /* centra verticalmente el texto */
+  justify-content: center; /* centra horizontalmente */
+  height: 100%; /* ocupa toda la celda */
+  box-sizing: border-box;
 }
