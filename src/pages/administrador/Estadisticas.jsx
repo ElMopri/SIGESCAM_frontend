@@ -403,15 +403,15 @@ const Estadisticas = () => {
               </div>
               <div className="campo">
                 <label>Entradas:</label>
-                <input type="text" value={`$ ${total.toLocaleString()}`} readOnly />
+                <input className="campo-texto" type="text" value={`$ ${total.toLocaleString()}`} readOnly />
               </div>
               <div className="campo">
                 <label>Salidas:</label>
-                <input type="text" value={`$ ${totalEntradas.toLocaleString()}`} readOnly />
+                <input className="campo-texto" type="text" value={`$ ${totalEntradas.toLocaleString()}`} readOnly />
               </div>
               <div className="campo margen">
                 <label>Margen de Negocio:</label>
-                <span className="valor-positivo">
+                <span className={total - totalEntradas >= 0 ? "valor-positivo" : "valor-negativo"}>
                   ${ (total - totalEntradas).toLocaleString() }
                 </span>
               </div>
