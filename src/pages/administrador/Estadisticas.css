@@ -189,14 +189,14 @@
   text-align: left;
   border-bottom: 2px solid #cbd5e0;
   white-space: nowrap;
-  font-size: 0.95rem; /* Asegura que también en th y td */
+  font-size: 0.95rem;
 }
 
 .tabla-estadisticas td {
   padding: 0.9rem 1rem;
   border-bottom: 1px solid #e2e8f0;
   color: #4a5568;
-  font-size: 0.95rem; /* Asegura que también en th y td */
+  font-size: 0.95rem;
 }
 
 .fila-par {
@@ -253,10 +253,9 @@
   align-items: stretch; /* Asegura misma altura */
 }
 
-/* Widget de análisis - ajustes para el nuevo layout */
 .widget-margen-negocio {
-  width: 380px; /* Aumentado de 300px a 380px */
-  padding: 1.5rem; /* Un poco más de padding */
+  width: 380px;
+  padding: 1.5rem;
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 12px;
@@ -349,10 +348,8 @@
   height: 20px;
 }
 
-/* Sección de ganancias - ajustes para el nuevo layout */
 .seccion-ganancias {
   flex: 1;
-  min-width: 0;
   background-color: #fff;
   border-radius: 12px;
   padding: 20px;
@@ -360,7 +357,6 @@
   border: 1px solid #e9ecef;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
 }
 
 .titulo-ganancias {
@@ -375,96 +371,53 @@
 .contenedor-tabla-ganancias {
   flex: 1;
   overflow-y: auto;
-  max-height: 300px; /* Altura máxima para el scroll */
+  max-height: 200px;
 }
 
 .tabla-ganancias {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+}
+
+.tabla-ganancias th,
+.tabla-ganancias td {
+  padding: 12px 15px;
 }
 
 .encabezado-ganancias {
   position: sticky;
   top: 0;
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
+
+  background-color: #ff9fcd;
 }
 
 .columna-mes {
-  padding: 12px 15px;
   text-align: left;
   font-weight: 600;
-  color: #495057;
 }
 
 .columna-margen {
-  padding: 12px 15px;
-  text-align: right;
+  text-align: left;
   font-weight: 600;
-  color: #495057;
 }
 
 .fila-ganancias {
-  border-bottom: 1px solid #eee;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
-.fila-par-ganancias {
-  background-color: #f8f9fa;
-}
-
-.fila-impar-ganancias {
-  background-color: #fff;
-}
-
-.celda-mes {
-  padding: 12px 15px;
-  color: #333;
-}
-
-.celda-margen {
-  padding: 12px 15px;
-  text-align: right;
-  font-weight: 500;
+.fila-ganancias:hover {
+  background-color: #e7e7e7e3;
 }
 
 .fila-promedio-ganancias {
-  background-color: #e9ecef;
-  border-top: 2px solid #dee2e6;
-}
-
-.celda-promedio {
-  padding: 12px 15px;
-  font-weight: 600;
-  color: #212529;
-}
-
-.celda-total {
-  padding: 12px 15px;
-  text-align: right;
+  position: sticky;
+  bottom: 0;
+  background-color: #f8f8f8;
+  border-top: 2px solid #e0e0e0;
   font-weight: 600;
 }
 
-/* Scroll personalizado */
-.contenedor-tabla-ganancias::-webkit-scrollbar {
-  width: 6px;
-}
-
-.contenedor-tabla-ganancias::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.contenedor-tabla-ganancias::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
-}
-
-.contenedor-tabla-ganancias::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Responsive */
 @media (max-width: 1024px) {
   .secciones-inferiores {
     flex-direction: column;

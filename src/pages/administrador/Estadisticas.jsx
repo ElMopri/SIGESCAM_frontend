@@ -12,6 +12,10 @@ const datosGananciasEjemplo = [
   { mes: "Febrero", margen: 700000 },
   { mes: "Marzo", margen: 500000 },
   { mes: "Abril", margen: 436000 },
+  { mes: "Abril", margen: 436000 },
+  { mes: "Abril", margen: 436000 },
+  { mes: "Abril", margen: 436000 },
+  { mes: "Abril", margen: 436000 },
 ];
 
 const datosEntradasEjemplo = [
@@ -405,7 +409,7 @@ const Estadisticas = () => {
       </div>
 
       <div className="secciones-inferiores">
-        {/* Widget de análisis */}
+        {/* seccion de análisis entradas/salidas*/}
         <div className="widget-margen-negocio">
           <div className="header-estadisticas">
             <span>Análisis de Entradas / Salidas</span>
@@ -454,14 +458,7 @@ const Estadisticas = () => {
               </thead>
               <tbody>
                 {datosGananciasEjemplo.map((item, idx) => (
-                  <tr
-                    key={idx}
-                    className={`fila-ganancias ${
-                      idx % 2 === 0
-                        ? "fila-par-ganancias"
-                        : "fila-impar-ganancias"
-                    }`}
-                  >
+                  <tr key={idx} className="fila-ganancias" tabIndex={0}>
                     <td className="celda-mes">{item.mes}</td>
                     <td
                       className={`celda-margen ${
