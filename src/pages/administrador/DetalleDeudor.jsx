@@ -85,15 +85,6 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
           </tbody>
         </table>
 
-        <div className="modal-total">
-          <label>Total Adeudado:</label>
-          <input
-            type="text"
-            value={`$${parseFloat(total || 0).toFixed(2)}`}
-            readOnly
-          />
-        </div>
-
         <button className="btn-guardar" onClick={onGuardar}>Guardar</button>
       </div>
     </div>
