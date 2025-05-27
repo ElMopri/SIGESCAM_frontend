@@ -1,98 +1,64 @@
-import TablaDeudores from "../../components/por_cobrar/TablaDeudores"
-import SearchBarWaitForClick from "../../components/SearchBarWaitForClick"
-import "./PorCobrarAdmin.css"
+import { useEffect, useState } from "react";
+import TablaDeudores from "../../components/por_cobrar/TablaDeudores";
+import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
+import { obtenerDeudores } from "../../api/DeudorApi.js";
+import "./PorCobrarAdmin.css";
 
 const PorCobrarAdmin = () => {
-  
-  const clientesDeudores = [
-    {
-      id: 1,
-      nombre: "Michelle Rojas",
-      deuda: 120000,
-      cedula: "1094131661",
-      telefono: "3214444444",
-    },
-    {
-      id: 2,
-      nombre: "Juan Perez",
-      deuda: 20000,
-      cedula: "135665688",
-      telefono: "3214444444",
-    },
-    {
-      id: 3,
-      nombre: "Alexander Blanco",
-      deuda: 2000,
-      cedula: "118416478",
-      telefono: "3214444444",
-    },
-    {
-      id: 4,
-      nombre: "Felipe López",
-      deuda: 1200000,
-      cedula: "135665688",
-      telefono: "3214444444",
-    },
-    {
-      id: 5,
-      nombre: "Daniela Vargas",
-      deuda: 40000,
-      cedula: "1111111111",
-      telefono: "3214444444",
-    },
-    {
-      id: 6,
-      nombre: "Jose Perez",
-      deuda: 120000,
-      cedula: "2222222222",
-      telefono: "3214444444",
-    },
-    {
-      id: 7,
-      nombre: "Daniela Barreto",
-      deuda: 200000,
-      cedula: "1005028830",
-      telefono: "3214444444",
-    },
-    {
-      id: 8,
-      nombre: "Shakira Mebarak",
-      deuda: 15000,
-      cedula: "1210149200",
-      telefono: "3214444444",
-    },
-  ]
+  const [clientesDeudores, setClientesDeudores] = useState([]);
 
-const obtenerFechaActual = () => {
-  const fecha = new Date();
-  const opciones = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
+  useEffect(() => {
+    const cargarDeudores = async () => {
+      try {
+        const datos = await obtenerDeudores();
+        if (datos) {
+          // Mapear los datos para que coincidan con las propiedades que espera la tabla
+          const datosFormateados = datos.map((deudor) => ({
+            id: deudor.dni_deudor,
+            nombre: deudor.nombre,
+            telefono: deudor.telefono,
+            cedula: deudor.dni_deudor,
+            monto_pendiente: parseFloat(deudor.monto_pendiente)
+          }));
+          setClientesDeudores(datosFormateados);
+          console.log(clientesDeudores);
+        }
+      } catch (error) {
+        console.error("Error al cargar deudores:", error.message);
+      }
+    };
+
+    cargarDeudores();
+  }, []);
+
+  const obtenerFechaActual = () => {
+    const fecha = new Date();
+    const opciones = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    };
+    const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
+    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
   };
-  const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
-  return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-};
 
   return (
     <div className="padre-por-cobrar-container">
-    <div className="por-cobrar-container">
-      <div className="informacion-superior">
-        <h1 className="titulo">Pendientes de pago</h1>
-        <span className="fecha_actual">{obtenerFechaActual()}</span>
+      <div className="por-cobrar-container">
+        <div className="informacion-superior">
+          <h1 className="titulo">Pendientes de pago</h1>
+          <span className="fecha_actual">{obtenerFechaActual()}</span>
+        </div>
+
+        <div className="buscador-container">
+          <SearchBarWaitForClick placeholder="Buscar clientes..." />
+        </div>
+
+        <TablaDeudores clientes={clientesDeudores} />
       </div>
-
-      <div className="buscador-container">
-        <SearchBarWaitForClick
-          placeholder="Buscar clientes..."
-        />
-      </div>
-
-      <TablaDeudores clientes={clientesDeudores} />
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default PorCobrarAdmin
+export default PorCobrarAdmin;
