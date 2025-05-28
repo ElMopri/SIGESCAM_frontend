@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import "./HeaderUser.css";
 
 const HeaderUser = () => {
-  const { user } = useContext(AuthContext);
+  const { user, role } = useContext(AuthContext);
   const navigate = useNavigate();
   const [imagenUrl, setImagenUrl] = useState("/usericon.png");
 
@@ -18,9 +18,9 @@ const HeaderUser = () => {
   }, [user]);
 
   const handleNotificationClick = () => {
-    if (user?.rol === "Administrador") {
+    if (role === "Administrador") {
       navigate("/admin/notificaciones");
-    } else if (user?.rol === "Gestor de ventas") {
+    } else if (role === "Gestor de ventas") {
       navigate("/gestorDeVentas/notificaciones");
     } else {
       console.warn("Rol no reconocido o no autenticado");
