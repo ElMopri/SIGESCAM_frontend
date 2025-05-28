@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
 import { obtenerVentasFiadasDeudor, obtenerDeudorPorDNI } from '../../api/DeudorApi';
-import { obtenerDetalleVenta } from '../../api/VentaApi';
+import { obtenerDetalleVentaFiada } from '../../api/VentaApi';
 import { AuthContext } from "../../context/AuthContext";
 
 const DetalleDeudor = () => {
@@ -13,7 +13,6 @@ const DetalleDeudor = () => {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const { user } = useContext(AuthContext);
-
   useEffect(() => {
     const fetchVentasFiadas = async () => {
       try {
@@ -34,7 +33,8 @@ const DetalleDeudor = () => {
 
   const handleAbono = async (venta) => {
     try {
-      const detalle = await obtenerDetalleVenta(venta.id_venta);
+      const detalle = await obtenerDetalleVentaFiada(venta.id_venta);
+      if(detalle){console.log(detalle)};
       setVentaSeleccionada({
         detalles: detalle.detallesVenta || [],
         totalVenta: venta.monto_total,

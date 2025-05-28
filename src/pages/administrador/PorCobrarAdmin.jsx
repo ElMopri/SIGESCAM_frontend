@@ -30,7 +30,7 @@ const PorCobrarAdmin = () => {
   };
 
   const buscarClientes = async () => {
-    const texto = textoBusqueda.trim(); // ✅ textoBusqueda ya es string
+    const texto = textoBusqueda.trim(); 
     if (!texto) {
       cargarDeudores();
       return;
@@ -95,7 +95,7 @@ const PorCobrarAdmin = () => {
             placeholder="Buscar clientes..."
             value={textoBusqueda}
             onChange={(e) => setTextoBusqueda(e.target.value)}
-            onSearch={buscarClientes} // ✅ No se pasa argumento, porque usa textoBusqueda directamente
+            onSearch={buscarClientes} 
           />
         </div>
 
