@@ -2,7 +2,7 @@ import React from "react";
 import AjustesBase from "../../components/AjustesBase";
 
 const Ajustes = () => {
-  const imagenPerfil = "https://randomuser.me/api/portraits/women/65.jpg";
+  const imagenPerfil = "/user.png";
 
   const notificaciones = [
     { id: "sugerencias", label: "Notificaciones de sugerencias" },

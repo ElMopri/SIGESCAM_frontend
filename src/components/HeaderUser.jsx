@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
@@ -7,6 +7,15 @@ import "./HeaderUser.css";
 const HeaderUser = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [imagenUrl, setImagenUrl] = useState("/usericon.png");
+
+  useEffect(() => {
+    if (user?.url_imagen) {
+      setImagenUrl(user.url_imagen);
+    } else {
+      setImagenUrl("/usericon.png");
+    }
+  }, [user]);
 
   const handleNotificationClick = () => {
     if (user?.rol === "Administrador") {
@@ -18,6 +27,11 @@ const HeaderUser = () => {
     }
   };
 
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = "/usericon.png";
+  };
+
   return (
     <header className="header-user">
       <button className="notificacion-btn" onClick={handleNotificationClick}>
@@ -27,9 +41,10 @@ const HeaderUser = () => {
       <div className="usuario-info">
         <div className="foto-usuario">
           <img
-            src="https://randomuser.me/api/portraits/women/65.jpg"
+            src={imagenUrl}
             alt="Foto de usuario"
             className="imagen-usuario"
+            onError={handleImageError}
           />
         </div>
         <span className="nombre-usuario">

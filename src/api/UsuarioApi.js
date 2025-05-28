@@ -7,7 +7,12 @@ const API_USUARIOS = `${API_URL}/usuarios`;
 export const obtenerPorId = async (dni) => {
   try {
     const response = await axios.get(`${API_USUARIOS}/${dni}`);
-    return response.data;
+    // Asegurarnos de que el usuario tenga el campo url_imagen
+    const usuario = {
+      ...response.data,
+      url_imagen: response.data.url_imagen || null
+    };
+    return usuario;
   } catch (error) {
     const mensaje = error.response?.data?.message || 'Error al obtener el usuario';
     console.error('Error al obtener usuario:', mensaje);
@@ -109,5 +114,28 @@ export const enviarNuevaContraseña = async (token, contrasena) => {
   } catch (error) {
     console.error("Error en enviar Nueva Contraseña:", error);
     alert(error.message || "Error inesperado al enviar la nueva contraseña");
+  }
+};
+
+// Subir foto de perfil a Cloudinary (a través del backend)
+export const subirFotoPerfil = async (dni, archivoImagen) => {
+  const formData = new FormData();
+  formData.append('imagen', archivoImagen);
+  try {
+    const response = await axios.post(`${API_USUARIOS}/${dni}/foto`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    
+    // Verificar que la respuesta tenga la estructura esperada
+    if (!response.data || !response.data.url_imagen) {
+      throw new Error('La respuesta del servidor no incluye la URL de la imagen');
+    }
+    
+    return response.data;
+  } catch (error) {
+    const mensaje = error.response?.data?.message || 'Error al subir la foto de perfil';
+    throw new Error(mensaje);
   }
 };
