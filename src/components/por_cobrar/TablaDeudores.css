@@ -133,18 +133,19 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .padre-por-cobrar-container {
+    width: 100%;
+    max-width: 100% !important; 
+    border-radius: 16px;
+    padding: 16px;
+    margin: auto;
+    overflow: hidden;
+  }
+
   .tabla-wrapper {
     padding: 10px;
   }
 
-  .tabla-deudores th,
-  .tabla-deudores td {
-    padding: 12px 15px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
   .tabla-deudores th,
   .tabla-deudores td {
     padding: 10px 12px;
@@ -156,5 +157,80 @@
     width: 30px;
     height: 30px;
     padding: 6px;
+  }
+
+  .col-nombre,
+  .col-deuda,
+  .col-cedula,
+  .col-acciones {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .col-icono {
+    width: 40px;
+  }
+
+  .informacion-superior {
+    display: flex
+;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-left: 20px;
+    /* margin-right: 20px; */
+    background-color: white;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.fecha_actual {
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+    align-items: end;
+    align-content: end;
+    margin-left: 30px;
+    margin-right: -30px;
+    padding-left: 15px !important;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-top: -10px;
+}
+
+  .tabla-deudores-container {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    width: 100%;
+    max-height: 440px;
+    overflow-y: auto;
+    overflow-x: visible;
+    position: relative;
+    margin-top: 8px;
+}
+
+    .tabla-deudores-container::-webkit-scrollbar {
+    width: 4px; /* más delgada */
+    height: 4px; /* para scroll horizontal si aparece */
+  }
+
+  .tabla-deudores-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .tabla-deudores-container::-webkit-scrollbar-thumb {
+    background: #a8a8a8;
+    border-radius: 10px;
+  }
+
+  .tabla-deudores-container::-webkit-scrollbar-thumb:hover {
+    background: #888;
   }
 }
