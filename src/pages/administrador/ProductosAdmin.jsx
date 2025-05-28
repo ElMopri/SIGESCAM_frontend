@@ -277,6 +277,17 @@ const ProductosAdmin = () => {
     });
   };
 
+  const handleVentaRegistrada = (productosActualizados) => {
+    const datosTransformados = productosActualizados.map((producto) => ({
+      id: producto.nombre,
+      producto: producto.nombre,
+      categoria: producto.categoria,
+      unidades: producto.cantidad,
+      precio: producto.precio_venta,
+    }));
+    setDatos(datosTransformados);
+  };
+
   return (
     <div className="productos-admin-container">
       <div className="contenedor-centrado">
@@ -403,6 +414,7 @@ const ProductosAdmin = () => {
       {mostrarModalRegistrarVenta && (
         <ModalRegistrarVenta
           onClose={() => setMostrarModalRegistrarVenta(false)}
+          onVentaRegistrada={handleVentaRegistrada}
         />
       )}
 
