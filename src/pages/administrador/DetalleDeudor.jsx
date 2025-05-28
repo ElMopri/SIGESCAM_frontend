@@ -66,17 +66,17 @@ const DetalleDeudor = () => {
           </div>
           <div className="modal-header-right-detalle-deuda">
             <span
-            className="close-button-detalle-deuda"
-            onClick={() => {
-              if (user?.rol === "Administrador") {
-                navigate("/admin/por-cobrar");
-              } else if (user?.rol === "Gestor de ventas") {
-                navigate("/gestorDeVentas/por-cobrar");
-              }
-            }}
-          >
-            &times;
-          </span>
+              className="close-button-detalle-deuda"
+              onClick={() => {
+                if (user?.rol === "Administrador") {
+                  navigate("/admin/por-cobrar");
+                } else if (user?.rol === "Gestor de ventas") {
+                  navigate("/gestorDeVentas/por-cobrar");
+                }
+              }}
+            >
+              &times;
+            </span>
           </div>
         </div>
 
@@ -114,6 +114,15 @@ const DetalleDeudor = () => {
             detalles={ventaSeleccionada.detalles}
             totalVenta={ventaSeleccionada.totalVenta}
             abonoInicial={ventaSeleccionada.abonoInicial}
+            ventaId={ventaSeleccionada.venta.id_venta}
+            onPagoGuardado={() => {
+              // Refrescar la lista de ventas fiadas después del abono
+              const reloadVentasFiadas = async () => {
+                const data = await obtenerVentasFiadasDeudor(clienteId);
+                setVentasFiadas(data?.ventas || []);
+              };
+              reloadVentasFiadas();
+            }}
           />
         )}
       </div>
