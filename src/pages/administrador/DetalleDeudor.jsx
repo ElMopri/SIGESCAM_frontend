@@ -1,40 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../../components/por_cobrar/ModalDetalleDeuda.css';
 import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
-import { obtenerDeudorPorDNI } from '../../api/DeudorApi';
+import { obtenerVentasFiadasDeudor, obtenerDeudorPorDNI } from '../../api/DeudorApi';
+import { obtenerDetalleVenta } from '../../api/VentaApi';
 
-
-const DetalleDeudor = ({ onClose, onGuardar }) => {
+const DetalleDeudor = () => {
   const { clienteId } = useParams();
   const navigate = useNavigate();
   const [deudor, setDeudor] = useState(null);
-  const [detalles, setDetalles] = useState([]);
+  const [ventasFiadas, setVentasFiadas] = useState([]);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const [clienteIdSeleccionado, setClienteIdSeleccionado] = useState(null);
+  const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
 
   useEffect(() => {
-    const fetchDeudor = async () => {
+    const fetchVentasFiadas = async () => {
       try {
-        const data = await obtenerDeudorPorDNI(clienteId);
-        if (!data) {
-          console.warn("No se encontró deudor con ese DNI");
-          return;
-        }
-        setDeudor(data.deudor);
-        setDetalles(data.detalles || []);
-        setTotal(data.total || 0);
+        const data = await obtenerVentasFiadasDeudor(clienteId);
+        setDeudor({
+          nombre: data.nombre,
+          documento: data.dni_deudor,
+          telefono: data.telefono || '---',
+        });
+        setVentasFiadas(data?.ventas || []);
       } catch (error) {
-        console.error('Error cargando detalles del deudor:', error);
+        console.error('Error obteniendo ventas fiadas:', error);
       }
     };
 
-    if (clienteId) fetchDeudor();
+    if (clienteId) fetchVentasFiadas();
   }, [clienteId]);
 
-  const handleRegistrarClick = (clienteId) => {
-    setClienteIdSeleccionado(clienteId);
-    setMostrarModal(true);
+  const handleAbono = async (venta) => {
+    try {
+      const detalle = await obtenerDetalleVenta(venta.id_venta);
+      setVentaSeleccionada({
+        detalles: detalle.detallesVenta || [],
+        totalVenta: venta.monto_total,
+        abonoInicial: venta.abono || 0,
+        venta: venta
+      });
+      setMostrarModal(true);
+    } catch (error) {
+      console.error('Error obteniendo detalle de venta:', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setMostrarModal(false);
+    setVentaSeleccionada(null);
   };
 
   return (
@@ -50,7 +63,7 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
             </p>
           </div>
           <div className="modal-header-right-detalle-deuda">
-            <span className="close-button-detalle-deuda" onClick={() => {navigate('/admin/por-cobrar');}}>&times;</span>
+            <span className="close-button-detalle-deuda" onClick={() => navigate('/admin/por-cobrar')}>&times;</span>
           </div>
         </div>
 
@@ -66,31 +79,30 @@ const DetalleDeudor = ({ onClose, onGuardar }) => {
             </tr>
           </thead>
           <tbody>
-            {detalles.map((item, index) => (
-              <tr
-                key={index}
-                className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}
-              >
+            {ventasFiadas.map((item, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}>
                 <td>Venta {index + 1}</td>
-                <td>${parseFloat(item.valor).toFixed(2)}</td>
-                <td>{item.fecha}</td>
+                <td>${item.monto_pendiente.toLocaleString()}</td>
+                <td>{new Date(item.fecha_venta).toLocaleDateString()}</td>
                 <td>
-                  <button
-                    className="btn-abono"
-                    onClick={() => handleRegistrarClick(index)}
-                  >
-                    Registrar
+                  <button className="btn-abono" onClick={() => handleAbono(item)}>
+                    Registrar Abono
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {mostrarModal && (
-        <DetalleDeudor
-          onClose={() => setMostrarModal(false)}
-        />
-      )}
+
+        {mostrarModal && ventaSeleccionada && (
+          <ModalDetalleDeuda
+            onClose={handleCloseModal}
+            cliente={deudor}
+            detalles={ventaSeleccionada.detalles}
+            totalVenta={ventaSeleccionada.totalVenta}
+            abonoInicial={ventaSeleccionada.abonoInicial}
+          />
+        )}
       </div>
     </div>
   );

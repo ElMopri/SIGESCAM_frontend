@@ -3,16 +3,11 @@ import TablaDeudores from "../../components/por_cobrar/TablaDeudores";
 import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
 import { obtenerDeudores, obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
 import "./PorCobrarAdmin.css";
-import Modal from "../../components/Modal";
-
 
 const PorCobrarAdmin = () => {
   const [clientesDeudores, setClientesDeudores] = useState([]);
-  const [busqueda, setBusqueda] = useState(""); // ⬅️ Estado del input
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [mensajeModal, setMensajeModal] = useState("");
+  const [textoBusqueda, setTextoBusqueda] = useState(""); // ✅ Nuevo estado
 
-  // Carga inicial de todos los deudores
   useEffect(() => {
     cargarDeudores();
   }, []);
@@ -24,7 +19,6 @@ const PorCobrarAdmin = () => {
         const datosFormateados = datos.map((deudor) => ({
           id: deudor.dni_deudor,
           nombre: deudor.nombre,
-          telefono: deudor.telefono,
           cedula: deudor.dni_deudor,
           monto_pendiente: parseFloat(deudor.deuda_total),
         }));
@@ -36,21 +30,19 @@ const PorCobrarAdmin = () => {
   };
 
   const buscarClientes = async () => {
-    const texto = busqueda.trim();
+    const texto = textoBusqueda.trim(); // ✅ textoBusqueda ya es string
     if (!texto) {
-      cargarDeudores(); // Si está vacío, carga todos
+      cargarDeudores();
       return;
     }
 
     try {
-      // Buscar por cédula
       const deudor = await obtenerDeudorPorDNI(texto);
       if (deudor) {
         setClientesDeudores([
           {
             id: deudor.dni_deudor,
             nombre: deudor.nombre,
-            telefono: deudor.telefono,
             cedula: deudor.dni_deudor,
             monto_pendiente: parseFloat(deudor.monto_pendiente),
           },
@@ -58,22 +50,18 @@ const PorCobrarAdmin = () => {
         return;
       }
 
-      // Si no se encuentra por cédula, buscar por nombre
       const todos = await obtenerDeudores();
       const filtrados = todos.filter((deudor) =>
         deudor.nombre.toLowerCase().includes(texto.toLowerCase())
       );
 
       if (filtrados.length === 0) {
-        // Mostrar modal si no se encuentra ningún cliente
-        setMensajeModal(`No se encontró ningún deudor con el nombre o cédula: "${texto}"`);
-        setMostrarModal(true);
+        alert(`No se encontró ningún deudor con el nombre o cédula: "${texto}"`);
       }
 
       const datosFormateados = filtrados.map((deudor) => ({
         id: deudor.dni_deudor,
         nombre: deudor.nombre,
-        telefono: deudor.telefono,
         cedula: deudor.dni_deudor,
         monto_pendiente: parseFloat(deudor.monto_pendiente),
       }));
@@ -84,17 +72,14 @@ const PorCobrarAdmin = () => {
     }
   };
 
-
   const obtenerFechaActual = () => {
     const fecha = new Date();
-    const opciones = {
+    return fecha.toLocaleDateString("es-ES", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "2-digit",
-    };
-    const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
-    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+    });
   };
 
   return (
@@ -107,21 +92,14 @@ const PorCobrarAdmin = () => {
 
         <div className="buscador-container">
           <SearchBarWaitForClick
-            placeholder="Buscar clientes por nombre o cédula..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            onSearch={buscarClientes}
+            placeholder="Buscar clientes..."
+            value={textoBusqueda}
+            onChange={(e) => setTextoBusqueda(e.target.value)}
+            onSearch={buscarClientes} // ✅ No se pasa argumento, porque usa textoBusqueda directamente
           />
         </div>
 
         <TablaDeudores clientes={clientesDeudores} />
-        <Modal
-          isOpen={mostrarModal}
-          onClose={() => setMostrarModal(false)}
-          title="Deudor no encontrado"
-          message={mensajeModal}
-          type="error"
-        />
       </div>
     </div>
   );

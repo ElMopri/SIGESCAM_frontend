@@ -38,9 +38,9 @@ const TablaDeudores = ({ clientes }) => {
     }
   };
 
-  const irADetalleCliente = (dni) => {
-    navigate(`/admin/por-cobrar/deudor/${dni}`);
-  };
+  const irADetalleCliente = (cliente) => {
+  navigate(`/admin/por-cobrar/deudor/${cliente.cedula}`, { state: { cliente } });
+};
 
   return (
     <div className="tabla-wrapper">
@@ -90,7 +90,7 @@ const TablaDeudores = ({ clientes }) => {
                   <td className="acciones col-acciones">
                     <button
                       className="btn-ver"
-                      onClick={() => irADetalleCliente(cliente.cedula)}
+                      onClick={() => irADetalleCliente(cliente)}
                       title="Ver detalles"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
