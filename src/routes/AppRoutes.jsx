@@ -76,6 +76,7 @@ export default function AppRoutes() {
         <Route path="registar-venta" element={<RegistrarVentasGestor />} />
         <Route path="ajustes" element={<AjustesGestor />} />
         <Route path="notificaciones" element={<NotificacionesGestor />} />
+        <Route path="/gestorDeVentas/por-cobrar/deudor/:clienteId" element={<DetalleDeudor />} />
       </Route>
 
       <Route path="*" element={<Inicio />} />

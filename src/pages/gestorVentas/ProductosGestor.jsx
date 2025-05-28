@@ -4,7 +4,7 @@ import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
 import FiltroModal from "../../components/FiltroModal";
 import { FaPlus, FaUndo } from "react-icons/fa";
 import { MdOutlineFilterAlt } from "react-icons/md";
-import "./ProductosGestor.css";
+import "../administrador/ProductosAdmin.css";
 
 import Modal from "../../components/Modal"
 
