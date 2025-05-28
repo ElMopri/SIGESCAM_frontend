@@ -80,6 +80,17 @@ const ProductSection = () => {
           <button className="product-search-btn" onClick={handleBuscar} disabled={cargando}>
             Buscar
           </button>
+          <button
+            className="product-search-btn"
+            style={{ backgroundColor: '#f63b3b', marginLeft: 8 }}
+            onClick={() => {
+              setBusqueda("");
+              cargarProductos();
+            }}
+            disabled={cargando && busqueda === ""}
+          >
+            Limpiar
+          </button>
         </div>
         {cargando ? (
           <div style={{ margin: "20px 0" }}>Cargando productos...</div>

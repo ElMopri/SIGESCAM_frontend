@@ -15,7 +15,7 @@ const ProductTable = ({ products }) => {
         <tbody>
           {products.length === 0 ? (
             <tr>
-              <td colSpan="3">No se encontraron productos</td>
+              <td colSpan="3">No hay productos disponibles con ese nombre.</td>
             </tr>
           ) : (
             products.map((producto) => (
