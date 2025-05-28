@@ -7,7 +7,7 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
     (sum, item) => sum + item.precio * item.cantidad,
     0
   );
-
+  console.log(detalles);
   const [abono, setAbono] = useState("");
   const [deudaRestante, setDeudaRestante] = useState(totalVenta - abonoInicial);
 

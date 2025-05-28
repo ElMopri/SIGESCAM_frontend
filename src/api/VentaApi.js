@@ -149,3 +149,14 @@ export const obtenerMargenDeGananciaDelMes = async (fecha) => {
     );
   }
 };
+
+export const obtenerDetalleVentaFiada = async (id) => {
+  try {
+    const response = await axios.get(`${API_VENTAS}/ventas-fiadas/detalles/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al obtener el detalle de la venta"
+    );
+  }
+};

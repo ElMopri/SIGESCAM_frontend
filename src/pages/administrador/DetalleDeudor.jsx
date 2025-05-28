@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
 import { obtenerVentasFiadasDeudor, obtenerDeudorPorDNI } from '../../api/DeudorApi';
-import { obtenerDetalleVenta } from '../../api/VentaApi';
+import { obtenerDetalleVentaFiada } from '../../api/VentaApi';
 import { AuthContext } from "../../context/AuthContext";
 
 const DetalleDeudor = () => {
@@ -12,7 +12,7 @@ const DetalleDeudor = () => {
   const [ventasFiadas, setVentasFiadas] = useState([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
-  const { user } = useContext(AuthContext);
+  const { user, role } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchVentasFiadas = async () => {
@@ -34,7 +34,7 @@ const DetalleDeudor = () => {
 
   const handleAbono = async (venta) => {
     try {
-      const detalle = await obtenerDetalleVenta(venta.id_venta);
+      const detalle = await obtenerDetalleVentaFiada(venta.id_venta);
       setVentaSeleccionada({
         detalles: detalle.detallesVenta || [],
         totalVenta: venta.monto_total,
@@ -66,17 +66,17 @@ const DetalleDeudor = () => {
           </div>
           <div className="modal-header-right-detalle-deuda">
             <span
-              className="close-button-detalle-deuda"
-              onClick={() => {
-                if (user?.rol === "Administrador") {
-                  navigate("/admin/por-cobrar");
-                } else if (user?.rol === "Gestor de ventas") {
-                  navigate("/gestorDeVentas/por-cobrar");
-                }
-              }}
-            >
-              &times;
-            </span>
+            className="close-button-detalle-deuda"
+            onClick={() => {
+              if (role === "Administrador") {
+                navigate("/admin/por-cobrar");
+              } else if (role === "Gestor de ventas") {
+                navigate("/gestorDeVentas/por-cobrar");
+              }
+            }}
+          >
+            &times;
+          </span>
           </div>
         </div>
 
