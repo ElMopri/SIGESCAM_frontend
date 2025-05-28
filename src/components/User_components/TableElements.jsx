@@ -17,52 +17,60 @@ const TableElements = ({ headers, data, onEdit, onView, onToggleStatus }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((user, index) => (
-            <tr key={index}>
-              <td className="user-cell">
-                <div className="user-name-container">
-                  <button
-                    onClick={() => onEdit(user)}
-                    className="boton-icono editar"
-                    aria-label="Editar usuario"
-                  >
-                    <img
-                      src={iconEditar}
-                      alt="Editar"
-                      className="icono-accion"
-                    />
-                  </button>
-                  <span className="user-name">{user.nombre}</span>
-                </div>
-              </td>
-              <td>{user.rol}</td>
-
-              <td className="action-cell">
-                <div className="actions-container">
-                  <FaEye
-                    className="view-icon"
-                    title="Ver detalles"
-                    onClick={() => onView(user)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              </td>
-
-              <td>
-                <span
-                  className={`estado ${
-                    user.estado === "Habilitado"
-                      ? "habilitado"
-                      : "deshabilitado"
-                  }`}
-                  onClick={() => onToggleStatus(user.dni, user.estado === "Habilitado" ? false : true)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {user.estado}
-                </span>
+          {data.length === 0 ? (
+            <tr>
+              <td colSpan={headers.length + 2} style={{ textAlign: 'center', fontStyle: 'italic', color: '#888' }}>
+                No se encontró ningún usuario con ese nombre.
               </td>
             </tr>
-          ))}
+          ) : (
+            data.map((user, index) => (
+              <tr key={index}>
+                <td className="user-cell">
+                  <div className="user-name-container">
+                    <button
+                      onClick={() => onEdit(user)}
+                      className="boton-icono editar"
+                      aria-label="Editar usuario"
+                    >
+                      <img
+                        src={iconEditar}
+                        alt="Editar"
+                        className="icono-accion"
+                      />
+                    </button>
+                    <span className="user-name">{user.nombre}</span>
+                  </div>
+                </td>
+                <td>{user.rol}</td>
+
+                <td className="action-cell">
+                  <div className="actions-container">
+                    <FaEye
+                      className="view-icon"
+                      title="Ver detalles"
+                      onClick={() => onView(user)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                </td>
+
+                <td>
+                  <span
+                    className={`estado ${
+                      user.estado === "Habilitado"
+                        ? "habilitado"
+                        : "deshabilitado"
+                    }`}
+                    onClick={() => onToggleStatus(user.dni, user.estado === "Habilitado" ? false : true)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {user.estado}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
