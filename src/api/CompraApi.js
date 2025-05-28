@@ -29,11 +29,8 @@ export const filtrarComprasPorFecha = async (fechaInicio, fechaFin) => {
     });
     return response.data;
   } catch (error) {
-    console.error(
-      "Error al filtrar por fecha:",
-      error.response?.data?.message || error.message
-    );
     throw new Error(
+      error.response?.data?.error ||
       error.response?.data?.message || "Error al filtrar por fecha"
     );
   }
@@ -52,6 +49,7 @@ export const filtrarComprasPorProducto = async (nombre) => {
       error.response?.data?.message || error.message
     );
     throw new Error(
+      error.response?.data?.error ||
       error.response?.data?.message || "Error al filtrar por producto"
     );
   }

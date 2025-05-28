@@ -7,7 +7,11 @@ import {
 } from "../../api/CompraApi";
 import "./Estadisticas.css";
 import Modal from "../../components/Modal";
-import { obtenerHistorialMargenesDeGanancia } from "../../api/VentaApi";
+import {
+  filtrarVentasPorFecha,
+  obtenerHistorialMargenesDeGanancia,
+  obtenerHistorialVentas,
+} from "../../api/VentaApi";
 const obtenerAnioActual = () => new Date().getFullYear();
 
 const datosEntradasEjemplo = [
@@ -44,7 +48,6 @@ const Estadisticas = () => {
   const [filtroPorEntradas, setFiltroPorEntradas] = useState("fecha");
   const [fechaInicioEntradas, setFechaInicioEntradas] = useState("");
   const [fechaFinEntradas, setFechaFinEntradas] = useState("");
-  const [productoEntradas, setProductoEntradas] = useState("");
 
   const [filtroPorSalidas, setFiltroPorSalidas] = useState("fecha");
   const [fechaInicioSalidas, setFechaInicioSalidas] = useState("");
@@ -59,6 +62,10 @@ const Estadisticas = () => {
   const [pestañaActiva, setPestañaActiva] = useState("entradas");
   const [compras, setCompras] = useState([]);
   const [total, setTotal] = useState(0);
+
+  const [ventas, setVentas] = useState([]);
+  const [totalVentas, setTotalVentas] = useState(0);
+
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     title: "",
@@ -66,7 +73,6 @@ const Estadisticas = () => {
     type: "error",
   });
 
-  // Cargar márgenes de ganancia desde la API cuando cambia el año
   useEffect(() => {
     const cargarMargenes = async () => {
       try {
@@ -115,7 +121,7 @@ const Estadisticas = () => {
   };
 
   useEffect(() => {
-    const mostrarHistorial = async () => {
+    const mostrarHistorialSalidas = async () => {
       try {
         const data = await obtenerHistorialCompras();
         setCompras(data.compras);
@@ -127,11 +133,27 @@ const Estadisticas = () => {
         console.error("Error al obtener el historial:", error);
       }
     };
-    mostrarHistorial();
+    mostrarHistorialSalidas();
+  }, []);
+
+  useEffect(() => {
+    const mostrarHistorialEntradas = async () => {
+      try {
+        const data = await obtenerHistorialVentas();
+        setVentas(data.ventas);
+        setTotalVentas(data.totalGeneral);
+      } catch (error) {
+        mostrarError(
+          error.message || "Error al obtener el historial de compras"
+        );
+      }
+    };
+    mostrarHistorialEntradas();
   }, []);
 
   // Función para manejar el filtrado por fecha
-  const filtrarPorFecha = async () => {
+
+  const filtrarPorFechaSalidas = async () => {
     if (fechaInicioSalidas && fechaFinSalidas) {
       try {
         const data = await filtrarComprasPorFecha(
@@ -150,6 +172,35 @@ const Estadisticas = () => {
         const data = await obtenerHistorialCompras();
         setCompras(data.compras);
         setTotal(data.totalGeneral);
+      } catch (error) {
+        mostrarError(
+          error.message || "Error al obtener el historial de compras"
+        );
+      }
+    }
+  };
+
+  // Filtro por fecha para las entradas
+
+  const filtrarPorFechaEntradas = async () => {
+    if (fechaInicioEntradas && fechaFinEntradas) {
+      try {
+        const data = await filtrarVentasPorFecha(
+          fechaInicioEntradas,
+          fechaFinEntradas
+        );
+        setVentas(data.ventas);
+        setTotalVentas(data.totalGeneral);
+      } catch (error) {
+        mostrarError(error.message || "Error al filtrar por fecha");
+        setFechaInicioEntradas("");
+        setFechaFinEntradas("");
+      }
+    } else {
+      try {
+        const data = await obtenerHistorialVentas();
+        setVentas(data.ventas);
+        setTotalVentas(data.totalGeneral);
       } catch (error) {
         mostrarError(
           error.message || "Error al obtener el historial de compras"
@@ -182,10 +233,12 @@ const Estadisticas = () => {
     }
   };
 
+  // Filtros del historico de salidas
+
   useEffect(() => {
     if (filtroPorSalidas === "fecha") {
       setProductoSalidas("");
-      filtrarPorFecha();
+      filtrarPorFechaSalidas();
     } else if (filtroPorSalidas === "producto") {
       setFechaInicioSalidas("");
       setFechaFinSalidas("");
@@ -193,35 +246,23 @@ const Estadisticas = () => {
     }
   }, [filtroPorSalidas, fechaInicioSalidas, fechaFinSalidas, productoSalidas]);
 
-  const entradasFiltradas = entradas.filter((item) => {
-    if (filtroPorEntradas === "producto" && productoEntradas) {
-      return item.producto.nombre
-        .toLowerCase()
-        .includes(productoEntradas.toLowerCase());
+  useEffect(() => {
+    if (filtroPorEntradas === "fecha") {
+      console.log("Filtrando por fecha de entradas");
+      filtrarPorFechaEntradas();
     }
-    if (
-      filtroPorEntradas === "fecha" &&
-      fechaInicioEntradas &&
-      fechaFinEntradas
-    ) {
-      return (
-        item.fecha_entrada >= fechaInicioEntradas &&
-        item.fecha_entrada <= fechaFinEntradas
-      );
-    }
-    return true;
-  });
+  }, [filtroPorEntradas, fechaInicioEntradas, fechaFinEntradas]);
 
   const obtenerMesAnioActual = () => {
-  const fecha = new Date();
-  const opciones = { month: "long", year: "numeric" };
-  const mesAnio = fecha.toLocaleDateString("es-ES", opciones);
+    const fecha = new Date();
+    const opciones = { month: "long", year: "numeric" };
+    const mesAnio = fecha.toLocaleDateString("es-ES", opciones);
 
-  // Capitaliza la primera letra del mes y elimina la preposición "de"
-  const [mes, anio] = mesAnio.replace(" de ", " ").split(" ");
-  const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
-  return `${mesCapitalizado} ${anio}`;
-};
+    // Capitaliza la primera letra del mes y elimina la preposición "de"
+    const [mes, anio] = mesAnio.replace(" de ", " ").split(" ");
+    const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
+    return `${mesCapitalizado} ${anio}`;
+  };
 
   return (
     <div className="estadisticas-container">
@@ -345,77 +386,51 @@ const Estadisticas = () => {
                 onChange={(e) => setFiltroPorEntradas(e.target.value)}
               >
                 <option value="fecha">Fecha</option>
-                <option value="producto">Producto</option>
               </select>
 
-              {filtroPorEntradas === "fecha" ? (
-                <div className="fecha-inputs">
-                  <input
-                    type="date"
-                    value={fechaInicioEntradas}
-                    onChange={(e) => setFechaInicioEntradas(e.target.value)}
-                  />
-                  <input
-                    type="date"
-                    value={fechaFinEntradas}
-                    onChange={(e) => setFechaFinEntradas(e.target.value)}
-                  />
-                </div>
-              ) : (
+              <div className="fecha-inputs">
                 <input
-                  type="text"
-                  placeholder="Buscar producto..."
-                  className="busqueda-input"
-                  value={productoEntradas}
-                  onChange={(e) => setProductoEntradas(e.target.value)}
+                  type="date"
+                  value={fechaInicioEntradas}
+                  onChange={(e) => setFechaInicioEntradas(e.target.value)}
                 />
-              )}
+                <input
+                  type="date"
+                  value={fechaFinEntradas}
+                  onChange={(e) => setFechaFinEntradas(e.target.value)}
+                />
+              </div>
             </div>
             <div className="tabla-container">
               <table className="tabla-estadisticas">
                 <thead>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Cantidad</th>
-                    <th>Precio (U)</th>
-                    <th>Fecha Entrada</th>
-                    <th>Total de la entrada</th>
-                    <th>Estado</th>
-                    <th>Abono</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {entradas.length === 0 ? (
+                  {ventas.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="no-data-message">
                         No hay entradas registradas.
                       </td>
                     </tr>
-                  ) : entradasFiltradas.length === 0 ? (
+                  ) : ventas.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="no-data-message">
-                        No hay entradas que coincidan con los filtros aplicados.
+                        No hay entradas durante este periodo de tiempo.
                       </td>
                     </tr>
                   ) : (
-                    entradasFiltradas.map((item, idx) => (
+                    ventas.map((item, idx) => (
                       <tr
                         key={idx}
                         className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
+                        value={item.id_venta}
                       >
-                        <td>{item.producto.nombre}</td>
-                        <td>{item.cantidad}</td>
-                        <td>${item.precio.toLocaleString()}</td>
-                        <td>{item.fecha_entrada.split("T")[0]}</td>
-                        <td>${item.total_entrada.toLocaleString()}</td>
-                        <td>
-                          <span
-                            className={`estado-badge estado-${item.estado.toLowerCase()}`}
-                          >
-                            {item.estado}
-                          </span>
-                        </td>
-                        <td>${item.abono?.toLocaleString() || "0"}</td>
+                        <td>{item.fecha_venta.split("T")[0]}</td>
+                        <td>${item.total.toLocaleString()}</td>
                       </tr>
                     ))
                   )}
@@ -426,7 +441,7 @@ const Estadisticas = () => {
               <span>Total:</span>
               <input
                 type="text"
-                value={`$ ${totalEntradas.toLocaleString()}`}
+                value={`$ ${totalVentas.toLocaleString()}`}
                 readOnly
                 className="total-input"
               />
@@ -440,7 +455,9 @@ const Estadisticas = () => {
         <div className="widget-margen-negocio">
           <div className="header-estadisticas">
             <span>Análisis de Entradas / Salidas</span>
-            <span className="mes-ano-estadisticas" style={{ color: "#3182ce" }}>{obtenerMesAnioActual()}</span>
+            <span className="mes-ano-estadisticas" style={{ color: "#3182ce" }}>
+              {obtenerMesAnioActual()}
+            </span>
             <IoWalletOutline className="wallet-icon" />
           </div>
           <div className="campo">
