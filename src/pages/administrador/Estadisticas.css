@@ -450,6 +450,25 @@
   font-weight: 600;
 }
 
+.btn-revertir {
+  border: 2px solid #f63b3b;
+  background-color: white;
+  color: #f63b3b;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-revertir:hover {
+  background-color: #f63b3b;
+  color: white;
+}
+
 @media (max-width: 1024px) {
   .secciones-inferiores {
     flex-direction: column;
