@@ -212,6 +212,17 @@ const Estadisticas = () => {
     return true;
   });
 
+  const obtenerMesAnioActual = () => {
+  const fecha = new Date();
+  const opciones = { month: "long", year: "numeric" };
+  const mesAnio = fecha.toLocaleDateString("es-ES", opciones);
+
+  // Capitaliza la primera letra del mes y elimina la preposición "de"
+  const [mes, anio] = mesAnio.replace(" de ", " ").split(" ");
+  const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
+  return `${mesCapitalizado} ${anio}`;
+};
+
   return (
     <div className="estadisticas-container">
       <Modal
@@ -429,6 +440,7 @@ const Estadisticas = () => {
         <div className="widget-margen-negocio">
           <div className="header-estadisticas">
             <span>Análisis de Entradas / Salidas</span>
+            <span className="mes-ano-estadisticas" style={{ color: "#3182ce" }}>{obtenerMesAnioActual()}</span>
             <IoWalletOutline className="wallet-icon" />
           </div>
           <div className="campo">

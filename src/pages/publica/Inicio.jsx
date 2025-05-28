@@ -40,7 +40,7 @@ const Inicio = () => {
       <ProductSection />
 
       <a
-        href="https://wa.me/573001234567"
+        href="https://wa.me/573212283623?text=Hola%2C%20quiero%20más%20información%20sobre%20sus%20productos"
         target="_blank"
         rel="noopener noreferrer"
         className="boton-whatsapp"

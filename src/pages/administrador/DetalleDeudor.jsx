@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
-import { obtenerVentasFiadasDeudor } from '../../api/DeudorApi';
+import { obtenerVentasFiadasDeudor, obtenerDeudorPorDNI } from '../../api/DeudorApi';
 import { obtenerDetalleVenta } from '../../api/VentaApi';
 
 const DetalleDeudor = () => {
@@ -67,7 +67,7 @@ const DetalleDeudor = () => {
           </div>
         </div>
 
-        <div className="modal-title">Detalle de la Deuda</div>
+        <div className="modal-title">Detalle de Ventas Fiadas</div>
 
         <table className="tabla-deuda">
           <thead>
