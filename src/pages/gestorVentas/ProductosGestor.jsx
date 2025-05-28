@@ -167,7 +167,9 @@ const ProductosGestor = () => {
             Revertir Filtros <FaUndo style={{ marginLeft: "4px" }} />
           </button>
         </div>
-        <TablaProductos columnas={columnasAdmin} datos={datos} />
+        <div className="tabla-productos-gestor">
+          <TablaProductos columnas={columnasAdmin} datos={datos} />
+        </div>
       </div>
 
       {mostrarFiltroModal && (
