@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from "react";
+import { obtenerPorId } from "../api/UsuarioApi";
 
 export const AuthContext = createContext();
 
@@ -14,7 +15,18 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
 
-  const checkAuth = useCallback(() => {
+  // Función para actualizar el usuario con datos frescos del backend
+  const actualizarUsuarioDesdeBackend = useCallback(async (dni) => {
+    try {
+      const usuarioActualizado = await obtenerPorId(dni);
+      setUser(usuarioActualizado);
+      localStorage.setItem("user", JSON.stringify(usuarioActualizado));
+    } catch (error) {
+      console.error('Error al actualizar usuario desde backend:', error);
+    }
+  }, []);
+
+  const checkAuth = useCallback(async () => {
     const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
     if (!isLoggedIn) {
       clearAuth();
@@ -25,13 +37,19 @@ export const AuthProvider = ({ children }) => {
     const storedRole = localStorage.getItem("role");
 
     if (storedUser && storedRole) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
       setRole(storedRole);
+      
+      // Actualizar datos del usuario desde el backend
+      if (parsedUser?.dni) {
+        await actualizarUsuarioDesdeBackend(parsedUser.dni);
+      }
     } else {
       clearAuth();
     }
     setLoading(false);
-  }, []);
+  }, [actualizarUsuarioDesdeBackend]);
 
   const clearAuth = useCallback(() => {
     setUser(null);
@@ -61,12 +79,17 @@ export const AuthProvider = ({ children }) => {
     }
   }, [role]);
 
-  const login = (userData, userRole) => {
+  const login = async (userData, userRole) => {
     setUser(userData);
     setRole(userRole);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("role", userRole);
     sessionStorage.setItem("isLoggedIn", "true");
+    
+    // Actualizar datos del usuario desde el backend
+    if (userData?.dni) {
+      await actualizarUsuarioDesdeBackend(userData.dni);
+    }
   };
 
   const logout = () => {

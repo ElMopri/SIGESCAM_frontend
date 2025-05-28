@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { editarCorreo, obtenerPorId } from "../api/UsuarioApi";
+import { editarCorreo, obtenerPorId, subirFotoPerfil } from "../api/UsuarioApi";
 import Modal from "./Modal";
 import "./AjustesBase.css";
 import { AuthContext } from "../context/AuthContext";
@@ -26,6 +26,11 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
     }, {})
   );
 
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
+  const [errorImagen, setErrorImagen] = useState("");
+  const [urlImagen, setUrlImagen] = useState(imagenPerfil);
+  const fileInputRef = React.useRef();
+
   useEffect(() => {
     const cargarUsuario = async () => {
       if (user?.dni) {
@@ -33,6 +38,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
           const usuario = await obtenerPorId(user.dni);
           setNombre(usuario.nombre || "Nombre no disponible");
           setCorreo(usuario.email || "Correo no disponible");
+          setUrlImagen(usuario.url_imagen || "/usericon.png");
         } catch (error) {
           console.error("Error al cargar usuario:", error);
           setModalConfig({
@@ -135,6 +141,49 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
     }));
   };
 
+  const handleClickEditarFoto = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const handleArchivoSeleccionado = async (e) => {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+    setSubiendoImagen(true);
+    setErrorImagen("");
+    try {
+      // Subir la imagen
+      const res = await subirFotoPerfil(user.dni, archivo);
+      console.log('Respuesta de subirFotoPerfil:', res);
+      
+      if (!res.url_imagen) {
+        throw new Error('No se recibió la URL de la imagen del servidor');
+      }
+
+      // Actualizar la URL en la interfaz
+      setUrlImagen(res.url_imagen);
+      
+      // Actualizar el usuario en el contexto y localStorage
+      const usuarioActualizado = {
+        ...user, // Mantener todos los datos actuales del usuario
+        url_imagen: res.url_imagen // Actualizar solo la URL de la imagen
+      };
+      
+      console.log('Usuario actualizado que se guardará:', usuarioActualizado);
+      
+      // Actualizar el contexto
+      setUser(usuarioActualizado);
+      
+      // Actualizar localStorage
+      localStorage.setItem('user', JSON.stringify(usuarioActualizado));
+      
+    } catch (err) {
+      console.error('Error completo:', err);
+      setErrorImagen(err.message || "Error al subir la imagen");
+    } finally {
+      setSubiendoImagen(false);
+    }
+  };
+
   if (!user) {
     return <div>No hay un perfil con sesión activa</div>;
   }
@@ -146,17 +195,38 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
         <h2>Cuenta</h2>
         <div className="account-section">
           <div className="profile-container">
-            <img
-              src={
-                imagenPerfil ||
-                "https://randomuser.me/api/portraits/women/65.jpg"
-              }
-              alt="Perfil"
-              className="profile-pic"
-            />
-            <span className="profile-icon">
+            {loading ? (
+              <img
+                src="/usericon.png"
+                alt="Usuario genérico"
+                className="profile-pic"
+              />
+            ) : urlImagen ? (
+              <img
+                src={urlImagen}
+                alt="Perfil"
+                className="profile-pic"
+                onError={e => { e.target.onerror = null; e.target.src = "/usericon.png"; }}
+              />
+            ) : (
+              <img
+                src="/usericon.png"
+                alt="Usuario genérico"
+                className="profile-pic"
+              />
+            )}
+            <span className="profile-icon" onClick={handleClickEditarFoto} style={{ cursor: 'pointer' }}>
               <img src="/public/create.png" alt="Editar perfil" />
             </span>
+            <input
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              ref={fileInputRef}
+              onChange={handleArchivoSeleccionado}
+            />
+            {subiendoImagen && <span className="cargando-imagen">Subiendo imagen...</span>}
+            {errorImagen && <span className="error-imagen">{errorImagen}</span>}
           </div>
           <div className="input-fields">
             <div className="input-group">
