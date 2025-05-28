@@ -18,6 +18,21 @@
   width: 100%;
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.cerrar-icono {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+  color: #ff4444;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cerrar-icono:hover {
+  transform: scale(1.1);
 }
 
 .modal-content h2 {
@@ -27,6 +42,21 @@
   font-size: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid #f0f0f0;
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.user-profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #68baf0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .user-details {
@@ -111,6 +141,11 @@
 
   .detail-group label {
     width: 100%;
+  }
+
+  .user-profile-pic {
+    width: 100px;
+    height: 100px;
   }
 
   .btn-cerrar {
