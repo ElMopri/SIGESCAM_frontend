@@ -354,9 +354,21 @@ const Estadisticas = () => {
                       >
                         <td>{item.producto.nombre}</td>
                         <td>{item.cantidad_agregar}</td>
-                        <td>${item.precio.toLocaleString()}</td>
+                        <td>
+                          $
+                          {Number(item.precio).toLocaleString("es-CO", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </td>
                         <td>{item.fecha_compra.split("T")[0]}</td>
-                        <td>${item.total_compra}</td>
+                        <td>
+                          $
+                          {Number(item.total_compra).toLocaleString("es-CO", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </td>
                       </tr>
                     ))
                   )}
@@ -406,7 +418,9 @@ const Estadisticas = () => {
                 <thead>
                   <tr>
                     <th>Fecha</th>
-                    <th>Total</th>
+                    <th>Total de venta</th>
+                    <th>Estado</th>
+                    <th>Total pagado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -430,7 +444,23 @@ const Estadisticas = () => {
                         value={item.id_venta}
                       >
                         <td>{item.fecha_venta.split("T")[0]}</td>
-                        <td>${item.total.toLocaleString()}</td>
+                        <td>
+                          $
+                          {Number(item.total).toLocaleString("es-CO", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}
+                        </td>
+                        <td>{item.es_fiado ? "Fiado" : "Pagado"}</td>
+                        <td>
+                          {item.es_fiado
+                            ? "$" + item.totalAbonos.toLocaleString()
+                            : "$" +
+                              Number(item.total).toLocaleString("es-CO", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              })}
+                        </td>
                       </tr>
                     ))
                   )}
@@ -438,7 +468,7 @@ const Estadisticas = () => {
               </table>
             </div>
             <div className="total-container">
-              <span>Total:</span>
+              <span>Total Entradas:</span>
               <input
                 type="text"
                 value={`$ ${totalVentas.toLocaleString()}`}
