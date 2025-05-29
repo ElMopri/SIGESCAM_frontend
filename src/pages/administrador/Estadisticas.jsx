@@ -551,36 +551,38 @@ const Estadisticas = () => {
         <div className="widget-margen-negocio">
           <div className="header-estadisticas">
             <span>Análisis de Entradas / Salidas</span>
-            <span className="mes-ano-estadisticas" style={{ color: "#3182ce" }}>
+            <span className="mes-ano-estadisticas">
               {obtenerMesAnioActual()}
             </span>
             <IoWalletOutline className="wallet-icon" />
           </div>
-          <div className="campo">
-            <label>Entradas:</label>
-            <input
-              className="campo-texto"
-              type="text"
-              value={`$ ${entradasMes.toLocaleString()}`}
-              readOnly
-            />
-          </div>
-          <div className="campo">
-            <label>Salidas:</label>
-            <input
-              className="campo-texto"
-              type="text"
-              value={`$ ${salidasMes.toLocaleString()}`}
-              readOnly
-            />
-          </div>
-          <div className="campo margen">
-            <label>Margen de Negocio:</label>
-            <span
-              className={margenMes >= 0 ? "valor-positivo" : "valor-negativo"}
-            >
-              ${margenMes.toLocaleString()}
-            </span>
+          <div className="contenido-widget">
+            <div className="campo">
+              <label>Entradas:</label>
+              <input
+                className="campo-texto"
+                type="text"
+                value={`$ ${entradasMes.toLocaleString()}`}
+                readOnly
+              />
+            </div>
+            <div className="campo">
+              <label>Salidas:</label>
+              <input
+                className="campo-texto"
+                type="text"
+                value={`$ ${salidasMes.toLocaleString()}`}
+                readOnly
+              />
+            </div>
+            <div className="campo margen">
+              <label>Margen de Negocio:</label>
+              <span
+                className={margenMes >= 0 ? "valor-positivo" : "valor-negativo"}
+              >
+                ${margenMes.toLocaleString()}
+              </span>
+            </div>
           </div>
         </div>
 
