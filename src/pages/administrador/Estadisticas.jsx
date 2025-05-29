@@ -63,9 +63,6 @@ const Estadisticas = () => {
         const data = await obtenerHistorialMargenesDeGanancia(anioFiltro);
         setDatosMargenes(data.historial || []);
       } catch (error) {
-        mostrarError(
-          error.message || "Error al obtener el histórico de márgenes"
-        );
         setDatosMargenes([]);
       }
     };

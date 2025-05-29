@@ -196,7 +196,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
         <div className="account-section">
           <div className="profile-container">
             {loading ? (
-              <img
+            <img
                 src="/usericon.png"
                 alt="Usuario genérico"
                 className="profile-pic"
@@ -204,8 +204,8 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
             ) : urlImagen ? (
               <img
                 src={urlImagen}
-                alt="Perfil"
-                className="profile-pic"
+              alt="Perfil"
+              className="profile-pic"
                 onError={e => { e.target.onerror = null; e.target.src = "/usericon.png"; }}
               />
             ) : (
@@ -213,7 +213,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
                 src="/usericon.png"
                 alt="Usuario genérico"
                 className="profile-pic"
-              />
+            />
             )}
             <span className="profile-icon" onClick={handleClickEditarFoto} style={{ cursor: 'pointer' }}>
               <img src="/public/create.png" alt="Editar perfil" />

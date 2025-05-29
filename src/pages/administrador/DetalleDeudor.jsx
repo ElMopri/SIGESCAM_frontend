@@ -114,6 +114,15 @@ const DetalleDeudor = () => {
             detalles={ventaSeleccionada.detalles}
             totalVenta={ventaSeleccionada.totalVenta}
             abonoInicial={ventaSeleccionada.abonoInicial}
+            ventaId={ventaSeleccionada.venta.id_venta}
+            onPagoGuardado={() => {
+              // Refrescar la lista de ventas fiadas después del abono
+              const reloadVentasFiadas = async () => {
+                const data = await obtenerVentasFiadasDeudor(clienteId);
+                setVentasFiadas(data?.ventas || []);
+              };
+              reloadVentasFiadas();
+            }}
           />
         )}
       </div>

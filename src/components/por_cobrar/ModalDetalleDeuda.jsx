@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import "./ModalDetalleDeuda.css";
 
-const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicial }) => {
+const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicial, ventaId, onPagoGuardado }) => {
   const totalOriginal = detalles.reduce(
     (sum, item) => sum + item.precio * item.cantidad,
     0
@@ -23,7 +23,7 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
     return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
   };
 
-  const handleGuardar = () => {
+  const handleGuardar = async () => {
     const valorAbono = parseInt(abono.replace(/\D/g, ""), 10); // limpia $ y puntos
 
     if (isNaN(valorAbono) || valorAbono < 0) {
@@ -36,15 +36,34 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
       return;
     }
 
-    const nuevaDeuda = deudaRestante - valorAbono;
-    setDeudaRestante(nuevaDeuda);
+    try {
+      const response = await fetch(`/ventas-fiadas/${ventaId}/abono`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ monto: valorAbono }),
+      });
 
-    console.log("Detalles actualizados:", detalles);
-    console.log("Abono registrado:", valorAbono);
-    console.log("Nueva deuda:", nuevaDeuda);
+      if (response.ok) {
+        alert("Abono registrado exitosamente.");
+        setDeudaRestante((prev) => prev - valorAbono);
 
-    onClose(); // cerrar el modal
+        if (typeof onPagoGuardado === "function") {
+          onPagoGuardado(); // actualiza la tabla en el padre
+        }
+
+        onClose(); // cierra el modal
+      } else {
+        const error = await response.json();
+        alert("Error al registrar abono: " + (error.message || "Intenta nuevamente."));
+      }
+    } catch (error) {
+      console.error("Error al guardar el abono:", error);
+      alert("Hubo un problema al registrar el abono.");
+    }
   };
+
 
   return (
     <div className="modal-deuda-overlay">
@@ -77,10 +96,10 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
           </thead>
           <tbody>
             {detalles.map((item, index) => (
-              <tr key={index} className={index % 2 === 0 ? "fila-par-detalle-deuda" : "fila-impar-detalle-deuda"}>
-                <td>{item.producto.nombre}</td>
+              <tr key={index}>
+                <td>{item.nombre_producto}</td>
                 <td>{item.cantidad}</td>
-                <td>${item.precio.toLocaleString()}</td>
+                <td>${item.precio?.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>

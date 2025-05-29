@@ -1,15 +1,16 @@
 import React, { useState, useContext } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaTimes } from "react-icons/fa";
 import "./ModalRegistrarVenta.css";
 import {
   agregarProductoAVentaTemporal,
   registrarVenta,
 } from "../../api/VentaApi.js";
-import { autocompletarCampos } from "../../api/ProductoApi.js";
+import { autocompletarCampos, obtenerProductos } from "../../api/ProductoApi.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
+import Modal from "../Modal";
 
-const ModalRegistrarVenta = ({ onClose }) => {
+const ModalRegistrarVenta = ({ onClose, onVentaRegistrada }) => {
   const [deudorExistente, setDeudorExistente] = useState(false);
   const { user, setUser } = useContext(AuthContext);
   const [isPendingPayment, setIsPendingPayment] = useState(false);
@@ -33,6 +34,20 @@ const ModalRegistrarVenta = ({ onClose }) => {
 
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
+
+  // Estados para los modales
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    type: "",
+    title: "",
+    message: "",
+  });
+
+  // Estado para el modal de confirmación de eliminación
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState({
+    isOpen: false,
+    productId: null,
+  });
 
   const handleNombreProductoChange = async (e) => {
     const valor = e.target.value;
@@ -59,8 +74,15 @@ const ModalRegistrarVenta = ({ onClose }) => {
   };
 
   const handleAgregarProducto = async () => {
-    if (!nombreProducto || !cantidad)
-      return alert("Todos los campos son obligatorios");
+    if (!nombreProducto || !cantidad) {
+      setModalState({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: "Todos los campos son obligatorios",
+      });
+      return;
+    }
 
     const cantidadNueva = parseInt(cantidad);
     const productoExistente = productos.find(
@@ -91,13 +113,24 @@ const ModalRegistrarVenta = ({ onClose }) => {
       setNombreProducto("");
       setCantidad("");
     } catch (error) {
-      alert(error.message);
+      setModalState({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: error.message,
+      });
     }
   };
 
   const handleRegistrarVenta = async () => {
     if (productos.length === 0) {
-      return alert("Debe agregar al menos un producto");
+      setModalState({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: "Debe agregar al menos un producto",
+      });
+      return;
     }
     const venta = {
       productos,
@@ -115,15 +148,46 @@ const ModalRegistrarVenta = ({ onClose }) => {
 
     try {
       await registrarVenta(venta);
-      alert("Venta registrada con éxito");
-      onClose();
+      
+      // Obtener productos actualizados
+      const productosActualizados = await obtenerProductos();
+      
+      setModalState({
+        isOpen: true,
+        type: "success",
+        title: "Venta Registrada",
+        message: "La venta se ha registrado exitosamente",
+      });
+
+      // Notificar al componente padre que se actualizaron los productos
+      if (onVentaRegistrada) {
+        onVentaRegistrada(productosActualizados);
+      }
+
+      // Esperamos un momento antes de cerrar para que el usuario vea el mensaje de éxito
+      setTimeout(() => {
+        onClose();
+      }, 1500);
     } catch (error) {
-      alert(error.message);
+      setModalState({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: error.message,
+      });
     }
+  };
+
+  const handleConfirmDelete = (id) => {
+    setConfirmDeleteModal({
+      isOpen: true,
+      productId: id,
+    });
   };
 
   const eliminarProducto = (id) => {
     setProductos(productos.filter((producto) => producto.idProducto !== id));
+    setConfirmDeleteModal({ isOpen: false, productId: null });
   };
 
   const calcularTotal = () => {
@@ -139,13 +203,7 @@ const ModalRegistrarVenta = ({ onClose }) => {
       <div className="modal-venta-container" role="dialog" aria-modal="true">
         <div className="modal-venta-header">
           <h2 className="modal-venta-title">Registrar Venta</h2>
-          <button
-            className="modal-venta-close-btn"
-            onClick={onClose}
-            aria-label="Cerrar modal"
-          >
-            &times;
-          </button>
+          <FaTimes className="cerrar-icono" onClick={onClose} />
         </div>
 
         <div className="modal-venta-body">
@@ -231,7 +289,7 @@ const ModalRegistrarVenta = ({ onClose }) => {
                     <td className="venta-col-acciones">
                       <button
                         className="venta-btn-eliminar"
-                        onClick={() => eliminarProducto(producto.idProducto)}
+                        onClick={() => handleConfirmDelete(producto.idProducto)}
                         aria-label="Eliminar producto"
                       >
                         <FaTrash />
@@ -326,6 +384,27 @@ const ModalRegistrarVenta = ({ onClose }) => {
           </button>
         </div>
       </div>
+
+      {/* Modal para mensajes de error y éxito */}
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+      />
+
+      {/* Modal de confirmación para eliminar producto */}
+      <Modal
+        isOpen={confirmDeleteModal.isOpen}
+        onClose={() => setConfirmDeleteModal({ ...confirmDeleteModal, isOpen: false })}
+        onConfirm={() => eliminarProducto(confirmDeleteModal.productId)}
+        title="Confirmar eliminación"
+        message="¿Está seguro que desea eliminar este producto de la venta?"
+        type="confirm"
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
     </>
   );
 };

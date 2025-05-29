@@ -74,12 +74,13 @@ const PorCobrarAdmin = () => {
 
   const obtenerFechaActual = () => {
     const fecha = new Date();
-    return fecha.toLocaleDateString("es-ES", {
+    const fechaFormateada = fecha.toLocaleDateString("es-ES", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "2-digit",
     });
+    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
   };
 
   return (

@@ -27,7 +27,7 @@ const ProductosAdmin = () => {
   const [dni, setDni] = useState(
     user?.dni || "No hay un perfil con sesión activa"
   );
-
+  const [bajoStock, setBajoStock] = useState(false);
   const [mostrarModalCategorias, setMostrarModalCategorias] = useState(false);
   const [mostrarFiltroModal, setMostrarFiltroModal] = useState(false);
   const [mostrarModalAgregarProducto, setMostrarModalAgregarProducto] =
@@ -70,8 +70,7 @@ const ProductosAdmin = () => {
       } catch (error) {
         console.error("Error al obtener los productos:", error);
         mostrarError(
-          `Error al obtener los productos: ${
-            error.message || "Ocurrió un problema inesperado"
+          `Error al obtener los productos: ${error.message || "Ocurrió un problema inesperado"
           }`
         );
       }
@@ -90,8 +89,7 @@ const ProductosAdmin = () => {
       } catch (error) {
         console.error("Error al obtener las categorías:", error);
         mostrarError(
-          `Error al obtener las categorías: ${
-            error.message || "Ocurrió un problema inesperado"
+          `Error al obtener las categorías: ${error.message || "Ocurrió un problema inesperado"
           }`
         );
       }
@@ -101,63 +99,75 @@ const ProductosAdmin = () => {
   }, []);
 
   React.useEffect(() => {
-    const fetchProductosFiltrados = async () => {
-      try {
-        if (filtroNombre) {
-          const productos = await buscarProductosPorNombreParecido(
-            filtroNombre
-          );
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
-        } else if (
-          (filtrosAvanzados.cantidad !== undefined &&
-            filtrosAvanzados.cantidad !== "") ||
-          (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
-          (filtrosAvanzados.precio !== undefined &&
-            filtrosAvanzados.precio !== "")
-        ) {
-          const productos = await filtrarProductos(
-            filtrosAvanzados.cantidad || null,
-            filtrosAvanzados.categoria || null,
-            filtrosAvanzados.precio || null
-          );
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
-        } else {
-          const productos = await obtenerProductos();
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }));
-          setDatos(datosTransformados);
-        }
-      } catch (error) {
-        console.error("Error al filtrar los productos:", error);
-        mostrarError(
-          `Error al filtrar los productos: ${
-            error.message || "Ocurrió un problema inesperado"
-          }`
+  const fetchProductosFiltrados = async () => {
+    try {
+      if (bajoStock) {
+        // Filtrar productos con cantidad <= 3
+        const productos = await obtenerProductos();
+        const productosBajoStock = productos.filter(p => p.cantidad <= 3);
+        const datosTransformados = productosBajoStock.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else if (filtroNombre) {
+        const productos = await buscarProductosPorNombreParecido(
+          filtroNombre
         );
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else if (
+        (filtrosAvanzados.cantidad !== undefined &&
+          filtrosAvanzados.cantidad !== "") ||
+        (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
+        (filtrosAvanzados.precio !== undefined &&
+          filtrosAvanzados.precio !== "")
+      ) {
+        const productos = await filtrarProductos(
+          filtrosAvanzados.cantidad || null,
+          filtrosAvanzados.categoria || null,
+          filtrosAvanzados.precio || null
+        );
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else {
+        const productos = await obtenerProductos();
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
       }
-    };
+    } catch (error) {
+      console.error("Error al filtrar los productos:", error);
+      mostrarError(
+        `Error al filtrar los productos: ${
+          error.message || "Ocurrió un problema inesperado"
+        }`
+      );
+    }
+  };
 
-    fetchProductosFiltrados();
-  }, [filtroNombre, filtrosAvanzados]);
+  fetchProductosFiltrados();
+}, [filtroNombre, filtrosAvanzados, bajoStock]);
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -216,8 +226,7 @@ const ProductosAdmin = () => {
     } catch (error) {
       console.error("Error al desactivar el producto:", error);
       mostrarError(
-        `Error al desactivar el producto: ${
-          error.message || "Ocurrió un problema inesperado"
+        `Error al desactivar el producto: ${error.message || "Ocurrió un problema inesperado"
         }`
       );
     }
@@ -226,38 +235,39 @@ const ProductosAdmin = () => {
   const revertirFiltros = () => {
     setFiltroNombre("");
     setFiltrosAvanzados({});
+    setBajoStock(false);
   };
 
   const agregarProducto = async (nuevoProducto) => {
-  try {
-    const compraData = {
-      dni_usuario: dni,
-      nombre_producto: nuevoProducto.producto,
-      precio_compra: nuevoProducto.precioCompra,
-      nombre_categoria: nuevoProducto.categoria,
-      precio_venta: nuevoProducto.precio,
-      cantidad_agregar: nuevoProducto.cantidadAgregar,
-      fecha_compra: nuevoProducto.fechaCompra,
-    };
+    try {
+      const compraData = {
+        dni_usuario: dni,
+        nombre_producto: nuevoProducto.producto,
+        precio_compra: nuevoProducto.precioCompra,
+        nombre_categoria: nuevoProducto.categoria,
+        precio_venta: nuevoProducto.precio,
+        cantidad_agregar: nuevoProducto.cantidadAgregar,
+        fecha_compra: nuevoProducto.fechaCompra,
+      };
 
-    console.log("Datos enviados a registrarCompra:", compraData);
+      console.log("Datos enviados a registrarCompra:", compraData);
 
-    await registrarCompra(compraData);
+      await registrarCompra(compraData);
 
-    const productos = await obtenerProductos();
-    const datosTransformados = productos.map((producto) => ({
-      id: producto.nombre,
-      producto: producto.nombre,
-      categoria: producto.categoria,
-      unidades: producto.cantidad,
-      precio: producto.precio_venta,
-    }));
-    setDatos(datosTransformados);
+      const productos = await obtenerProductos();
+      const datosTransformados = productos.map((producto) => ({
+        id: producto.nombre,
+        producto: producto.nombre,
+        categoria: producto.categoria,
+        unidades: producto.cantidad,
+        precio: producto.precio_venta,
+      }));
+      setDatos(datosTransformados);
 
-    setMostrarModalAgregarProducto(false);
-    setProductoSeleccionado(null);
+      setMostrarModalAgregarProducto(false);
+      setProductoSeleccionado(null);
 
-    setShowSuccessModal(true);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Error al agregar producto:", error);
     }
@@ -277,11 +287,22 @@ const ProductosAdmin = () => {
     });
   };
 
+  const handleVentaRegistrada = (productosActualizados) => {
+    const datosTransformados = productosActualizados.map((producto) => ({
+      id: producto.nombre,
+      producto: producto.nombre,
+      categoria: producto.categoria,
+      unidades: producto.cantidad,
+      precio: producto.precio_venta,
+    }));
+    setDatos(datosTransformados);
+  };
+
   return (
     <div className="productos-admin-container">
       <div className="contenedor-centrado">
         <SearchBarWaitForClick
-        placeholder="Buscar productos..."
+          placeholder="Buscar productos..."
           value={nombreBusquedaTemp}
           onChange={(e) => setNombreBusquedaTemp(e.target.value)}
           onSearch={() => {
@@ -301,6 +322,17 @@ const ProductosAdmin = () => {
           </button>
           <button className="btn-revertir" onClick={revertirFiltros}>
             Revertir Filtros <FaUndo style={{ marginLeft: "4px" }} />
+          </button>
+          <button
+            className="btn-bajo-stock"
+            style={{
+              backgroundColor: bajoStock ? "#f7b731" : "",
+              color: bajoStock ? "#fff" : "",
+              marginLeft: "8px"
+            }}
+            onClick={() => setBajoStock(!bajoStock)}
+          >
+            Bajo stock
           </button>
         </div>
         <TablaProductos columnas={columnasAdmin} datos={datos} />
@@ -391,8 +423,7 @@ const ProductosAdmin = () => {
             } catch (error) {
               console.error("Error al editar el producto:", error);
               mostrarError(
-                `Error al editar el producto: ${
-                  error.message || "Ocurrió un problema inesperado"
+                `Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"
                 }`
               );
             }
@@ -403,6 +434,7 @@ const ProductosAdmin = () => {
       {mostrarModalRegistrarVenta && (
         <ModalRegistrarVenta
           onClose={() => setMostrarModalRegistrarVenta(false)}
+          onVentaRegistrada={handleVentaRegistrada}
         />
       )}
 
