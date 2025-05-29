@@ -1,5 +1,6 @@
 import React from "react";
 import "./ModalDetalleVenta.css";
+import { FaTimes } from "react-icons/fa";
 
 const ModalDetalleVenta = ({ isOpen, onClose, detalle, total }) => {
   if (!isOpen) return null;
@@ -9,9 +10,7 @@ const ModalDetalleVenta = ({ isOpen, onClose, detalle, total }) => {
       <div className="modal-detalle-venta">
         <div className="modal-detalle-header">
           <h2>Detalle de la Venta</h2>
-          <button className="modal-detalle-close" onClick={onClose}>
-            ×
-          </button>
+          <FaTimes className="cerrar-icono" onClick={onClose} />
         </div>
         <table className="tabla-detalle-venta">
           <thead>
