@@ -1,18 +1,18 @@
 .padre-por-cobrar-container {
-    border-radius: 16px;
-    padding: 16px;
-    max-width: 80%;
-    margin: auto;
-    overflow: hidden;
+  border-radius: 16px;
+  padding: 16px;
+  max-width: 80%;
+  margin: auto;
+  overflow: hidden;
 }
 
 .por-cobrar-container {
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-    max-width: 100%;
-    overflow: hidden;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .informacion-superior {

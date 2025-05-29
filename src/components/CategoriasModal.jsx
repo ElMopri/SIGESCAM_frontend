@@ -4,6 +4,7 @@ import EditarCategoriaModal from "./EditarCategoriaModal";
 import iconEditar from "/EditYellow.png";
 import iconDelete from "/Delete.png";
 import Modal from "./Modal";
+import { FaTimes } from "react-icons/fa";
 
 import {
   obtenerCategorias,
@@ -102,7 +103,7 @@ const CategoriasModal = ({ onClose }) => {
       <div className="modal-categorias">
         <div className="modal-header">
           <h2>Categorías</h2>
-          <button className="btn-cerrar" onClick={onClose}>✕</button>
+          <FaTimes className="cerrar-icono" onClick={onClose} />
         </div>
 
         <div className="tabla-scroll">

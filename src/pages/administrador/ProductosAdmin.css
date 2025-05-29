@@ -1,3 +1,9 @@
+.tabla-productos-gestor .tabla-productos th, .tabla-productos td {
+    padding: 17px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
 .productos-admin-container {
   padding: 20px;
   background-color: #fff9dc;

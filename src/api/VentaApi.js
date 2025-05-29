@@ -62,7 +62,8 @@ export const obtenerVentasDelDia = async () => {
     );
     throw new Error(
       error.response?.data?.error ||
-      error.response?.data?.message || "Error al obtener ventas del día"
+        error.response?.data?.message ||
+        "Error al obtener ventas del día"
     );
   }
 };
@@ -90,11 +91,11 @@ export const obtenerHistorialMargenesDeGanancia = async (anio) => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error ||
-      error.response?.data?.message || "Error al obtener historial de márgenes"
+        error.response?.data?.message ||
+        "Error al obtener historial de márgenes"
     );
   }
 };
-
 
 export const obtenerHistorialVentas = async () => {
   try {
@@ -103,23 +104,23 @@ export const obtenerHistorialVentas = async () => {
   } catch (error) {
     throw new Error(
       error.response?.data?.error ||
-      error.response?.data?.message || "Error al obtener el historial de ventas"
+        error.response?.data?.message ||
+        "Error al obtener el historial de ventas"
     );
   }
 };
 
 export const filtrarVentasPorFecha = async (fechaInicio, fechaFin) => {
   try {
-    const response = await axios.get(`${API_VENTAS}/historial-ventas-fechas`,
-      {
-        params: { fechaInicio, fechaFin },
-      }
-    );
+    const response = await axios.get(`${API_VENTAS}/historial-ventas-fechas`, {
+      params: { fechaInicio, fechaFin },
+    });
     return response.data;
   } catch (error) {
     throw new Error(
       error.response?.data?.error ||
-      error.response?.data?.message || "Error al obtener el historial de ventas"
+        error.response?.data?.message ||
+        "Error al obtener el historial de ventas"
     );
   }
 };
@@ -127,6 +128,31 @@ export const filtrarVentasPorFecha = async (fechaInicio, fechaFin) => {
 export const obtenerDetalleVenta = async (id) => {
   try {
     const response = await axios.get(`${API_VENTAS}/detalle-venta/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Error al obtener el detalle de la venta"
+    );
+  }
+};
+
+export const obtenerMargenDeGananciaDelMes = async (fecha) => {
+  try {
+    const response = await axios.get(`${API_VENTAS}/margen-ganancia-mes`, {
+      params: { fecha },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "Error al obtener el margen de ganancia del mes"
+    );
+  }
+};
+
+export const obtenerDetalleVentaFiada = async (id) => {
+  try {
+    const response = await axios.get(`${API_VENTAS}/ventas-fiadas/detalles/${id}`);
     return response.data;
   } catch (error) {
     throw new Error(

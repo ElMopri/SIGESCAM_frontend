@@ -26,7 +26,7 @@ const TablaSugerenciasGestor = ({ sugerencias }) => {
   }
 
   return (
-    <div className="tabla-container">
+    <div className="tabla-container-sugerencias">
       <table className="tabla-sugerencias">
         <thead>
           <tr>

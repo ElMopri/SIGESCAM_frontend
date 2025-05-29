@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./EditarCategoriaModal.css";
 import { actualizarCategoria } from "../api/CategoriaApi";
 import Modal from "./Modal"
+import { FaTimes } from "react-icons/fa";
 
 const EditarCategoriaModal = ({ categoria, onClose, onGuardar }) => {
     const [formData, setFormData] = useState({
@@ -52,7 +53,7 @@ const EditarCategoriaModal = ({ categoria, onClose, onGuardar }) => {
     return (
         <div className="modal-editar-overlay">
             <div className="modal-editar">
-                <button className="btn-cerrar" onClick={onClose}>✕</button>
+                <FaTimes className="cerrar-icono" onClick={onClose} />
 
                 <label>Nombre</label>
                 <input

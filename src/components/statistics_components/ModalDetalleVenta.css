@@ -1,0 +1,91 @@
+.modal-detalle-venta-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 62, 80, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-detalle-venta {
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  min-width: 380px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  position: relative;
+  animation: fadeInModal 0.2s;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.97);}
+  to { opacity: 1; transform: scale(1);}
+}
+
+.modal-detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.modal-detalle-header h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #3182ce;
+  margin: 0;
+}
+
+.cerrar-icono {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: red;
+  cursor: pointer;
+}
+
+.tabla-detalle-venta {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+}
+
+.tabla-detalle-venta th,
+.tabla-detalle-venta td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.tabla-detalle-venta th {
+  background: #e4f7fb;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.tabla-detalle-venta tr:last-child td {
+  border-bottom: none;
+}
+
+.modal-detalle-total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #2d3748;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.modal-detalle-total-valor {
+  color: #3182ce;
+  font-size: 1.2rem;
+}

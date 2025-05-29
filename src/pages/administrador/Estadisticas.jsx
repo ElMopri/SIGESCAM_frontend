@@ -1,48 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { IoWalletOutline } from "react-icons/io5";
+import { FaUndo } from "react-icons/fa";
 import {
   obtenerHistorialCompras,
   filtrarComprasPorFecha,
   filtrarComprasPorProducto,
 } from "../../api/CompraApi";
-import "./Estadisticas.css";
-import Modal from "../../components/Modal";
 import {
   filtrarVentasPorFecha,
   obtenerHistorialMargenesDeGanancia,
   obtenerHistorialVentas,
+  obtenerDetalleVenta,
+  obtenerMargenDeGananciaDelMes,
 } from "../../api/VentaApi";
-const obtenerAnioActual = () => new Date().getFullYear();
 
-const datosEntradasEjemplo = [
-  {
-    producto: { nombre: "Cartera" },
-    cantidad: 10,
-    precio: 1500,
-    fecha_entrada: "2024-05-01T00:00:00Z",
-    total_entrada: 15000,
-    estado: "Pagado",
-    abono: 0,
-  },
-  {
-    producto: { nombre: "Esmalte" },
-    cantidad: 20,
-    precio: 800,
-    fecha_entrada: "2024-05-03T00:00:00Z",
-    total_entrada: 16000,
-    estado: "Pendiente",
-    abono: 8000,
-  },
-  {
-    producto: { nombre: "Balaca" },
-    cantidad: 15,
-    precio: 500,
-    fecha_entrada: "2024-05-05T00:00:00Z",
-    total_entrada: 7500,
-    estado: "Pagado",
-    abono: 0,
-  },
-];
+import "./Estadisticas.css";
+import Modal from "../../components/Modal";
+import ModalDetalleVenta from "../../components/statistics_components/ModalDetalleVenta";
+
+const obtenerAnioActual = () => new Date().getFullYear();
 
 const Estadisticas = () => {
   const [filtroPorEntradas, setFiltroPorEntradas] = useState("fecha");
@@ -66,6 +42,14 @@ const Estadisticas = () => {
   const [ventas, setVentas] = useState([]);
   const [totalVentas, setTotalVentas] = useState(0);
 
+  const [modalDetalleOpen, setModalDetalleOpen] = useState(false);
+  const [detalleVenta, setDetalleVenta] = useState([]);
+  const [totalDetalleVenta, setTotalDetalleVenta] = useState(0);
+
+  const [entradasMes, setEntradasMes] = useState(0);
+  const [salidasMes, setSalidasMes] = useState(0);
+  const [margenMes, setMargenMes] = useState(0);
+
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     title: "",
@@ -79,14 +63,32 @@ const Estadisticas = () => {
         const data = await obtenerHistorialMargenesDeGanancia(anioFiltro);
         setDatosMargenes(data.historial || []);
       } catch (error) {
-        mostrarError(
-          error.message || "Error al obtener el histórico de márgenes"
-        );
         setDatosMargenes([]);
       }
     };
     cargarMargenes();
   }, [anioFiltro]);
+
+  useEffect(() => {
+    const cargarMargenMes = async () => {
+      try {
+        // Usamos el primer día del mes actual
+        const fecha = new Date();
+        const fechaStr = `${fecha.getFullYear()}-${String(
+          fecha.getMonth() + 1
+        ).padStart(2, "0")}-01`;
+        const data = await obtenerMargenDeGananciaDelMes(fechaStr);
+        setEntradasMes(data.entradas || 0);
+        setSalidasMes(data.salidas || 0);
+        setMargenMes(data.margenNegocio || 0);
+      } catch (error) {
+        setEntradasMes(0);
+        setSalidasMes(0);
+        setMargenMes(0);
+      }
+    };
+    cargarMargenMes();
+  }, []);
 
   const gananciasFiltradas = datosMargenes;
   const promedioGanancias =
@@ -94,13 +96,6 @@ const Estadisticas = () => {
       ? gananciasFiltradas.reduce((acc, item) => acc + item.margenNegocio, 0) /
         gananciasFiltradas.length
       : 0;
-
-  // Estado para las entradas de ejemplo
-  const [entradas] = useState(datosEntradasEjemplo);
-  const totalEntradas = entradas.reduce(
-    (acc, item) => acc + item.total_entrada,
-    0
-  );
 
   const cerrarModal = () => {
     setModalConfig({
@@ -118,6 +113,33 @@ const Estadisticas = () => {
       message: mensaje,
       type: "error",
     });
+  };
+
+  const abrirDetalleVenta = async (id_venta) => {
+    try {
+      const data = await obtenerDetalleVenta(id_venta);
+      // data.ventas es un array, tomamos la primera venta
+      const venta =
+        data.ventas && data.ventas.length > 0 ? data.ventas[0] : null;
+      if (!venta) {
+        setDetalleVenta([]);
+        setTotalDetalleVenta(0);
+        setModalDetalleOpen(true);
+        return;
+      }
+      // Mapear los productos al formato que espera el modal
+      const productos = (venta.detalle_venta || []).map((item) => ({
+        nombre: item.producto?.nombre || "",
+        cantidad: item.cantidad,
+        precio_unitario: Number(item.precio),
+        subtotal: Number(item.precio) * Number(item.cantidad),
+      }));
+      setDetalleVenta(productos);
+      setTotalDetalleVenta(Number(venta.total));
+      setModalDetalleOpen(true);
+    } catch (error) {
+      mostrarError(error.message || "No se pudo cargar el detalle de la venta");
+    }
   };
 
   useEffect(() => {
@@ -248,7 +270,6 @@ const Estadisticas = () => {
 
   useEffect(() => {
     if (filtroPorEntradas === "fecha") {
-      console.log("Filtrando por fecha de entradas");
       filtrarPorFechaEntradas();
     }
   }, [filtroPorEntradas, fechaInicioEntradas, fechaFinEntradas]);
@@ -262,6 +283,39 @@ const Estadisticas = () => {
     const [mes, anio] = mesAnio.replace(" de ", " ").split(" ");
     const mesCapitalizado = mes.charAt(0).toUpperCase() + mes.slice(1);
     return `${mesCapitalizado} ${anio}`;
+  };
+
+  const revertirFiltros = () => {
+    if (pestañaActiva === "salidas") {
+      setFechaInicioSalidas("");
+      setFechaFinSalidas("");
+      setProductoSalidas("");
+      setFiltroPorSalidas("fecha");
+      obtenerHistorialCompras()
+        .then((data) => {
+          setCompras(data.compras);
+          setTotal(data.totalGeneral);
+        })
+        .catch((error) => {
+          mostrarError(
+            error.message || "Error al obtener el historial de compras"
+          );
+        });
+    } else if (pestañaActiva === "entradas") {
+      setFechaInicioEntradas("");
+      setFechaFinEntradas("");
+      setFiltroPorEntradas("fecha");
+      obtenerHistorialVentas()
+        .then((data) => {
+          setVentas(data.ventas);
+          setTotalVentas(data.totalGeneral);
+        })
+        .catch((error) => {
+          mostrarError(
+            error.message || "Error al obtener el historial de ventas"
+          );
+        });
+    }
   };
 
   return (
@@ -327,6 +381,14 @@ const Estadisticas = () => {
                   onChange={(e) => setProductoSalidas(e.target.value)}
                 />
               )}
+              <button
+                type="button"
+                className="btn-revertir"
+                onClick={revertirFiltros}
+              >
+                <FaUndo style={{ marginRight: "8px" }} />
+                Revertir filtros
+              </button>
             </div>
             <div className="tabla-container">
               <table className="tabla-estadisticas">
@@ -412,6 +474,14 @@ const Estadisticas = () => {
                   onChange={(e) => setFechaFinEntradas(e.target.value)}
                 />
               </div>
+              <button
+                type="button"
+                className="btn-revertir"
+                onClick={revertirFiltros}
+              >
+                <FaUndo style={{ marginRight: "8px" }} />
+                Revertir filtros
+              </button>
             </div>
             <div className="tabla-container">
               <table className="tabla-estadisticas">
@@ -430,18 +500,14 @@ const Estadisticas = () => {
                         No hay entradas registradas.
                       </td>
                     </tr>
-                  ) : ventas.length === 0 ? (
-                    <tr>
-                      <td colSpan="7" className="no-data-message">
-                        No hay entradas durante este periodo de tiempo.
-                      </td>
-                    </tr>
                   ) : (
                     ventas.map((item, idx) => (
                       <tr
                         key={idx}
                         className={idx % 2 === 0 ? "fila-par" : "fila-impar"}
                         value={item.id_venta}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => abrirDetalleVenta(item.id_venta)}
                       >
                         <td>{item.fecha_venta.split("T")[0]}</td>
                         <td>
@@ -495,7 +561,7 @@ const Estadisticas = () => {
             <input
               className="campo-texto"
               type="text"
-              value={`$ ${total.toLocaleString()}`}
+              value={`$ ${entradasMes.toLocaleString()}`}
               readOnly
             />
           </div>
@@ -504,18 +570,16 @@ const Estadisticas = () => {
             <input
               className="campo-texto"
               type="text"
-              value={`$ ${totalEntradas.toLocaleString()}`}
+              value={`$ ${salidasMes.toLocaleString()}`}
               readOnly
             />
           </div>
           <div className="campo margen">
             <label>Margen de Negocio:</label>
             <span
-              className={
-                total - totalEntradas >= 0 ? "valor-positivo" : "valor-negativo"
-              }
+              className={margenMes >= 0 ? "valor-positivo" : "valor-negativo"}
             >
-              ${(total - totalEntradas).toLocaleString()}
+              ${margenMes.toLocaleString()}
             </span>
           </div>
         </div>
@@ -590,6 +654,12 @@ const Estadisticas = () => {
           </div>
         </div>
       </div>
+      <ModalDetalleVenta
+        isOpen={modalDetalleOpen}
+        onClose={() => setModalDetalleOpen(false)}
+        detalle={detalleVenta}
+        total={totalDetalleVenta}
+      />
     </div>
   );
 };
