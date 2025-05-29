@@ -6,11 +6,28 @@ import "./PorCobrarAdmin.css";
 
 const PorCobrarAdmin = () => {
   const [clientesDeudores, setClientesDeudores] = useState([]);
-  const [textoBusqueda, setTextoBusqueda] = useState(""); // ✅ Nuevo estado
+  const [textoBusqueda, setTextoBusqueda] = useState("");
+  const [todosLosDeudores, setTodosLosDeudores] = useState([]);
 
   useEffect(() => {
     cargarDeudores();
   }, []);
+
+  useEffect(() => {
+    const texto = textoBusqueda.trim().toLowerCase();
+
+    if (texto === "") {
+      setClientesDeudores(todosLosDeudores);
+      return;
+    }
+
+    const filtrados = todosLosDeudores.filter((deudor) =>
+      deudor.nombre.toLowerCase().includes(texto) ||
+      deudor.cedula.toLowerCase().includes(texto)
+    );
+
+    setClientesDeudores(filtrados);
+  }, [textoBusqueda, todosLosDeudores]);
 
   const cargarDeudores = async () => {
     try {
@@ -23,52 +40,10 @@ const PorCobrarAdmin = () => {
           monto_pendiente: parseFloat(deudor.deuda_total),
         }));
         setClientesDeudores(datosFormateados);
+        setTodosLosDeudores(datosFormateados);
       }
     } catch (error) {
       console.error("Error al cargar deudores:", error.message);
-    }
-  };
-
-  const buscarClientes = async () => {
-    const texto = textoBusqueda.trim(); 
-    if (!texto) {
-      cargarDeudores();
-      return;
-    }
-
-    try {
-      const deudor = await obtenerDeudorPorDNI(texto);
-      if (deudor) {
-        setClientesDeudores([
-          {
-            id: deudor.dni_deudor,
-            nombre: deudor.nombre,
-            cedula: deudor.dni_deudor,
-            monto_pendiente: parseFloat(deudor.monto_pendiente),
-          },
-        ]);
-        return;
-      }
-
-      const todos = await obtenerDeudores();
-      const filtrados = todos.filter((deudor) =>
-        deudor.nombre.toLowerCase().includes(texto.toLowerCase())
-      );
-
-      if (filtrados.length === 0) {
-        alert(`No se encontró ningún deudor con el nombre o cédula: "${texto}"`);
-      }
-
-      const datosFormateados = filtrados.map((deudor) => ({
-        id: deudor.dni_deudor,
-        nombre: deudor.nombre,
-        cedula: deudor.dni_deudor,
-        monto_pendiente: parseFloat(deudor.monto_pendiente),
-      }));
-
-      setClientesDeudores(datosFormateados);
-    } catch (error) {
-      console.error("Error al buscar clientes:", error.message);
     }
   };
 
@@ -93,10 +68,10 @@ const PorCobrarAdmin = () => {
 
         <div className="buscador-container">
           <SearchBarWaitForClick
-            placeholder="Buscar clientes..."
+            placeholder="Buscar clientes por nombre o cédula..."
             value={textoBusqueda}
             onChange={(e) => setTextoBusqueda(e.target.value)}
-            onSearch={buscarClientes} 
+            onSearch={() => {}} // Ya no se necesita esta función
           />
         </div>
 

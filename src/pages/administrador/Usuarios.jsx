@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import SearchBar from "../../components/SearchBar";
 import ButtonNewElements from "../../components/ButtonNewElements";
 import TableElements from "../../components/User_components/TableElements";
@@ -18,6 +19,7 @@ import "./Usuarios.css";
 
 const Usuarios = () => {
   const headers = ["Nombre", "Rol"];
+  const { user } = useContext(AuthContext);
   const [usuarios, setUsuarios] = useState([]);
   const [usuariosFiltrados, setUsuariosFiltrados] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -52,16 +54,17 @@ const Usuarios = () => {
     fetchUsuarios();
   }, []);
 
-  useEffect(() => {
-    const filteredUsers = usuarios.filter(user => {
-      const coincideNombre = user.nombre.toLowerCase().includes(searchTerm.toLowerCase());
-      const coincideRol = !filtros.rol || user.rol === filtros.rol;
-      const coincideEstado = !filtros.estado || user.estado === filtros.estado;
-      
+ useEffect(() => {
+  const filteredUsers = usuarios
+    .filter(userItem => userItem.dni !== user?.dni) // <-- Excluye el usuario logueado
+    .filter(userItem => {
+      const coincideNombre = userItem.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+      const coincideRol = !filtros.rol || userItem.rol === filtros.rol;
+      const coincideEstado = !filtros.estado || userItem.estado === filtros.estado;
       return coincideNombre && coincideRol && coincideEstado;
     });
-    setUsuariosFiltrados(filteredUsers);
-  }, [searchTerm, usuarios, filtros]);
+  setUsuariosFiltrados(filteredUsers);
+}, [searchTerm, usuarios, filtros, user]);
 
   const handleEditUser = (usuario) => {
     setUserToEdit(usuario);
