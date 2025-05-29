@@ -4,9 +4,12 @@ import "./ModalDetalleDeuda.css";
 
 const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicial, ventaId, onPagoGuardado }) => {
   const totalOriginal = detalles.reduce(
-    (sum, item) => sum + item.precio * item.cantidad,
+    (sum, item) =>
+      sum + (parseFloat(item.precio_unitario || 0) * item.cantidad),
     0
   );
+
+
   console.log(detalles);
   const [abono, setAbono] = useState("");
   const [deudaRestante, setDeudaRestante] = useState(totalVenta - abonoInicial);
@@ -99,7 +102,11 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
               <tr key={index}>
                 <td>{item.nombre_producto}</td>
                 <td>{item.cantidad}</td>
-                <td>${item.precio?.toLocaleString()}</td>
+                <td>
+                  {item.precio_unitario
+                    ? `$${parseFloat(item.precio_unitario).toLocaleString()}`
+                    : "$ 0"}
+                </td>
               </tr>
             ))}
           </tbody>

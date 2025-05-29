@@ -33,6 +33,16 @@ const DetalleDeudor = () => {
   }, [clienteId]);
 
   const handleAbono = async (venta) => {
+    // 🔍 DEBUG: Mostrar datos de la venta que se recibe
+    console.log("Venta recibida al hacer clic:", venta);
+    console.log("ID de venta recibido:", venta.id_venta);
+
+    // Validación defensiva
+    if (!venta?.id_venta) {
+      console.error("ID de venta es inválido o undefined:", venta);
+      return;
+    }
+
     try {
       const detalle = await obtenerDetalleVentaFiada(venta.id_venta);
       setVentaSeleccionada({
@@ -66,17 +76,17 @@ const DetalleDeudor = () => {
           </div>
           <div className="modal-header-right-detalle-deuda">
             <span
-            className="close-button-detalle-deuda"
-            onClick={() => {
-              if (role === "Administrador") {
-                navigate("/admin/por-cobrar");
-              } else if (role === "Gestor de ventas") {
-                navigate("/gestorDeVentas/por-cobrar");
-              }
-            }}
-          >
-            &times;
-          </span>
+              className="close-button-detalle-deuda"
+              onClick={() => {
+                if (role === "Administrador") {
+                  navigate("/admin/por-cobrar");
+                } else if (role === "Gestor de ventas") {
+                  navigate("/gestorDeVentas/por-cobrar");
+                }
+              }}
+            >
+              &times;
+            </span>
           </div>
         </div>
 
@@ -92,18 +102,22 @@ const DetalleDeudor = () => {
             </tr>
           </thead>
           <tbody>
-            {ventasFiadas.map((item, index) => (
-              <tr key={index} className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}>
-                <td>Venta {index + 1}</td>
-                <td>${item.monto_pendiente.toLocaleString()}</td>
-                <td>{new Date(item.fecha_venta).toLocaleDateString()}</td>
-                <td>
-                  <button className="btn-abono" onClick={() => handleAbono(item)}>
-                    Registrar Abono
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {ventasFiadas.map((item, index) => {
+              console.log("item:", item); // 👈 Agrega esto
+
+              return (
+                <tr key={index} className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}>
+                  <td>Venta {index + 1}</td>
+                  <td>${item.monto_pendiente.toLocaleString()}</td>
+                  <td>{new Date(item.fecha_venta).toLocaleDateString()}</td>
+                  <td>
+                    <button className="btn-abono" onClick={() => handleAbono(item)}>
+                      Registrar Abono
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
