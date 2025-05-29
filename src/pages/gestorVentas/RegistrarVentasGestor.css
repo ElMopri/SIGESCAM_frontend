@@ -1,6 +1,6 @@
 .gestor-venta-container {
   width: 80%;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 2rem;
   border-radius: 12px;
   background-color: #ffffff;
@@ -21,16 +21,6 @@
   font-weight: 600;
   color: #2c3e50;
   margin: 0;
-}
-
-.gestor-fecha-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0;
-  background-color: transparent;
-  padding: 0; /* Quita el padding */
-  border-radius: 0; /* Quita el borde redondeado */
 }
 
 .gestor-fecha-header-group {
@@ -69,7 +59,7 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 0.2rem 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .gestor-form-group {
@@ -77,24 +67,7 @@
   flex-direction: column;
   flex: 1 1 0;
   min-width: 140px;
-}
-
-.gestor-form-group label {
-  margin-bottom: 0.2rem;
-}
-
-.gestor-form-group input[type="date"] {
-  min-width: 140px;
-  max-width: 180px;
-}
-
-.gestor-fecha-form-group {
-  min-width: 120px;
-  max-width: 140px;
-  flex: 0 0 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  position: relative;
 }
 
 .gestor-form-input {
@@ -111,6 +84,11 @@
   outline: none;
   border-color: #4cb5ff;
   box-shadow: 0 0 0 3px rgba(76, 181, 255, 0.1);
+}
+
+.gestor-form-input:disabled {
+  background-color: #f8fafc;
+  cursor: not-allowed;
 }
 
 .gestor-btn-agregar {
@@ -140,11 +118,57 @@
 }
 
 .gestor-productos-container {
-  margin: 2rem 0;
+  margin: 0.5rem 0 1rem;
   border-radius: 12px;
   background-color: white;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   overflow: hidden;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gestor-table-wrapper {
+  overflow-y: auto;
+  overflow-x: auto;
+  flex-grow: 1;
+  scrollbar-width: thin;
+  scrollbar-color: #4cb5ff #f0f0f0;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #4cb5ff;
+  border-radius: 4px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #3a9edb;
+}
+
+.gestor-total-table {
+  margin-top: -1px;
+  border-top: 2px solid #e2e8f0;
+  background-color: #f8f9fa;
+}
+
+.gestor-total-row {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
+.gestor-total-row td {
+  border-bottom: none !important;
+  text-align: left;
 }
 
 .gestor-table {
@@ -154,47 +178,37 @@
   min-width: 800px;
 }
 
+.gestor-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f8f9fa;
+}
+
 .gestor-table th {
   background-color: #f8f9fa;
   color: #2c3e50;
   font-weight: 600;
-  padding: 1rem;
+  padding: 0.65rem 1rem;
   text-align: left;
   border-bottom: 2px solid #e2e8f0;
   font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .gestor-table td {
-  padding: 1rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid #e2e8f0;
   color: #2c3e50;
   font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-.gestor-total-row {
-  font-weight: 600;
-  background-color: #f8f9fa;
-}
-
-.gestor-total-row td {
-  border-top: 2px solid #e2e8f0;
-}
-
-.gestor-col-nombre {
-  width: 40%;
-}
-.gestor-col-cantidad {
-  width: 16%;
-}
-.gestor-col-precio {
-  width: 21%;
-}
-.gestor-col-total {
-  width: 21%;
-}
-.gestor-col-acciones {
-  width: 3%;
-}
+.gestor-col-nombre { width: 40%; }
+.gestor-col-cantidad { width: 16%; }
+.gestor-col-precio { width: 21%; }
+.gestor-col-total { width: 21%; text-align: left; }
+.gestor-col-acciones { width: 1%; }
 
 .gestor-btn-eliminar {
   background: none;
@@ -213,7 +227,7 @@
 }
 
 .gestor-payment-status {
-  margin: 2rem 0;
+  margin: 1rem 0;
   padding: 1.5rem;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -266,10 +280,39 @@
   transform: translateY(0);
 }
 
+.gestor-sugerencias-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gestor-sugerencia-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.gestor-sugerencia-item:hover {
+  background-color: #f0f7ff;
+}
+
 @media (max-width: 768px) {
   .gestor-venta-container {
     padding: 1.5rem;
     margin: 1rem;
+    width: 95%;
   }
 
   .gestor-venta-title {
@@ -295,6 +338,7 @@
   .gestor-btn-agregar {
     width: 100%;
     margin-top: 0.5rem;
+    margin-left: 0;
   }
 
   .gestor-deudor-info {

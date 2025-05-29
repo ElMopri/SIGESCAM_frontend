@@ -70,7 +70,8 @@ const ProductosAdmin = () => {
       } catch (error) {
         console.error("Error al obtener los productos:", error);
         mostrarError(
-          `Error al obtener los productos: ${error.message || "Ocurrió un problema inesperado"
+          `Error al obtener los productos: ${
+            error.message || "Ocurrió un problema inesperado"
           }`
         );
       }
@@ -89,7 +90,8 @@ const ProductosAdmin = () => {
       } catch (error) {
         console.error("Error al obtener las categorías:", error);
         mostrarError(
-          `Error al obtener las categorías: ${error.message || "Ocurrió un problema inesperado"
+          `Error al obtener las categorías: ${
+            error.message || "Ocurrió un problema inesperado"
           }`
         );
       }
@@ -99,75 +101,75 @@ const ProductosAdmin = () => {
   }, []);
 
   React.useEffect(() => {
-  const fetchProductosFiltrados = async () => {
-    try {
-      if (bajoStock) {
-        // Filtrar productos con cantidad <= 3
-        const productos = await obtenerProductos();
-        const productosBajoStock = productos.filter(p => p.cantidad <= 3);
-        const datosTransformados = productosBajoStock.map((producto) => ({
-          id: producto.nombre,
-          producto: producto.nombre,
-          categoria: producto.categoria,
-          unidades: producto.cantidad,
-          precio: producto.precio_venta,
-        }));
-        setDatos(datosTransformados);
-      } else if (filtroNombre) {
-        const productos = await buscarProductosPorNombreParecido(
-          filtroNombre
+    const fetchProductosFiltrados = async () => {
+      try {
+        if (bajoStock) {
+          // Filtrar productos con cantidad <= 3
+          const productos = await obtenerProductos();
+          const productosBajoStock = productos.filter((p) => p.cantidad <= 3);
+          const datosTransformados = productosBajoStock.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        } else if (filtroNombre) {
+          const productos = await buscarProductosPorNombreParecido(
+            filtroNombre
+          );
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        } else if (
+          (filtrosAvanzados.cantidad !== undefined &&
+            filtrosAvanzados.cantidad !== "") ||
+          (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
+          (filtrosAvanzados.precio !== undefined &&
+            filtrosAvanzados.precio !== "")
+        ) {
+          const productos = await filtrarProductos(
+            filtrosAvanzados.cantidad || null,
+            filtrosAvanzados.categoria || null,
+            filtrosAvanzados.precio || null
+          );
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        } else {
+          const productos = await obtenerProductos();
+          const datosTransformados = productos.map((producto) => ({
+            id: producto.nombre,
+            producto: producto.nombre,
+            categoria: producto.categoria,
+            unidades: producto.cantidad,
+            precio: producto.precio_venta,
+          }));
+          setDatos(datosTransformados);
+        }
+      } catch (error) {
+        console.error("Error al filtrar los productos:", error);
+        mostrarError(
+          `Error al filtrar los productos: ${
+            error.message || "Ocurrió un problema inesperado"
+          }`
         );
-        const datosTransformados = productos.map((producto) => ({
-          id: producto.nombre,
-          producto: producto.nombre,
-          categoria: producto.categoria,
-          unidades: producto.cantidad,
-          precio: producto.precio_venta,
-        }));
-        setDatos(datosTransformados);
-      } else if (
-        (filtrosAvanzados.cantidad !== undefined &&
-          filtrosAvanzados.cantidad !== "") ||
-        (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
-        (filtrosAvanzados.precio !== undefined &&
-          filtrosAvanzados.precio !== "")
-      ) {
-        const productos = await filtrarProductos(
-          filtrosAvanzados.cantidad || null,
-          filtrosAvanzados.categoria || null,
-          filtrosAvanzados.precio || null
-        );
-        const datosTransformados = productos.map((producto) => ({
-          id: producto.nombre,
-          producto: producto.nombre,
-          categoria: producto.categoria,
-          unidades: producto.cantidad,
-          precio: producto.precio_venta,
-        }));
-        setDatos(datosTransformados);
-      } else {
-        const productos = await obtenerProductos();
-        const datosTransformados = productos.map((producto) => ({
-          id: producto.nombre,
-          producto: producto.nombre,
-          categoria: producto.categoria,
-          unidades: producto.cantidad,
-          precio: producto.precio_venta,
-        }));
-        setDatos(datosTransformados);
       }
-    } catch (error) {
-      console.error("Error al filtrar los productos:", error);
-      mostrarError(
-        `Error al filtrar los productos: ${
-          error.message || "Ocurrió un problema inesperado"
-        }`
-      );
-    }
-  };
+    };
 
-  fetchProductosFiltrados();
-}, [filtroNombre, filtrosAvanzados, bajoStock]);
+    fetchProductosFiltrados();
+  }, [filtroNombre, filtrosAvanzados, bajoStock]);
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -226,7 +228,8 @@ const ProductosAdmin = () => {
     } catch (error) {
       console.error("Error al desactivar el producto:", error);
       mostrarError(
-        `Error al desactivar el producto: ${error.message || "Ocurrió un problema inesperado"
+        `Error al desactivar el producto: ${
+          error.message || "Ocurrió un problema inesperado"
         }`
       );
     }
@@ -272,7 +275,6 @@ const ProductosAdmin = () => {
       console.error("Error al agregar producto:", error);
     }
   };
-
 
   const mostrarError = (mensaje) => {
     setErrorMessage(mensaje);
@@ -328,7 +330,7 @@ const ProductosAdmin = () => {
             style={{
               backgroundColor: bajoStock ? "#f7b731" : "",
               color: bajoStock ? "#fff" : "",
-              marginLeft: "8px"
+              marginLeft: "8px",
             }}
             onClick={() => setBajoStock(!bajoStock)}
           >
@@ -423,7 +425,8 @@ const ProductosAdmin = () => {
             } catch (error) {
               console.error("Error al editar el producto:", error);
               mostrarError(
-                `Error al editar el producto: ${error.message || "Ocurrió un problema inesperado"
+                `Error al editar el producto: ${
+                  error.message || "Ocurrió un problema inesperado"
                 }`
               );
             }
