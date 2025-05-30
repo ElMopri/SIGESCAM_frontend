@@ -487,6 +487,7 @@ const Estadisticas = () => {
               <table className="tabla-estadisticas">
                 <thead>
                   <tr>
+                    <th>Id</th>
                     <th>Fecha</th>
                     <th>Total de venta</th>
                     <th>Estado</th>
@@ -509,6 +510,7 @@ const Estadisticas = () => {
                         style={{ cursor: "pointer" }}
                         onClick={() => abrirDetalleVenta(item.id_venta)}
                       >
+                        <td>{idx+1}</td>
                         <td>{item.fecha_venta.split("T")[0]}</td>
                         <td>
                           $
@@ -517,7 +519,17 @@ const Estadisticas = () => {
                             maximumFractionDigits: 0,
                           })}
                         </td>
-                        <td>{item.es_fiado ? "Fiado" : "Pagado"}</td>
+                        <td>
+                          <span
+                            className={
+                              item.es_fiado
+                                ? "estado-venta estado-fiado"
+                                : "estado-venta estado-pagado"
+                            }
+                          >
+                            {item.es_fiado ? "Fiado" : "Pagado"}
+                          </span>
+                        </td>
                         <td>
                           {item.es_fiado
                             ? "$" + item.totalAbonos.toLocaleString()
