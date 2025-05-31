@@ -58,12 +58,16 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
       await registrarAbono(abonoData);
 
       setDeudaRestante((prev) => prev - valorAbono);
-
       if (typeof onPagoGuardado === "function") {
         onPagoGuardado();
       }
 
       setModalSuccess({ open: true, mensaje: "Abono registrado exitosamente." });
+
+      setTimeout(() => {
+        setModalSuccess({ open: false, mensaje: "" });
+        onClose(); // Cierra el modal principal
+      }, 3000); // 3 segundos
     } catch (error) {
       let mensaje = "Error al registrar abono. Intenta nuevamente.";
       if (error?.response?.data?.mensaje) {
