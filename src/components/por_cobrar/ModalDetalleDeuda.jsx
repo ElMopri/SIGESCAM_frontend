@@ -67,7 +67,7 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
       setTimeout(() => {
         setModalSuccess({ open: false, mensaje: "" });
         onClose(); // Cierra el modal principal
-      }, 3000); // 3 segundos
+      }, 2000); // 2 segundos
     } catch (error) {
       let mensaje = "Error al registrar abono. Intenta nuevamente.";
       if (error?.response?.data?.mensaje) {
