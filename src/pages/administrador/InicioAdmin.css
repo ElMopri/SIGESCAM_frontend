@@ -14,6 +14,13 @@
   padding: 10px;
 }
 
+.contenedor-inferior {
+  display: flex;
+  gap: 60px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 .mas-vendidos-container {
   background: white;
   border-radius: 12px;
@@ -45,42 +52,45 @@
   border-radius: 12px;
   text-align: center;
   font-size: 100px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .producto:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.verde {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  color: #1a5f3c;
+}
+
+.amarillo {
+  background: linear-gradient(135deg, #ffd1a8 0%, #ffecd2 100%);
+  color: #8b4513;
+}
+
+.naranja {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  color: #943126;
 }
 
 .producto p {
   margin: 5px 0;
   font-size: 18px;
-}
-
-.producto p:first-child {
-  font-weight: bold;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .producto strong {
   font-size: 26px;
   display: block;
   margin-top: 12px;
-}
-
-.verde {
-  background-color: #8ce789;
-  color: #090909;
-}
-
-.amarillo {
-  background-color: #f7f37e;
-  color: #856404;
-}
-
-.naranja {
-  background-color: #f6a271;
-  color: #d35400;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .ventas-dia-container {
@@ -88,11 +98,7 @@
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-width: 65%;
 }
 
 .ventas-dia-titulo {
@@ -137,4 +143,58 @@
   width: 100%;
   margin-top: 20px;
   transition: background-color 0.3s ease;
+}
+
+.botones-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.boton-accion {
+  background-color: #9FDBED;
+  color: #1a202c;
+  border: none;
+  border-radius: 20px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.boton-accion img {
+  width: 28px;
+  height: 28px;
+}
+
+.boton-accion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .contenedor-inferior {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ventas-dia-container {
+    min-width: unset;
+    padding: 30px;
+  }
+
+  .botones-acciones {
+    max-width: none;
+    width: 100%;
+  }
 }

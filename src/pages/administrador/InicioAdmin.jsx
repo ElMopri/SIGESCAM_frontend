@@ -5,10 +5,12 @@ import {
   obtenerProductosMasVendidos,
 } from "../../api/VentaApi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const InicioAdmin = () => {
   const [ventasDelDia, setVentasDelDia] = useState(0);
   const [productosMasVendidos, setProductosMasVendidos] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cargarVentas = async () => {
@@ -34,14 +36,28 @@ const InicioAdmin = () => {
     const intervalo = setInterval(() => {
       cargarVentas();
       cargarProductosMasVendidos();
-    }, 10000); //
+    }, 10000);
 
     return () => clearInterval(intervalo);
   }, []);
 
+  const handleRegistrarCompra = () => {
+    // Navegar a productos con un parámetro que indique abrir el modal
+    navigate('/admin/productos?openModal=true');
+  };
+
+  const handleRegistrarVenta = () => {
+    // Navegar a productos con un parámetro que indique abrir el modal de venta
+    navigate('/admin/productos?openVentaModal=true');
+  };
+
+  const handleRegistrarSugerencia = () => {
+    // Navegar a la sección de sugerencias
+    navigate('/admin/sugerencias');
+  };
+
   return (
     <div className="inicio-admin">
-      {/* Contenedor de todo el dashboard */}
       <div className="dashboard-container">
         {/* Más vendidos */}
         <div className="mas-vendidos-container">
@@ -70,14 +86,41 @@ const InicioAdmin = () => {
           </div>
         </div>
 
-        {/* Ventas del día */}
-        <div className="ventas-dia-container">
-          <h3 className="ventas-dia-titulo">Ventas del día</h3>
-          <div className="ventas-dia-content">
-            <div className="ventas-dia-icono">
-              <img src="/carrito.png" alt="Carrito de ventas" />
+        <div className="contenedor-inferior">
+          {/* Ventas del día */}
+          <div className="ventas-dia-container">
+            <h3 className="ventas-dia-titulo">Ventas del día</h3>
+            <div className="ventas-dia-content">
+              <div className="ventas-dia-icono">
+                <img src="/carrito.png" alt="Carrito de ventas" />
+              </div>
+              <span className="ventas-numero">{ventasDelDia}</span>
             </div>
-            <span className="ventas-numero">{ventasDelDia}</span>
+          </div>
+
+          {/* Botones de acción */}
+          <div className="botones-acciones">
+            <button 
+              className="boton-accion"
+              onClick={handleRegistrarCompra}
+            >
+              Registrar compra
+              <img src="/compra.png" alt="Icono compra" />
+            </button>
+            <button 
+              className="boton-accion"
+              onClick={handleRegistrarVenta}
+            >
+              Registrar venta
+              <img src="/venta.png" alt="Icono venta" />
+            </button>
+            <button 
+              className="boton-accion"
+              onClick={handleRegistrarSugerencia}
+            >
+              Registrar sugerencia
+              <img src="/idea.png" alt="Icono sugerencia" />
+            </button>
           </div>
         </div>
       </div>

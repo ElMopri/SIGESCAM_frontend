@@ -124,7 +124,7 @@
     text-align: center;
   }
 
-.tabla-container {
+.tabla-container-sugerencias {
   margin-top: 1rem;
   overflow-x: auto;
   background-color: white;
@@ -134,5 +134,6 @@
   margin-top: 25px;
   margin-left: -38px;
 }
+
 }
 

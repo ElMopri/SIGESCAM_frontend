@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useLocation } from "react-router-dom";
 import CategoriasModal from "../../components/CategoriasModal";
 import TablaProductos from "../../components/TablaProductos";
 import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
@@ -24,6 +25,7 @@ import {
 
 const ProductosAdmin = () => {
   const { user } = useContext(AuthContext);
+  const location = useLocation();
   const [dni, setDni] = useState(
     user?.dni || "No hay un perfil con sesión activa"
   );
@@ -170,6 +172,21 @@ const ProductosAdmin = () => {
 
     fetchProductosFiltrados();
   }, [filtroNombre, filtrosAvanzados, bajoStock]);
+
+  // Efecto para abrir el modal si viene el parámetro en la URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('openModal') === 'true') {
+      setMostrarModalAgregarProducto(true);
+      // Limpiar el parámetro de la URL
+      window.history.replaceState({}, '', location.pathname);
+    }
+    if (params.get('openVentaModal') === 'true') {
+      setMostrarModalRegistrarVenta(true);
+      // Limpiar el parámetro de la URL
+      window.history.replaceState({}, '', location.pathname);
+    }
+  }, [location]);
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },

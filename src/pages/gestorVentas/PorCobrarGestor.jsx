@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TablaDeudoresGestor from "../../components/por_cobrar/TablaDeudoresGestor";
+import TablaDeudores from "../../components/por_cobrar/TablaDeudores.jsx";
 import SearchBarWaitForClick from "../../components/SearchBarWaitForClick";
 import { obtenerDeudores, obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
 import "../administrador/PorCobrarAdmin.css";
@@ -100,7 +100,7 @@ const PorCobrarGestor = () => {
           />
         </div>
 
-        <TablaDeudoresGestor clientes={clientesDeudores} />
+        <TablaDeudores clientes={clientesDeudores} />
       </div>
     </div>
   );
