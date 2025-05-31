@@ -1,12 +1,13 @@
-.tabla-productos-gestor .tabla-productos th, .tabla-productos td {
-    padding: 17px;
-    border: 1px solid #e0e0e0;
-    text-align: center;
+.tabla-productos-gestor .tabla-productos th,
+.tabla-productos td {
+  padding: 17px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
 }
 
 .productos-admin-container {
   padding: 20px;
-  background-color: #fff9dc;
+  background-color: #fff5e1;
 }
 
 .barra-busqueda {
@@ -123,7 +124,6 @@
 .btn-bajo-stock {
   border: 2px solid #f7b731;
   background-color: #ffffff;
-;
   color: #c38f1d;
   padding: 8px 16px;
   border-radius: 999px;
@@ -139,7 +139,6 @@
   background-color: #f7b731;
   color: #ffffff;
 }
-
 
 .btn-filtrar:hover {
   background-color: rgba(59, 130, 246, 0.1);
