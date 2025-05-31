@@ -55,3 +55,18 @@ export const obtenerVentasFiadasDeudor = async (dni) => {
         throw new Error(error.response?.data?.mensaje || "Error al obtener deudor");
     }
 };
+
+// Registrar un abono a una venta fiada
+export const registrarAbono = async ({ dni_deudor, id_venta, monto_abono, fecha_abono }) => {
+    try {
+        const response = await axios.post(`${API_DEUDOR}/registrar-abono`, {
+            dni_deudor,
+            id_venta,
+            monto_abono,
+            fecha_abono
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.mensaje || "Error al registrar el abono");
+    }
+};

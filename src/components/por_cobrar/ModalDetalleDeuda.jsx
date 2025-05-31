@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import "./ModalDetalleDeuda.css";
+import "../../api/DeudorApi.js";
+import { registrarAbono } from "../../api/DeudorApi.js";
+import Modal from "../Modal.jsx";
 
 const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicial, ventaId, onPagoGuardado }) => {
   const totalOriginal = detalles.reduce(
@@ -26,47 +29,51 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
     return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
   };
 
+  const [modalError, setModalError] = useState({ open: false, mensaje: "" });
+  const [modalSuccess, setModalSuccess] = useState({ open: false, mensaje: "" }); // ✅ AGREGADO
+
   const handleGuardar = async () => {
-    const valorAbono = parseInt(abono.replace(/\D/g, ""), 10); // limpia $ y puntos
+    const valorAbono = parseInt(abono.replace(/\D/g, ""), 10); // Limpia caracteres no numéricos
 
     if (isNaN(valorAbono) || valorAbono < 0) {
-      alert("Por favor ingrese un abono válido.");
+      setModalError({ open: true, mensaje: "Por favor ingrese un abono válido." });
       return;
     }
 
     if (valorAbono > deudaRestante) {
-      alert("El abono no puede ser mayor al total de la deuda.");
+      setModalError({ open: true, mensaje: "El abono no puede ser mayor al total de la deuda." });
       return;
     }
 
+    const fecha_abono = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    const abonoData = {
+      dni_deudor: cliente?.documento,
+      id_venta: ventaId,
+      monto_abono: valorAbono,
+      fecha_abono,
+    };
+
     try {
-      const response = await fetch(`/ventas-fiadas/${ventaId}/abono`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ monto: valorAbono }),
-      });
+      await registrarAbono(abonoData);
 
-      if (response.ok) {
-        alert("Abono registrado exitosamente.");
-        setDeudaRestante((prev) => prev - valorAbono);
+      setDeudaRestante((prev) => prev - valorAbono);
 
-        if (typeof onPagoGuardado === "function") {
-          onPagoGuardado(); // actualiza la tabla en el padre
-        }
-
-        onClose(); // cierra el modal
-      } else {
-        const error = await response.json();
-        alert("Error al registrar abono: " + (error.message || "Intenta nuevamente."));
+      if (typeof onPagoGuardado === "function") {
+        onPagoGuardado();
       }
+
+      setModalSuccess({ open: true, mensaje: "Abono registrado exitosamente." });
     } catch (error) {
-      console.error("Error al guardar el abono:", error);
-      alert("Hubo un problema al registrar el abono.");
+      let mensaje = "Error al registrar abono. Intenta nuevamente.";
+      if (error?.response?.data?.mensaje) {
+        mensaje = error.response.data.mensaje;
+      } else if (error?.message) {
+        mensaje = error.message;
+      }
+      setModalError({ open: true, mensaje });
     }
   };
-
 
   return (
     <div className="modal-deuda-overlay">
@@ -130,6 +137,28 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
 
         <button className="btn-guardar" onClick={handleGuardar}>Guardar Pago</button>
       </div>
+
+      {modalError.open && (
+        <Modal
+          isOpen={modalError.open}
+          onClose={() => setModalError({ open: false, mensaje: "" })}
+          title="Error al registrar abono"
+          message={modalError.mensaje}
+          type="error"
+          confirmText="Aceptar"
+        />
+      )}
+
+      {modalSuccess.open && (
+        <Modal
+          isOpen={modalSuccess.open}
+          onClose={() => setModalSuccess({ open: false, mensaje: "" })}
+          title="Éxito"
+          message={modalSuccess.mensaje}
+          type="success"
+          confirmText="Aceptar"
+        />
+      )}
     </div>
   );
 };
