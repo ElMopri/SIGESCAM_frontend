@@ -487,6 +487,7 @@ const Estadisticas = () => {
               <table className="tabla-estadisticas">
                 <thead>
                   <tr>
+                    <th>Id</th>
                     <th>Fecha</th>
                     <th>Total de venta</th>
                     <th>Estado</th>
@@ -509,6 +510,7 @@ const Estadisticas = () => {
                         style={{ cursor: "pointer" }}
                         onClick={() => abrirDetalleVenta(item.id_venta)}
                       >
+                        <td>{idx+1}</td>
                         <td>{item.fecha_venta.split("T")[0]}</td>
                         <td>
                           $
@@ -517,7 +519,17 @@ const Estadisticas = () => {
                             maximumFractionDigits: 0,
                           })}
                         </td>
-                        <td>{item.es_fiado ? "Fiado" : "Pagado"}</td>
+                        <td>
+                          <span
+                            className={
+                              item.es_fiado
+                                ? "estado-venta estado-fiado"
+                                : "estado-venta estado-pagado"
+                            }
+                          >
+                            {item.es_fiado ? "Fiado" : "Pagado"}
+                          </span>
+                        </td>
                         <td>
                           {item.es_fiado
                             ? "$" + item.totalAbonos.toLocaleString()
@@ -551,36 +563,38 @@ const Estadisticas = () => {
         <div className="widget-margen-negocio">
           <div className="header-estadisticas">
             <span>Análisis de Entradas / Salidas</span>
-            <span className="mes-ano-estadisticas" style={{ color: "#3182ce" }}>
+            <span className="mes-ano-estadisticas">
               {obtenerMesAnioActual()}
             </span>
             <IoWalletOutline className="wallet-icon" />
           </div>
-          <div className="campo">
-            <label>Entradas:</label>
-            <input
-              className="campo-texto"
-              type="text"
-              value={`$ ${entradasMes.toLocaleString()}`}
-              readOnly
-            />
-          </div>
-          <div className="campo">
-            <label>Salidas:</label>
-            <input
-              className="campo-texto"
-              type="text"
-              value={`$ ${salidasMes.toLocaleString()}`}
-              readOnly
-            />
-          </div>
-          <div className="campo margen">
-            <label>Margen de Negocio:</label>
-            <span
-              className={margenMes >= 0 ? "valor-positivo" : "valor-negativo"}
-            >
-              ${margenMes.toLocaleString()}
-            </span>
+          <div className="contenido-widget">
+            <div className="campo">
+              <label>Entradas:</label>
+              <input
+                className="campo-texto"
+                type="text"
+                value={`$ ${entradasMes.toLocaleString()}`}
+                readOnly
+              />
+            </div>
+            <div className="campo">
+              <label>Salidas:</label>
+              <input
+                className="campo-texto"
+                type="text"
+                value={`$ ${salidasMes.toLocaleString()}`}
+                readOnly
+              />
+            </div>
+            <div className="campo margen">
+              <label>Margen de Negocio:</label>
+              <span
+                className={margenMes >= 0 ? "valor-positivo" : "valor-negativo"}
+              >
+                ${margenMes.toLocaleString()}
+              </span>
+            </div>
           </div>
         </div>
 

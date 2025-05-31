@@ -1,7 +1,7 @@
 .estadisticas-container {
   padding: 1rem;
   border-radius: 8px;
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   padding-top: 0;
   display: flex;
@@ -163,6 +163,8 @@
   margin: 0;
   padding: 20px;
   padding-top: 0;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .tabla-estadisticas {
@@ -190,6 +192,7 @@
   border-bottom: 2px solid #cbd5e0;
   white-space: nowrap;
   font-size: 0.95rem;
+  z-index: 2;
 }
 
 .tabla-estadisticas td {
@@ -199,16 +202,13 @@
   font-size: 0.95rem;
 }
 
-.fila-par {
-  background-color: #f7fafc;
-}
-
-.fila-impar {
+.tabla-estadisticas tbody tr:hover {
   background-color: #ffffff;
-}
-
-.tabla-estadisticas tr:hover {
-  background-color: #e3f6fd;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  position: relative;
+  z-index: 1;
 }
 
 .total-container {
@@ -216,9 +216,13 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.2rem;
   background-color: #edf2f7;
   border-top: 1px solid #e2e8f0;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
 }
 
 .total-container span {
@@ -236,7 +240,7 @@
   font-weight: 600;
   color: #2d3748;
   text-align: right;
-  min-width: 180px;
+  width: 150px;
   font-size: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -253,8 +257,19 @@
   align-items: stretch;
 }
 
+/* Estilos compartidos para ambos widgets */
+.widget-margen-negocio,
+.seccion-ganancias {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+/* Widget de Análisis Entradas/Salidas */
 .widget-margen-negocio {
-  width: 400px;
+  width: 450px;
   padding: 1.5rem;
   background: white;
   border: 1px solid #e9ecef;
@@ -270,42 +285,68 @@
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   margin-bottom: 1.2rem;
   color: #2d3748;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid #e2e8f0;
 }
 
+.widget-margen-negocio .contenido-widget {
+  padding: 0 1.5rem;
+}
+
+.widget-margen-negocio .header-estadisticas span:first-child {
+  color: #2d3748;
+}
+
+.widget-margen-negocio .fecha-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1.2rem;
+  gap: 0.5rem;
+}
+
+.mes-ano-estadisticas {
+  margin-left: auto;
+  font-size: 1rem;
+  color: #3182ce;
+  font-weight: 500;
+}
+
+.wallet-icon {
+  width: 20px;
+  height: 20px;
+  color: #2d3748;
+  margin-left: 8px;
+}
+
 .widget-margen-negocio .campo {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-}
-
-.widget-margen-negocio .campo .campo-texto {
+  margin-bottom: 1rem;
   font-weight: 500;
 }
 
 .widget-margen-negocio label {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #4a5568;
-  font-weight: 600;
+  font-weight: 500;
   flex: 1;
 }
 
 .widget-margen-negocio input {
   border: 1px solid #e2e8f0;
-  background: white;
+  background: rgb(243, 242, 242);
   padding: 0.5rem 0.8rem;
   border-radius: 6px;
   width: 140px;
   text-align: right;
-  font-weight: 600;
-  color: #2d3748;
-  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2d3748e8;
+  font-size: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -315,10 +356,10 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.widget-margen-negocio .valor-positivo {
+.widget-margen-negocio .valor-positivo,
+.widget-margen-negocio .valor-negativo {
   font-weight: 500;
-  color: #38a169;
-  font-size: 0.9rem;
+  font-size: 1rem;
   background: white;
   border: 1px solid #e2e8f0;
   padding: 0.5rem 0.8rem;
@@ -327,27 +368,17 @@
   text-align: right;
   display: inline-block;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.widget-margen-negocio .valor-positivo {
+  color: #38a169;
 }
 
 .widget-margen-negocio .valor-negativo {
-  font-weight: 500;
   color: #e53e3e;
-  font-size: 0.9rem;
-  background: white;
-  border: 1px solid #e2e8f0;
-  padding: 0.5rem 0.8rem;
-  border-radius: 6px;
-  width: 140px;
-  text-align: right;
-  display: inline-block;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.wallet-icon {
-  width: 20px;
-  height: 20px;
-}
-
+/* Sección de Histórico de Márgenes */
 .seccion-ganancias {
   flex: 1;
   background-color: #fff;
@@ -393,8 +424,8 @@
 }
 
 .titulo-ganancias {
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.1rem;
+  color: #2d3748;
   margin-bottom: 0;
   font-weight: 600;
   padding-bottom: 0;
@@ -447,6 +478,7 @@
   background-color: #f8f8f8;
   border-top: 2px solid #e0e0e0;
   font-weight: 600;
+  font-size: 1rem;
 }
 
 .btn-revertir {
@@ -468,6 +500,20 @@
   color: white;
 }
 
+.tabla-ganancias th {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  padding: 12px 15px;
+}
+
+.tabla-ganancias td {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4a5568;
+  padding: 12px 15px;
+}
+
 @media (max-width: 1024px) {
   .secciones-inferiores {
     flex-direction: column;
@@ -479,29 +525,187 @@
 }
 
 @media (max-width: 768px) {
+  .estadisticas-container {
+    width: 95%;
+    padding: 0.8rem;
+  }
+
+  .filtro-section {
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .fecha-inputs {
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .fecha-inputs input {
+    width: 140px;
+  }
+
+  .widget-margen-negocio {
+    padding: 1rem;
+  }
+
+  .widget-margen-negocio .contenido-widget {
+    padding: 0 0.8rem;
+  }
+
+  .widget-margen-negocio .campo {
+    margin-bottom: 0.8rem;
+  }
+
+  .widget-margen-negocio input,
+  .widget-margen-negocio .valor-positivo,
+  .widget-margen-negocio .valor-negativo {
+    width: 120px;
+    font-size: 0.95rem;
+  }
+
   .tabla-container {
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
+    padding: 10px;
+    padding-top: 0;
+    max-height: 350px;
+    max-width: 90%;
   }
 
   .tabla-estadisticas {
     font-size: 0.9rem;
+    min-width: 500px;
+    max-width: 900px;
   }
 
   .tabla-estadisticas th,
   .tabla-estadisticas td {
     padding: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .total-container {
+    padding: 0.8rem;
+  }
+
+  .total-input {
+    width: 120px;
+    padding: 0.6rem 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
+  .estadisticas-container {
+    width: 90%;
+    padding: 0.5rem;
+  }
+
+  .filtro-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding: 0.8rem;
+  }
+
+  .filtro-label {
+    margin-right: 0;
+  }
+
+  .filtro-select {
+    width: 100%;
+  }
+
+  .fecha-inputs {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .fecha-inputs input {
+    width: 100%;
+  }
+
+  .busqueda-input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .btn-revertir {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .widget-margen-negocio {
+    padding: 0.8rem;
+  }
+
+  .widget-margen-negocio .contenido-widget {
+    padding: 0 0.5rem;
+  }
+
+  .widget-margen-negocio .header-estadisticas {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .widget-margen-negocio input,
+  .widget-margen-negocio .valor-positivo,
+  .widget-margen-negocio .valor-negativo {
+    width: 110px;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .widget-margen-negocio label {
+    font-size: 0.9rem;
+  }
+
+  .tabla-container {
+    padding: 5px;
+    padding-top: 0;
+    max-height: 300px;
+    max-width: 80%;
+    padding-right: 0;
+  }
+
   .tabla-estadisticas {
     font-size: 0.85rem;
+    min-width: 200px;
+    max-width: 500px;
   }
 
   .tabla-estadisticas th,
   .tabla-estadisticas td {
     padding: 0.7rem;
   }
+
+  .total-container {
+    padding: 0.6rem;
+  }
+
+  .total-input {
+    width: 100px;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+  }
+}
+
+.estado-venta {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-block;
+  text-align: center;
+  min-width: 80px;
+}
+
+.estado-fiado {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #ef4444;
+}
+
+.estado-pagado {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #22c55e;
 }

@@ -1,0 +1,357 @@
+.gestor-venta-container {
+  width: 80%;
+  margin: 1rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.gestor-venta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.gestor-venta-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.gestor-fecha-header-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gestor-fecha-label {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.gestor-fecha-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  min-width: 200px;
+  color: #2c3e50;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.gestor-fecha-input:focus {
+  outline: none;
+  border-color: #4cb5ff;
+  box-shadow: 0 0 0 3px rgba(76, 181, 255, 0.1);
+}
+
+.gestor-form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.gestor-form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 140px;
+  position: relative;
+}
+
+.gestor-form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.gestor-form-input:focus {
+  outline: none;
+  border-color: #4cb5ff;
+  box-shadow: 0 0 0 3px rgba(76, 181, 255, 0.1);
+}
+
+.gestor-form-input:disabled {
+  background-color: #f8fafc;
+  cursor: not-allowed;
+}
+
+.gestor-btn-agregar {
+  padding: 0.75rem 1.5rem;
+  background-color: #4cb5ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 90px;
+  height: 38px;
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+}
+
+.gestor-btn-agregar:hover {
+  background-color: #3a9edb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 181, 255, 0.2);
+}
+
+.gestor-productos-container {
+  margin: 0.5rem 0 1rem;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gestor-table-wrapper {
+  overflow-y: auto;
+  overflow-x: auto;
+  flex-grow: 1;
+  scrollbar-width: thin;
+  scrollbar-color: #4cb5ff #f0f0f0;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #4cb5ff;
+  border-radius: 4px;
+}
+
+.gestor-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #3a9edb;
+}
+
+.gestor-total-table {
+  margin-top: -1px;
+  border-top: 2px solid #e2e8f0;
+  background-color: #f8f9fa;
+}
+
+.gestor-total-row {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
+.gestor-total-row td {
+  border-bottom: none !important;
+  text-align: left;
+}
+
+.gestor-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 800px;
+}
+
+.gestor-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f8f9fa;
+}
+
+.gestor-table th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.gestor-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.gestor-col-nombre { width: 40%; }
+.gestor-col-cantidad { width: 16%; }
+.gestor-col-precio { width: 21%; }
+.gestor-col-total { width: 21%; text-align: left; }
+.gestor-col-acciones { width: 1%; }
+
+.gestor-btn-eliminar {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.gestor-btn-eliminar:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #bd2130;
+}
+
+.gestor-payment-status {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.gestor-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.gestor-checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gestor-deudor-info {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.gestor-btn-registrar {
+  width: 100%;
+  padding: 1rem;
+  background-color: #4cb5ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gestor-btn-registrar:hover {
+  background-color: #3a9edb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 181, 255, 0.2);
+}
+
+.gestor-btn-registrar:active {
+  transform: translateY(0);
+}
+
+.gestor-sugerencias-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gestor-sugerencia-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.gestor-sugerencia-item:hover {
+  background-color: #f0f7ff;
+}
+
+@media (max-width: 768px) {
+  .gestor-venta-container {
+    padding: 1.5rem;
+    margin: 1rem;
+    width: 95%;
+  }
+
+  .gestor-venta-title {
+    font-size: 1.5rem;
+  }
+
+  .gestor-form-row {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .gestor-form-group {
+    width: 100%;
+  }
+
+  .gestor-form-input,
+  .gestor-fecha-input {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .gestor-btn-agregar {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-left: 0;
+  }
+
+  .gestor-deudor-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .gestor-productos-container {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .gestor-payment-status {
+    padding: 1rem;
+  }
+}
