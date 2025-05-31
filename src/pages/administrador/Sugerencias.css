@@ -384,4 +384,19 @@
     color: #333;
 }
 
+.cerrar-icono {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 20px !important;
+    color: red;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
 }

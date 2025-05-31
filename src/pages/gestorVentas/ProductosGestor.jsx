@@ -23,6 +23,8 @@ const ProductosGestor = () => {
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtrosAvanzados, setFiltrosAvanzados] = useState({});
 
+  const [bajoStock, setBajoStock] = useState(false);
+
   const [errorModalOpen, setErrorModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
@@ -65,55 +67,75 @@ const ProductosGestor = () => {
   }, [])
 
   React.useEffect(() => {
-    const fetchProductosFiltrados = async () => {
-      try {
-        if (filtroNombre) {
-          const productos = await buscarProductosPorNombreParecido(filtroNombre)
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }))
-          setDatos(datosTransformados)
-        } else if (
-          (filtrosAvanzados.cantidad !== undefined && filtrosAvanzados.cantidad !== "") ||
-          (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
-          (filtrosAvanzados.precio !== undefined && filtrosAvanzados.precio !== "")
-        ) {
-          const productos = await filtrarProductos(
-            filtrosAvanzados.cantidad || null,
-            filtrosAvanzados.categoria || null,
-            filtrosAvanzados.precio || null,
-          )
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }))
-          setDatos(datosTransformados)
-        } else {
-          const productos = await obtenerProductos()
-          const datosTransformados = productos.map((producto) => ({
-            id: producto.nombre,
-            producto: producto.nombre,
-            categoria: producto.categoria,
-            unidades: producto.cantidad,
-            precio: producto.precio_venta,
-          }))
-          setDatos(datosTransformados)
-        }
-      } catch (error) {
-        console.error("Error al filtrar los productos:", error)
-        mostrarError(`Error al filtrar los productos: ${error.message || "Ocurrió un problema inesperado"}`)
+  const fetchProductosFiltrados = async () => {
+    try {
+      if (bajoStock) {
+        // Filtrar productos con cantidad <= 3
+        const productos = await obtenerProductos();
+        const productosBajoStock = productos.filter(p => p.cantidad <= 3);
+        const datosTransformados = productosBajoStock.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else if (filtroNombre) {
+        const productos = await buscarProductosPorNombreParecido(
+          filtroNombre
+        );
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else if (
+        (filtrosAvanzados.cantidad !== undefined &&
+          filtrosAvanzados.cantidad !== "") ||
+        (filtrosAvanzados.categoria && filtrosAvanzados.categoria !== "") ||
+        (filtrosAvanzados.precio !== undefined &&
+          filtrosAvanzados.precio !== "")
+      ) {
+        const productos = await filtrarProductos(
+          filtrosAvanzados.cantidad || null,
+          filtrosAvanzados.categoria || null,
+          filtrosAvanzados.precio || null
+        );
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
+      } else {
+        const productos = await obtenerProductos();
+        const datosTransformados = productos.map((producto) => ({
+          id: producto.nombre,
+          producto: producto.nombre,
+          categoria: producto.categoria,
+          unidades: producto.cantidad,
+          precio: producto.precio_venta,
+        }));
+        setDatos(datosTransformados);
       }
+    } catch (error) {
+      console.error("Error al filtrar los productos:", error);
+      mostrarError(
+        `Error al filtrar los productos: ${
+          error.message || "Ocurrió un problema inesperado"
+        }`
+      );
     }
+  };
 
-    fetchProductosFiltrados()
-  }, [filtroNombre, filtrosAvanzados])
+  fetchProductosFiltrados();
+}, [filtroNombre, filtrosAvanzados, bajoStock]);
 
   const columnasAdmin = [
     { key: "producto", label: "Producto" },
@@ -129,11 +151,12 @@ const ProductosGestor = () => {
   const revertirFiltros = () => {
     setFiltroNombre("");
     setFiltrosAvanzados({});
+    setBajoStock(false);
   };
 
-    const mostrarError = (mensaje) => {
-    setErrorMessage(mensaje)
-    setErrorModalOpen(true)
+  const mostrarError = (mensaje) => {
+    setErrorMessage(mensaje);
+    setErrorModalOpen(true);
 
     // Asegurarnos de que el modal de error tenga prioridad visual
     const modalOverlays = document.querySelectorAll(".modal-overlay")
@@ -160,11 +183,25 @@ const ProductosGestor = () => {
 
       <div className="contenedor-tabla">
         <div className="botones-filtro">
-          <button className="btn-filtrar" onClick={() => setMostrarFiltroModal(true)}>
+          <button
+            className="btn-filtrar"
+            onClick={() => setMostrarFiltroModal(true)}
+          >
             Filtro <MdOutlineFilterAlt style={{ marginLeft: "8px" }} />
           </button>
           <button className="btn-revertir" onClick={revertirFiltros}>
             Revertir Filtros <FaUndo style={{ marginLeft: "4px" }} />
+          </button>
+          <button
+            className="btn-bajo-stock"
+            style={{
+              backgroundColor: bajoStock ? "#f7b731" : "",
+              color: bajoStock ? "#fff" : "",
+              marginLeft: "8px"
+            }}
+            onClick={() => setBajoStock(!bajoStock)}
+          >
+            Bajo stock
           </button>
         </div>
         <div className="tabla-productos-gestor">
