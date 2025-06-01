@@ -453,3 +453,20 @@
     margin-left: -1px;
 }
 }
+
+/* Ipad Mini */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sugerencias-admin {
+    padding: 2rem;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .contenedor-scroll-sugerencias {
+    max-height: 59vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    padding-bottom: 1rem;
+    margin-top: 13px;
+}
+}

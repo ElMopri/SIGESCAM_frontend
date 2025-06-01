@@ -108,7 +108,7 @@
   transition: background-color 0.3s;
 }
 
-.btn-revertir {
+.botones-filtro .btn-revertir {
   border: 2px solid #f63b3b;
   background-color: white;
   color: #f63b3b;
@@ -119,6 +119,7 @@
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  justify-content: center;
 }
 
 .btn-bajo-stock {
@@ -225,5 +226,14 @@
 
   .botones-filtro {
     margin-bottom: 17px !important;
+  }
+
+  .contenedor-tabla .btn-revertir {
+    width: 50%;
+  }
+
+  .contenedor-tabla .btn-filtrar {
+    width: 40%;
+    justify-content: center;
   }
 }
