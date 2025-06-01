@@ -71,7 +71,6 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   word-wrap: break-word;
 }
 
@@ -105,12 +104,15 @@
 
 .tarjeta-sugerencia p {
   margin-bottom: 0.5rem;
+  font-size: 15,5px;
 }
 
 .acciones-sugerencia {
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .icono {
@@ -118,11 +120,11 @@
   cursor: pointer;
 }
 
-.verde {
+.icono-verde-sugerencias {
   color: #2e7d32;
 }
 
-.rojo {
+.icono-rojo-sugerencias {
   color: #d32f2f;
 }
 
@@ -140,8 +142,8 @@
 
 .sugerencias-admin {
   padding: 2rem;
-  margin-left: 80px;
-  margin-right: 80px;
+  margin-left: 90px;
+  margin-right: 90px;
 }
 
 /* Modal */
@@ -303,11 +305,11 @@
 }
 
 .contenedor-scroll-sugerencias {
-  max-height: 65vh;
-  overflow-y: auto;
-  padding-right: 10px; /* espacio para scrollbar */
-  padding-bottom: 1rem;
-  margin-top: 13px;
+    max-height: 51vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    padding-bottom: 1rem;
+    margin-top: 13px;
 }
 
 .contenedor-scroll-sugerencias::-webkit-scrollbar {
@@ -331,12 +333,11 @@
     width: 100%;
   }
 
-  .sugerencias-admin {
-    padding: 2rem;
-    min-height: 100vh;
-    margin-left: 50px;
-    margin-right: 50px;
-}
+.sugerencias-admin {
+    padding: 1rem;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 
   .tabs-sugerencias {
     flex-direction: column;
@@ -354,10 +355,10 @@
     border-bottom: none;
   }
 
-    .tarjeta-sugerencia {
-    font-size: 0.85rem;
-    justify-content: center;
-    margin-right: 14px;
+  .tarjeta-sugerencia {
+    margin: 0 auto; /* Centrar la tarjeta */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .nombre {
@@ -398,5 +399,33 @@
     text-align: center;
     color: #333;
     margin-bottom: 1.5rem;
+}
+
+.contenedor-scroll-sugerencias {
+    width: 100%; /* Cambiar de 110% a 100% */
+    margin-top: 22px;
+    overflow-x: hidden;
+  }
+
+.acciones-sugerencia {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: -8px;
+}
+
+.grid-sugerencias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.1rem 17.6px;
+}
+
+.input-sugerencia label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    margin-top: 5px;
 }
 }

@@ -15,10 +15,10 @@ const TarjetaSugerencia = ({ sugerencia, onAceptar, onRechazar }) => {
       </div>
       <div className="acciones-sugerencia">
         {onAceptar && (
-          <FaCheckSquare className="icono verde" title="Aceptar" onClick={onAceptar} />
+          <FaCheckSquare className="icono-verde-sugerencias" title="Aceptar" onClick={onAceptar} />
         )}
         {onRechazar && (
-          <FaTrashAlt className="icono rojo" title="Rechazar" onClick={onRechazar} />
+          <FaTrashAlt className="icono-rojo-sugerencias" title="Rechazar" onClick={onRechazar} />
         )}
       </div>
     </div>
