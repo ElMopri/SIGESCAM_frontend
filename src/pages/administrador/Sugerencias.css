@@ -171,10 +171,11 @@
   position: relative;
 }
 
-.modal-content h2 {
+.sugerencias-modal .modal-content h2 {
   margin-bottom: 1rem;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: #333;
+  padding-right: 19px;
 }
 
 .modal-content table {
@@ -321,6 +322,11 @@
   border-radius: 4px;
 }
 
+.tabla-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
 @media (max-width: 600px) {
   .input-agregar {
     flex-direction: column;
@@ -381,7 +387,6 @@
   }
 
   .descripcion-producto {
-    font-size: 0,75rem;
     color: #333;
 }
 
@@ -392,13 +397,6 @@
     font-size: 20px !important;
     color: red;
     cursor: pointer;
-}
-
-.modal-content h2 {
-    margin-top: 0;
-    text-align: center;
-    color: #333;
-    margin-bottom: 1.5rem;
 }
 
 .contenedor-scroll-sugerencias {
@@ -427,5 +425,31 @@
     font-weight: bold;
     margin-bottom: 0.5rem;
     margin-top: 5px;
+}
+
+  .modal-content table {
+    font-size: 0.9rem;
+  }
+
+  .modal-content th,
+  .modal-content td {
+    padding: 0.4rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal; /* Permite que el contenido salte de línea */
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .modal-content .cerrar-icono {
+    font-size: 20px;
+    right: 20px;
+  }
+
+  .tabla-scroll {
+    overflow-x: auto;
+    /* overflow-x: hidden; */
+    width: 102%;
+    margin-left: -1px;
 }
 }

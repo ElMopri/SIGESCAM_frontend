@@ -12,7 +12,7 @@ const ModalSugerencia = ({ tipo, sugerencias, onCerrar, onMover }) => {
       <div className="modal-content">
         <FaTimes className="cerrar-icono" onClick={onCerrar} />
         <h2>{titulo}</h2>
-        <div className="scroll-body">
+        <div className="scroll-body tabla-scroll">
           {sugerencias.length === 0 ? (
             <p className="mensaje-vacio">{mensajeVacio}</p>
           ) : (
