@@ -3,6 +3,8 @@ import { editarCorreo, obtenerPorId, subirFotoPerfil } from "../api/UsuarioApi";
 import Modal from "./Modal";
 import "./AjustesBase.css";
 import { AuthContext } from "../context/AuthContext";
+import { obtenerPreferencia } from "../api/PreferenciaNotiApi";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AjustesBase = ({ imagenPerfil, notificaciones }) => {
   const { user, setUser } = useContext(AuthContext);
@@ -19,12 +21,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
     onCancel: null,
   });
 
-  const [estadoNotificaciones, setEstadoNotificaciones] = useState(
-    notificaciones.reduce((acc, noti) => {
-      acc[noti.id] = true;
-      return acc;
-    }, {})
-  );
+  const [estadoNotificaciones, setEstadoNotificaciones] = useState({});
 
   const [subiendoImagen, setSubiendoImagen] = useState(false);
   const [errorImagen, setErrorImagen] = useState("");
@@ -59,6 +56,32 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
 
     cargarUsuario();
   }, [user]);
+
+  useEffect(() => {
+  const cargarPreferencias = async () => {
+    if (!user?.dni) return;
+    const id_usuario = localStorage.getItem("usuario_dni");
+
+    const preferenciasIniciales = {};
+
+    for (const noti of notificaciones) {
+      const id_tipo_notificacion = noti.id === "productos" ? 2 : 3;
+
+      try {
+        const resultado = await obtenerPreferencia(id_usuario, id_tipo_notificacion);
+        preferenciasIniciales[noti.id] = resultado;
+        console.log(resultado);
+      } catch (error) {
+        console.error("Error al obtener preferencia de", noti.label, error);
+        preferenciasIniciales[noti.id] = true; // valor por defecto en caso de error
+      }
+    }
+
+    setEstadoNotificaciones(preferenciasIniciales);
+  };
+
+  cargarPreferencias();
+}, [notificaciones]);
 
   const toggleEditable = (campo) => {
     if (editable[campo]) {
@@ -134,12 +157,53 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
     }
   };
 
-  const handleToggle = (id) => {
+  const handleToggle = async (id) => {
+  const nuevoEstado = !estadoNotificaciones[id];
+  setEstadoNotificaciones((prev) => ({
+    ...prev,
+    [id]: nuevoEstado,
+  }));
+
+  const id_usuario = user?.dni || localStorage.getItem("DNI");
+  const id_tipo_notificacion = id === "productos" ? 2 : 3;
+
+  try {
+    const res = await fetch(`${API_URL}/preferenciaNotificacion`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_usuario,
+        id_tipo_notificacion,
+        activa: nuevoEstado,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Error al cambiar la preferencia");
+    }
+
+    const data = await res.json();
+    console.log("Preferencia actualizada:", data);
+  } catch (error) {
+    console.error("Error al cambiar estado de notificación:", error);
+    // Revertimos el cambio si hay error
     setEstadoNotificaciones((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [id]: !nuevoEstado,
     }));
-  };
+
+    setModalConfig({
+      type: "error",
+      title: "Error al cambiar notificación",
+      message: "No se pudo cambiar el estado. Intenta más tarde.",
+      onConfirm: null,
+      onCancel: null,
+    });
+    setShowModal(true);
+  }
+};
 
   const handleClickEditarFoto = () => {
     if (fileInputRef.current) fileInputRef.current.click();
