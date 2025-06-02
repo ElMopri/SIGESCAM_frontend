@@ -313,7 +313,7 @@ const AjustesBase = ({ imagenPerfil, notificaciones }) => {
               <span className="icon" onClick={() => toggleEditable("correo")}>
                 <img
                   src={
-                    editable.correo ? "/public/save.png" : "/public/create.png"
+                    editable.correo ? "./save.png" : "./create.png"
                   }
                   alt={editable.correo ? "Guardar correo" : "Editar correo"}
                 />
