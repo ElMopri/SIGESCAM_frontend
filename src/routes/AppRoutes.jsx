@@ -30,12 +30,12 @@ export default function AppRoutes() {
       <Route path="/" element={<Inicio />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/restablecerContraseña"
+        path="/restablecer-contrasena"
         element={<RestablecerContraseña />}
       />
-      <Route path="/crearContraseña" element={<CrearContraseña />} />
+      <Route path="/crear-contrasena" element={<CrearContraseña />} />
       <Route
-        path="/establecer-contraseña/:token"
+        path="/establecer-contrasena/:token"
         element={<EstablecerContraseña />}
       />
 

@@ -80,7 +80,7 @@ const Login = () => {
             </span>
           </div>
 
-          <a href="/restablecerContraseña" className="forgot-link">
+          <a href="/restablecer-contrasena" className="forgot-link">
             ¿Olvidó su contraseña?
           </a>
         </div>
