@@ -1,8 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import ModalDetalleDeuda from '../../components/por_cobrar/ModalDetalleDeuda';
-import { obtenerVentasFiadasDeudor, obtenerDeudorPorDNI } from '../../api/DeudorApi';
-import { obtenerDetalleVentaFiada } from '../../api/VentaApi';
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import ModalDetalleDeuda from "../../components/por_cobrar/ModalDetalleDeuda";
+import {
+  obtenerVentasFiadasDeudor,
+  obtenerDeudorPorDNI,
+} from "../../api/DeudorApi";
+import { obtenerDetalleVentaFiada } from "../../api/VentaApi";
 import { AuthContext } from "../../context/AuthContext";
 
 const DetalleDeudor = () => {
@@ -21,11 +24,11 @@ const DetalleDeudor = () => {
         setDeudor({
           nombre: data.nombre,
           documento: data.dni_deudor,
-          telefono: data.telefono || '---',
+          telefono: data.telefono || "---",
         });
         setVentasFiadas(data?.ventas || []);
       } catch (error) {
-        console.error('Error obteniendo ventas fiadas:', error);
+        console.error("Error obteniendo ventas fiadas:", error);
       }
     };
 
@@ -49,11 +52,11 @@ const DetalleDeudor = () => {
         detalles: detalle.detallesVenta || [],
         totalVenta: venta.monto_total,
         abonoInicial: venta.abono || 0,
-        venta: venta
+        venta: venta,
       });
       setMostrarModal(true);
     } catch (error) {
-      console.error('Error obteniendo detalle de venta:', error);
+      console.error("Error obteniendo detalle de venta:", error);
     }
   };
 
@@ -68,8 +71,12 @@ const DetalleDeudor = () => {
       <div className="modal-deuda">
         <div className="modal-header">
           <div>
-            <p><strong>Nombre:</strong> {deudor?.nombre || '---'}</p>
-            <p><strong>Documento:</strong> {deudor?.documento || '---'}</p>
+            <p>
+              <strong>Nombre:</strong> {deudor?.nombre || "---"}
+            </p>
+            <p>
+              <strong>Documento:</strong> {deudor?.documento || "---"}
+            </p>
             <p className="fecha-actual-detalle-deuda">
               <strong>Fecha:</strong> {new Date().toLocaleDateString()}
             </p>
@@ -106,12 +113,22 @@ const DetalleDeudor = () => {
               console.log("item:", item); // 👈 Agrega esto
 
               return (
-                <tr key={index} className={index % 2 === 0 ? 'fila-par-detalle-deuda' : 'fila-impar-detalle-deuda'}>
+                <tr
+                  key={index}
+                  className={
+                    index % 2 === 0
+                      ? "fila-par-detalle-deuda"
+                      : "fila-impar-detalle-deuda"
+                  }
+                >
                   <td>Venta {index + 1}</td>
                   <td>${item.monto_pendiente.toLocaleString()}</td>
-                  <td>{new Date(item.fecha_venta).toLocaleDateString()}</td>
+                  <td>{item.fecha_venta.split("T")[0]}</td>
                   <td>
-                    <button className="btn-abono" onClick={() => handleAbono(item)}>
+                    <button
+                      className="btn-abono"
+                      onClick={() => handleAbono(item)}
+                    >
                       Registrar Abono
                     </button>
                   </td>
