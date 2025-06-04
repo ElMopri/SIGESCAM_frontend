@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ModalAgregarProducto.css";
 import { FaTimes } from "react-icons/fa";
-import Modal from "./Modal";
+import { obtenerCategorias } from "../api/CategoriaApi";
 
 const ModalAgregarProducto = ({
   onClose,
   onSave,
   productoInicial,
-  categorias,
   productos,
 }) => {
   const [nombreProducto, setNombreProducto] = useState(productoInicial?.producto || "");
@@ -16,42 +15,35 @@ const ModalAgregarProducto = ({
   const [precioCompra, setPrecioCompra] = useState(productoInicial?.precioCompra || "");
   const [cantidadExistente, setCantidadExistente] = useState(productoInicial?.unidades || 0);
   const [cantidadAgregar, setCantidadAgregar] = useState("");
-  const [fechaCompra, setFechaCompra] = useState(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  });
+  const [fechaCompra, setFechaCompra] = useState("");
   const [coincidencias, setCoincidencias] = useState([]);
-  const [errorModal, setErrorModal] = useState({ show: false, message: "" });
+  const [categorias, setCategorias] = useState([]);
+
   const inputRef = useRef(null);
 
   useEffect(() => {
-    const textoBusqueda = nombreProducto.trimStart();
-    if (textoBusqueda === "") {
+    const cargarCategorias = async () => {
+      try {
+        const data = await obtenerCategorias();
+        setCategorias(data.map((cat) => cat.nombre)); // si tus objetos tienen {id, nombre, descripcion}
+      } catch (error) {
+        console.error("Error cargando categorías:", error.message);
+      }
+    };
+
+    cargarCategorias();
+  }, []);
+
+  useEffect(() => {
+    if (nombreProducto.trim() === "") {
       setCoincidencias([]);
       return;
     }
     const resultados = productos.filter((p) =>
-      p.producto.toLowerCase().includes(textoBusqueda.toLowerCase())
+      p.producto.toLowerCase().includes(nombreProducto.toLowerCase())
     );
     setCoincidencias(resultados);
   }, [nombreProducto, productos]);
-
-  const handleNombreProductoChange = (e) => {
-    const valor = e.target.value;
-    // Eliminar espacios al inicio mientras se escribe
-    const valorSinEspacios = valor.replace(/^\s+/, '');
-    setNombreProducto(valorSinEspacios);
-  };
-
-  const handleKeyDown = (e) => {
-    // Si el input está vacío o solo contiene espacios, prevenir la entrada de espacios
-    if ((nombreProducto === '' || /^\s+$/.test(nombreProducto)) && e.key === ' ') {
-      e.preventDefault();
-    }
-  };
 
   const seleccionarProducto = (producto) => {
     setNombreProducto(producto.producto);
@@ -63,43 +55,6 @@ const ModalAgregarProducto = ({
   };
 
   const guardar = () => {
-    // Validar campos requeridos
-    if (!nombreProducto.trim()) {
-      setErrorModal({
-        show: true,
-        message: "Por favor ingrese el nombre del producto"
-      });
-      return;
-    }
-    if (!categoria) {
-      setErrorModal({
-        show: true,
-        message: "Por favor seleccione una categoría"
-      });
-      return;
-    }
-    if (!precio || precio <= 0) {
-      setErrorModal({
-        show: true,
-        message: "Por favor ingrese un precio de venta válido"
-      });
-      return;
-    }
-    if (!precioCompra || precioCompra <= 0) {
-      setErrorModal({
-        show: true,
-        message: "Por favor ingrese un precio de compra válido"
-      });
-      return;
-    }
-    if (!cantidadAgregar || cantidadAgregar <= 0) {
-      setErrorModal({
-        show: true,
-        message: "Por favor ingrese una cantidad válida a agregar"
-      });
-      return;
-    }
-
     const cantidadAgregarInt = parseInt(cantidadAgregar, 10);
 
     const nuevoProducto = {
@@ -128,20 +83,19 @@ const ModalAgregarProducto = ({
         <div className="registrar-producto">
           <h2>{productoInicial ? "Editar Producto" : "Registrar Producto"}</h2>
         </div>
+
         <div style={{ position: "relative" }}>
           <label htmlFor="nombreProducto">Nombre del producto</label>
           <input
             id="nombreProducto"
             type="text"
             value={nombreProducto}
-            onChange={handleNombreProductoChange}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => setNombreProducto(e.target.value)}
             onBlur={() => setTimeout(() => setCoincidencias([]), 100)}
             onFocus={() => {
-              const textoBusqueda = nombreProducto.trimStart();
-              if (textoBusqueda !== "") {
+              if (nombreProducto.trim() !== "") {
                 const resultados = productos.filter((p) =>
-                  p.producto.toLowerCase().includes(textoBusqueda.toLowerCase())
+                  p.producto.toLowerCase().includes(nombreProducto.toLowerCase())
                 );
                 setCoincidencias(resultados);
               }
@@ -151,10 +105,7 @@ const ModalAgregarProducto = ({
           {coincidencias.length > 0 && (
             <ul className="sugerencias-lista">
               {coincidencias.map((p, idx) => (
-                <li
-                  key={idx}
-                  onMouseDown={() => seleccionarProducto(p)} // Changed to onMouseDown
-                >
+                <li key={idx} onMouseDown={() => seleccionarProducto(p)}>
                   {p.producto}
                 </li>
               ))}
@@ -236,14 +187,6 @@ const ModalAgregarProducto = ({
           Registrar
         </button>
       </div>
-
-      <Modal
-        isOpen={errorModal.show}
-        onClose={() => setErrorModal({ show: false, message: "" })}
-        title="Error"
-        message={errorModal.message}
-        type="error"
-      />
     </div>
   );
 };
