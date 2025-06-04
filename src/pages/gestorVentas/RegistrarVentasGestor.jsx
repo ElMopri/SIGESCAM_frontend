@@ -5,7 +5,10 @@ import {
   agregarProductoAVentaTemporal,
   registrarVenta,
 } from "../../api/VentaApi.js";
-import { autocompletarCampos, obtenerProductos } from "../../api/ProductoApi.js";
+import {
+  autocompletarCampos,
+  obtenerProductos,
+} from "../../api/ProductoApi.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { obtenerDeudorPorDNI } from "../../api/DeudorApi.js";
 import Modal from "../../components/Modal";
@@ -149,7 +152,7 @@ const RegistrarVentasGestor = () => {
 
     try {
       await registrarVenta(venta);
-      
+
       setModalState({
         isOpen: true,
         type: "success",
@@ -158,7 +161,7 @@ const RegistrarVentasGestor = () => {
       });
 
       setTimeout(() => {
-        setModalState(prev => ({ ...prev, isOpen: false }));
+        setModalState((prev) => ({ ...prev, isOpen: false }));
         // Limpiar todos los campos
         setProductos([]);
         setNombreProducto("");
@@ -178,7 +181,6 @@ const RegistrarVentasGestor = () => {
         const day = String(today.getDate()).padStart(2, "0");
         setFecha(`${year}-${month}-${day}`);
       }, 1500);
-
     } catch (error) {
       setModalState({
         isOpen: true,
@@ -304,97 +306,95 @@ const RegistrarVentasGestor = () => {
                   </tr>
                 ))}
               </tbody>
+              {productos.length > 0 && (
+                <tfoot>
+                  <tr className="gestor-total-row">
+                    <td className="gestor-col-nombre">Total</td>
+                    <td className="gestor-col-cantidad"></td>
+                    <td className="gestor-col-precio"></td>
+                    <td className="gestor-col-total">
+                      ${calcularTotal().toLocaleString()}
+                    </td>
+                    <td className="gestor-col-acciones"></td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
-          {productos.length > 0 && (
-            <table className="gestor-table gestor-total-table">
-              <tbody>
-                <tr className="gestor-total-row">
-                  <td className="gestor-col-nombre">Total</td>
-                  <td className="gestor-col-cantidad"></td>
-                  <td className="gestor-col-precio"></td>
-                  <td className="gestor-col-total">
-                    ${calcularTotal().toLocaleString()}
-                  </td>
-                  <td className="gestor-col-acciones"></td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-        </div>
 
-        <div className="gestor-payment-status">
-          <label className="gestor-checkbox-label">
-            <input
-              type="checkbox"
-              checked={isPendingPayment}
-              onChange={() => setIsPendingPayment(!isPendingPayment)}
-            />
-            Pendiente de pago
-          </label>
-
-          {isPendingPayment && (
-            <div className="gestor-deudor-info">
+          <div className="gestor-payment-status">
+            <label className="gestor-checkbox-label">
               <input
-                type="text"
-                placeholder="Documento del deudor"
-                className="gestor-form-input"
-                value={dniDeudor}
-                onChange={async (e) => {
-                  const valor = e.target.value;
-                  setDniDeudor(valor);
+                type="checkbox"
+                checked={isPendingPayment}
+                onChange={() => setIsPendingPayment(!isPendingPayment)}
+              />
+              Pendiente de pago
+            </label>
 
-                  if (valor.length >= 2) {
-                    try {
-                      const deudor = await obtenerDeudorPorDNI(valor);
-                      if (deudor) {
-                        setNombreDeudor(deudor.nombre);
-                        setTelefonoDeudor(deudor.telefono);
-                        setDeudorExistente(true);
-                      } else {
+            {isPendingPayment && (
+              <div className="gestor-deudor-info">
+                <input
+                  type="text"
+                  placeholder="Documento del deudor"
+                  className="gestor-form-input"
+                  value={dniDeudor}
+                  onChange={async (e) => {
+                    const valor = e.target.value;
+                    setDniDeudor(valor);
+
+                    if (valor.length >= 2) {
+                      try {
+                        const deudor = await obtenerDeudorPorDNI(valor);
+                        if (deudor) {
+                          setNombreDeudor(deudor.nombre);
+                          setTelefonoDeudor(deudor.telefono);
+                          setDeudorExistente(true);
+                        } else {
+                          setNombreDeudor("");
+                          setTelefonoDeudor("");
+                          setDeudorExistente(false);
+                        }
+                      } catch (error) {
                         setNombreDeudor("");
                         setTelefonoDeudor("");
                         setDeudorExistente(false);
                       }
-                    } catch (error) {
-                      setNombreDeudor("");
-                      setTelefonoDeudor("");
+                    } else {
                       setDeudorExistente(false);
                     }
-                  } else {
-                    setDeudorExistente(false);
-                  }
-                }}
-              />
+                  }}
+                />
 
-              <input
-                type="text"
-                placeholder="Ingrese nombre del deudor"
-                className="gestor-form-input"
-                value={nombreDeudor}
-                onChange={(e) => setNombreDeudor(e.target.value)}
-                disabled={deudorExistente}
-              />
+                <input
+                  type="text"
+                  placeholder="Ingrese nombre del deudor"
+                  className="gestor-form-input"
+                  value={nombreDeudor}
+                  onChange={(e) => setNombreDeudor(e.target.value)}
+                  disabled={deudorExistente}
+                />
 
-              <input
-                type="text"
-                placeholder="Teléfono"
-                className="gestor-form-input"
-                value={telefonoDeudor}
-                onChange={(e) => setTelefonoDeudor(e.target.value)}
-                disabled={deudorExistente}
-              />
-            </div>
-          )}
+                <input
+                  type="text"
+                  placeholder="Teléfono"
+                  className="gestor-form-input"
+                  value={telefonoDeudor}
+                  onChange={(e) => setTelefonoDeudor(e.target.value)}
+                  disabled={deudorExistente}
+                />
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="gestor-btn-registrar"
+            onClick={handleRegistrarVenta}
+          >
+            Registrar Venta
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="gestor-btn-registrar"
-          onClick={handleRegistrarVenta}
-        >
-          Registrar Venta
-        </button>
       </div>
 
       <Modal
@@ -407,7 +407,9 @@ const RegistrarVentasGestor = () => {
 
       <Modal
         isOpen={confirmDeleteModal.isOpen}
-        onClose={() => setConfirmDeleteModal({ ...confirmDeleteModal, isOpen: false })}
+        onClose={() =>
+          setConfirmDeleteModal({ ...confirmDeleteModal, isOpen: false })
+        }
         onConfirm={() => eliminarProducto(confirmDeleteModal.productId)}
         title="Confirmar eliminación"
         message="¿Está seguro que desea eliminar este producto de la venta?"

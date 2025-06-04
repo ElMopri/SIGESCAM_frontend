@@ -123,9 +123,36 @@
   background-color: white;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  max-height: 250px;
+  max-height: 1000px;
   display: flex;
   flex-direction: column;
+}
+
+.gestor-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto; 
+  max-height: 210px; 
+}
+
+.gestor-table,
+.gestor-total-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+}
+
+.gestor-total-table {
+  border-top: 2px solid #e2e8f0;
+  background-color: #f8f9fa;
+  margin-top: -1px;
+}
+
+.gestor-total-row td {
+  padding: 0.65rem 1rem;
+  font-size: 0.92rem;
+  text-align: left;
+  border-bottom: none !important;
 }
 
 .gestor-table-wrapper {
@@ -204,13 +231,30 @@
   line-height: 1.5;
 }
 
-.gestor-col-nombre { width: 40%; }
-.gestor-col-cantidad { width: 16%; }
-.gestor-col-precio { width: 21%; }
-.gestor-col-total { width: 21%; text-align: left; }
-.gestor-col-acciones { width: 1%; }
+.gestor-col-nombre {
+  width: 40%;
+}
+.gestor-col-cantidad {
+  width: 16%;
+}
+.gestor-col-precio {
+  width: 15%;
+}
+.gestor-col-total {
+  width: 15%;
+  text-align: left;
+}
+.gestor-col-acciones {
+  width: 10%;
+  text-align: center;
+  vertical-align: middle;
+}
 
 .gestor-btn-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
   background: none;
   border: none;
   color: #dc3545;
@@ -315,8 +359,23 @@
     width: 95%;
   }
 
+  .gestor-venta-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
   .gestor-venta-title {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .gestor-fecha-header-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
   }
 
   .gestor-form-row {
@@ -327,6 +386,7 @@
 
   .gestor-form-group {
     width: 100%;
+    min-width: unset;
   }
 
   .gestor-form-input,
@@ -341,17 +401,44 @@
     margin-left: 0;
   }
 
+  .gestor-productos-container {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    max-height: 350px;
+  }
+
+  .gestor-table {
+    min-width: 600px;
+    font-size: 0.92rem;
+  }
+
+  .gestor-total-table {
+    width: 100%;
+    min-width: 600px;
+    border-top: 2px solid #e2e8f0;
+    background-color: #f8f9fa;
+    table-layout: fixed;
+  }
+
+  .gestor-total-row td {
+    padding: 0.65rem 1rem;
+    font-size: 0.92rem;
+    text-align: left;
+    border-bottom: none !important;
+    /* Asegura que ocupe el mismo ancho de columnas */
+  }
+
   .gestor-deudor-info {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .gestor-productos-container {
-    margin: 1.5rem 0;
-    overflow-x: auto;
-  }
-
   .gestor-payment-status {
     padding: 1rem;
+  }
+
+  .gestor-btn-registrar {
+    font-size: 1rem;
+    padding: 0.8rem;
   }
 }

@@ -225,7 +225,30 @@
   }
 
   .botones-filtro {
-    margin-bottom: 17px !important;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .botones-filtro button,
+  .btn-filtrar,
+  .btn-revertir,
+  .btn-bajo-stock {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-bajo-stock {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center !important;
+    margin-bottom: 20px;
   }
 
   .contenedor-tabla .btn-revertir {
