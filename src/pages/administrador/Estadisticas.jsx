@@ -211,12 +211,14 @@ const Estadisticas = () => {
           fechaInicioEntradas,
           fechaFinEntradas
         );
-        setVentas(data.ventas);
-        setTotalVentas(data.totalGeneral);
+        setVentas(data.ventas || []);
+        setTotalVentas(data.totalGeneral || 0);
       } catch (error) {
-        mostrarError(error.message || "Error al filtrar por fecha");
-        setFechaInicioEntradas("");
-        setFechaFinEntradas("");
+        // Para cualquier error (incluyendo 500), simplemente limpiamos los datos
+        // y mostramos el mensaje en la tabla
+        setVentas([]);
+        setTotalVentas(0);
+        // No mostramos el modal de error ni limpiamos las fechas
       }
     } else {
       try {
@@ -224,8 +226,9 @@ const Estadisticas = () => {
         setVentas(data.ventas);
         setTotalVentas(data.totalGeneral);
       } catch (error) {
+        // Solo mostramos el modal de error para el historial general
         mostrarError(
-          error.message || "Error al obtener el historial de compras"
+          error.message || "Error al obtener el historial de ventas"
         );
       }
     }
@@ -318,6 +321,40 @@ const Estadisticas = () => {
     }
   };
 
+  const handleFechaInicioSalidas = (e) => {
+    const fecha = e.target.value;
+    setFechaInicioSalidas(fecha);
+    // Si la fecha final es menor que la inicial, la reseteamos
+    if (fechaFinSalidas && fechaFinSalidas < fecha) {
+      setFechaFinSalidas("");
+    }
+  };
+
+  const handleFechaFinSalidas = (e) => {
+    const fecha = e.target.value;
+    // Solo permitimos la fecha si es mayor o igual que la fecha inicial
+    if (!fechaInicioSalidas || fecha >= fechaInicioSalidas) {
+      setFechaFinSalidas(fecha);
+    }
+  };
+
+  const handleFechaInicioEntradas = (e) => {
+    const fecha = e.target.value;
+    setFechaInicioEntradas(fecha);
+    // Si la fecha final es menor que la inicial, la reseteamos
+    if (fechaFinEntradas && fechaFinEntradas < fecha) {
+      setFechaFinEntradas("");
+    }
+  };
+
+  const handleFechaFinEntradas = (e) => {
+    const fecha = e.target.value;
+    // Solo permitimos la fecha si es mayor o igual que la fecha inicial
+    if (!fechaInicioEntradas || fecha >= fechaInicioEntradas) {
+      setFechaFinEntradas(fecha);
+    }
+  };
+
   return (
     <div className="estadisticas-container">
       <Modal
@@ -364,12 +401,14 @@ const Estadisticas = () => {
                   <input
                     type="date"
                     value={fechaInicioSalidas}
-                    onChange={(e) => setFechaInicioSalidas(e.target.value)}
+                    onChange={handleFechaInicioSalidas}
+                    max={fechaFinSalidas || undefined}
                   />
                   <input
                     type="date"
                     value={fechaFinSalidas}
-                    onChange={(e) => setFechaFinSalidas(e.target.value)}
+                    onChange={handleFechaFinSalidas}
+                    min={fechaInicioSalidas || undefined}
                   />
                 </div>
               ) : (
@@ -405,7 +444,11 @@ const Estadisticas = () => {
                   {compras.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="no-data-message">
-                        No hay compras registradas.
+                        {filtroPorSalidas === "fecha" && fechaInicioSalidas && fechaFinSalidas
+                          ? "No se encontraron compras registradas en el período seleccionado"
+                          : filtroPorSalidas === "producto" && productoSalidas
+                          ? "No se encontraron compras registradas para el producto seleccionado"
+                          : "No hay compras registradas."}
                       </td>
                     </tr>
                   ) : (
@@ -466,12 +509,14 @@ const Estadisticas = () => {
                 <input
                   type="date"
                   value={fechaInicioEntradas}
-                  onChange={(e) => setFechaInicioEntradas(e.target.value)}
+                  onChange={handleFechaInicioEntradas}
+                  max={fechaFinEntradas || undefined}
                 />
                 <input
                   type="date"
                   value={fechaFinEntradas}
-                  onChange={(e) => setFechaFinEntradas(e.target.value)}
+                  onChange={handleFechaFinEntradas}
+                  min={fechaInicioEntradas || undefined}
                 />
               </div>
               <button
@@ -497,8 +542,10 @@ const Estadisticas = () => {
                 <tbody>
                   {ventas.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="no-data-message">
-                        No hay entradas registradas.
+                      <td colSpan="5" className="no-data-message">
+                        {fechaInicioEntradas && fechaFinEntradas 
+                          ? "No se encontraron ventas registradas en el período seleccionado"
+                          : "No hay entradas registradas."}
                       </td>
                     </tr>
                   ) : (

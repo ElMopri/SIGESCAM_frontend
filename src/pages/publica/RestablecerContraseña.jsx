@@ -126,7 +126,7 @@ const RestablecerContraseña = () => {
       setMensajeColor("green");
       limpiarLocalStorage();
       setCodigoToken("");
-      navigate("/crearContraseña", { state: { dni: documento } });
+      navigate("/crear-contrasena", { state: { dni: documento } });
     } catch (err) {
       setMensajeValidacion(
         err?.response?.data?.message || "Token incorrecto, intente nuevamente"

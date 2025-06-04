@@ -51,11 +51,12 @@ const ModalRegistrarVenta = ({ onClose, onVentaRegistrada }) => {
 
   const handleNombreProductoChange = async (e) => {
     const valor = e.target.value;
-    setNombreProducto(valor);
+    const valorSinEspacios = valor.replace(/^\s+/, '');
+    setNombreProducto(valorSinEspacios);
 
-    if (valor.length >= 2) {
+    if (valorSinEspacios.length >= 2) {
       try {
-        const resultados = await autocompletarCampos(valor);
+        const resultados = await autocompletarCampos(valorSinEspacios);
         setSugerencias(resultados);
         setMostrarSugerencias(true);
       } catch (error) {
@@ -64,6 +65,12 @@ const ModalRegistrarVenta = ({ onClose, onVentaRegistrada }) => {
     } else {
       setSugerencias([]);
       setMostrarSugerencias(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if ((nombreProducto === '' || /^\s+$/.test(nombreProducto)) && e.key === ' ') {
+      e.preventDefault();
     }
   };
 
@@ -225,6 +232,7 @@ const ModalRegistrarVenta = ({ onClose, onVentaRegistrada }) => {
                 className="venta-form-input"
                 value={nombreProducto}
                 onChange={handleNombreProductoChange}
+                onKeyDown={handleKeyDown}
               />
               {mostrarSugerencias && sugerencias.length > 0 && (
                 <ul className="venta-sugerencias-lista">
