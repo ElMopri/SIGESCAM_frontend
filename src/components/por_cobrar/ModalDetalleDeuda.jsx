@@ -12,7 +12,6 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
     0
   );
 
-
   console.log(detalles);
   const [abono, setAbono] = useState("");
   const [deudaRestante, setDeudaRestante] = useState(totalVenta - abonoInicial);
@@ -30,13 +29,37 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
   };
 
   const [modalError, setModalError] = useState({ open: false, mensaje: "" });
-  const [modalSuccess, setModalSuccess] = useState({ open: false, mensaje: "" }); // ✅ AGREGADO
+  const [modalSuccess, setModalSuccess] = useState({ open: false, mensaje: "" });
 
   const handleGuardar = async () => {
-    const valorAbono = parseInt(abono.replace(/\D/g, ""), 10); // Limpia caracteres no numéricos
+    // ✅ VALIDACIÓN MEJORADA PARA LETRAS
+    if (/[a-zA-Z]/.test(abono)) {
+      setModalError({ 
+        open: true, 
+        mensaje: "El campo de abono no puede contener letras. Solo se permiten números." 
+      });
+      return;
+    }
 
-    if (isNaN(valorAbono) || valorAbono < 0) {
-      setModalError({ open: true, mensaje: "Por favor ingrese un abono válido." });
+    // Limpia caracteres no numéricos pero mantiene el signo negativo
+    const valorLimpio = abono.replace(/[^\d.-]/g, "");
+    const valorAbono = parseFloat(valorLimpio);
+
+    // ✅ VALIDACIÓN MEJORADA PARA NÚMEROS NEGATIVOS
+    if (valorAbono < 0) {
+      setModalError({ 
+        open: true, 
+        mensaje: "El abono no puede ser un número negativo." 
+      });
+      return;
+    }
+
+    // Validación para valores no numéricos o cero
+    if (isNaN(valorAbono) || valorAbono === 0) {
+      setModalError({ 
+        open: true, 
+        mensaje: "Por favor ingrese un abono válido mayor a cero." 
+      });
       return;
     }
 
@@ -133,7 +156,7 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
             <input
               type="text"
               value={abono}
-              onChange={(e) => setAbono(e.target.value)}
+              onChange={(e) => setAbono(e.target.value)} // ✅ VOLVEMOS AL MANEJADOR ORIGINAL
               placeholder="$ 0"
             />
           </div>
@@ -146,7 +169,7 @@ const ModalDetalleDeuda = ({ onClose, cliente, detalles, totalVenta, abonoInicia
         <Modal
           isOpen={modalError.open}
           onClose={() => setModalError({ open: false, mensaje: "" })}
-          title="Error al registrar abono"
+          title="Error de validación"
           message={modalError.mensaje}
           type="error"
           confirmText="Aceptar"
