@@ -21,7 +21,9 @@
   max-height: 90vh;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 1000;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .modal-venta-header {
@@ -49,7 +51,6 @@
   cursor: pointer;
 }
 
-
 /* Formulario superior */
 .venta-form-row {
   display: flex;
@@ -59,6 +60,7 @@
 
 .venta-form-group {
   flex: 1;
+  position: relative;
 }
 
 .venta-form-input {
@@ -67,6 +69,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.95rem;
+  box-sizing: border-box;
 }
 
 .venta-form-input::placeholder {
@@ -126,6 +129,7 @@
   background: #fff;
   scrollbar-width: thin;
   scrollbar-color: #58c0f8 #e3f1fb;
+  flex-shrink: 0;
 }
 
 .venta-table {
@@ -133,13 +137,15 @@
   border-collapse: collapse;
   font-size: 0.95rem;
   background: #fff;
+  table-layout: fixed;
 }
 
 .venta-table th,
 .venta-table td {
-  padding: 10px 12px;
+  padding: 10px 8px;
   border-bottom: 1px solid #d4d3d3;
   word-break: break-word;
+  vertical-align: middle;
 }
 
 .venta-table th {
@@ -149,6 +155,7 @@
   top: 0;
   z-index: 2;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+  padding: 12px 8px;
 }
 
 .venta-total-row {
@@ -164,8 +171,9 @@
 }
 
 .venta-col-nombre {
-  width: 40%;
+  width: 35%;
   text-align: left;
+  padding-left: 12px;
 }
 .venta-col-cantidad {
   width: 15%;
@@ -174,15 +182,17 @@
 .venta-col-precio {
   width: 20%;
   text-align: right;
+  padding-right: 12px;
 }
 .venta-col-total {
   width: 20%;
   text-align: right;
+  padding-right: 12px;
 }
 .venta-col-acciones {
-  width: 6%;
+  width: 10%;
   text-align: center;
-  padding: 10px 5px;
+  padding: 8px 4px;
 }
 
 /* Botón eliminar */
@@ -233,17 +243,25 @@
   width: 98%;
 }
 
+.modal-venta-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
 .venta-productos-container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  background: #e3f1fb;
-  border-radius: 8px;
+}
+
+.venta-productos-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
 .venta-productos-container::-webkit-scrollbar-thumb {
   background: #58c0f8;
-  border-radius: 8px;
-  border: 2px solid #e3f1fb;
+  border-radius: 4px;
 }
 
 .venta-productos-container::-webkit-scrollbar-thumb:hover {
@@ -277,21 +295,24 @@
 
 @media (max-width: 768px) {
   .modal-venta-container {
-    gap: 10px;
+    max-height: 95vh;
     padding: 15px;
   }
   .venta-form-row {
     width: 100%;
     flex-direction: column;
     gap: 10px;
+    box-sizing: border-box;
+  }
+  .venta-form-group {
+    width: 100%;
+    box-sizing: border-box;
   }
   .venta-productos-container {
-    min-width: 100%;
-    max-height: 200px;
+    max-height: 250px;
   }
   .venta-table {
     font-size: 0.85rem;
-    min-width: 100%;
   }
   .venta-table th,
   .venta-table td {
@@ -305,6 +326,21 @@
   .venta-deudor-info .venta-form-input {
     width: 100%;
     font-size: 1rem;
+  }
+  .venta-col-nombre {
+    width: 30%;
+  }
+  .venta-col-cantidad {
+    width: 15%;
+  }
+  .venta-col-precio {
+    width: 20%;
+  }
+  .venta-col-total {
+    width: 20%;
+  }
+  .venta-col-acciones {
+    width: 15%;
   }
 }
 
@@ -341,13 +377,20 @@
   max-height: 150px;
   overflow-y: auto;
   position: absolute;
+  left: 0;
+  right: 0;
   width: 100%;
   z-index: 1000;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .venta-sugerencia-item {
   padding: 8px 12px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .venta-sugerencia-item:hover {
