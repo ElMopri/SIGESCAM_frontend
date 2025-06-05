@@ -57,6 +57,8 @@ const Estadisticas = () => {
     type: "error",
   });
 
+  const [errorFechas, setErrorFechas] = useState("");
+
   useEffect(() => {
     const cargarMargenes = async () => {
       try {
@@ -259,21 +261,35 @@ const Estadisticas = () => {
   };
 
   // Filtros del historico de salidas
-
   useEffect(() => {
     if (filtroPorSalidas === "fecha") {
-      setProductoSalidas("");
-      filtrarPorFechaSalidas();
-    } else if (filtroPorSalidas === "producto") {
-      setFechaInicioSalidas("");
-      setFechaFinSalidas("");
+      if (fechaInicioSalidas && fechaFinSalidas) {
+        if (fechaFinSalidas < fechaInicioSalidas) {
+          setErrorFechas("La fecha final no puede ser menor que la fecha inicial");
+          setCompras([]);
+          setTotal(0);
+        } else {
+          setErrorFechas("");
+          filtrarPorFechaSalidas();
+        }
+      }
+    } else if (filtroPorSalidas === "producto" && productoSalidas) {
       filtrarPorProducto();
     }
   }, [filtroPorSalidas, fechaInicioSalidas, fechaFinSalidas, productoSalidas]);
 
   useEffect(() => {
     if (filtroPorEntradas === "fecha") {
-      filtrarPorFechaEntradas();
+      if (fechaInicioEntradas && fechaFinEntradas) {
+        if (fechaFinEntradas < fechaInicioEntradas) {
+          setErrorFechas("La fecha final no puede ser menor que la fecha inicial");
+          setVentas([]);
+          setTotalVentas(0);
+        } else {
+          setErrorFechas("");
+          filtrarPorFechaEntradas();
+        }
+      }
     }
   }, [filtroPorEntradas, fechaInicioEntradas, fechaFinEntradas]);
 
@@ -294,6 +310,7 @@ const Estadisticas = () => {
       setFechaFinSalidas("");
       setProductoSalidas("");
       setFiltroPorSalidas("fecha");
+      setErrorFechas("");
       obtenerHistorialCompras()
         .then((data) => {
           setCompras(data.compras);
@@ -308,6 +325,7 @@ const Estadisticas = () => {
       setFechaInicioEntradas("");
       setFechaFinEntradas("");
       setFiltroPorEntradas("fecha");
+      setErrorFechas("");
       obtenerHistorialVentas()
         .then((data) => {
           setVentas(data.ventas);
@@ -324,35 +342,21 @@ const Estadisticas = () => {
   const handleFechaInicioSalidas = (e) => {
     const fecha = e.target.value;
     setFechaInicioSalidas(fecha);
-    // Si la fecha final es menor que la inicial, la reseteamos
-    if (fechaFinSalidas && fechaFinSalidas < fecha) {
-      setFechaFinSalidas("");
-    }
   };
 
   const handleFechaFinSalidas = (e) => {
     const fecha = e.target.value;
-    // Solo permitimos la fecha si es mayor o igual que la fecha inicial
-    if (!fechaInicioSalidas || fecha >= fechaInicioSalidas) {
-      setFechaFinSalidas(fecha);
-    }
+    setFechaFinSalidas(fecha);
   };
 
   const handleFechaInicioEntradas = (e) => {
     const fecha = e.target.value;
     setFechaInicioEntradas(fecha);
-    // Si la fecha final es menor que la inicial, la reseteamos
-    if (fechaFinEntradas && fechaFinEntradas < fecha) {
-      setFechaFinEntradas("");
-    }
   };
 
   const handleFechaFinEntradas = (e) => {
     const fecha = e.target.value;
-    // Solo permitimos la fecha si es mayor o igual que la fecha inicial
-    if (!fechaInicioEntradas || fecha >= fechaInicioEntradas) {
-      setFechaFinEntradas(fecha);
-    }
+    setFechaFinEntradas(fecha);
   };
 
   return (
@@ -441,7 +445,13 @@ const Estadisticas = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {compras.length === 0 ? (
+                  {errorFechas ? (
+                    <tr>
+                      <td colSpan="5" className="no-data-message error-fechas">
+                        {errorFechas}
+                      </td>
+                    </tr>
+                  ) : compras.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="no-data-message">
                         {filtroPorSalidas === "fecha" && fechaInicioSalidas && fechaFinSalidas
@@ -540,7 +550,13 @@ const Estadisticas = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {ventas.length === 0 ? (
+                  {errorFechas ? (
+                    <tr>
+                      <td colSpan="5" className="no-data-message error-fechas">
+                        {errorFechas}
+                      </td>
+                    </tr>
+                  ) : ventas.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="no-data-message">
                         {fechaInicioEntradas && fechaFinEntradas 
